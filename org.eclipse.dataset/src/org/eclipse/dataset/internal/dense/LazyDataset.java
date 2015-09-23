@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.dataset.DatasetException;
 import org.eclipse.dataset.ILazyDataset;
 import org.eclipse.dataset.IMonitor;
 import org.eclipse.dataset.Slice;
@@ -101,7 +102,7 @@ public class LazyDataset extends LazyDatasetBase implements Serializable, Clonea
 
 			@Override
 			public Dataset getDataset(IMonitor mon, SliceND slice)
-					throws Exception {
+					throws DatasetException {
 				return d.getSlice(mon, slice);
 			}
 		});
@@ -224,7 +225,7 @@ public class LazyDataset extends LazyDatasetBase implements Serializable, Clonea
 	public Dataset getSlice(int[] start, int[] stop, int[] step) {
 		try {
 			return getSlice(null, start, stop, step);
-		} catch (Exception e) {
+		} catch (DatasetException e) {
 			logger.error("Problem slicing lazy dataset", e);
 		}
 		return null;
@@ -237,7 +238,7 @@ public class LazyDataset extends LazyDatasetBase implements Serializable, Clonea
 				return getSlice(null, new SliceND(shape));
 			}
 			return getSlice(null, new SliceND(shape, slice));
-		} catch (Exception e) {
+		} catch (DatasetException e) {
 			logger.error("Problem slicing lazy dataset", e);
 		}
 		return null;
@@ -247,14 +248,14 @@ public class LazyDataset extends LazyDatasetBase implements Serializable, Clonea
 	public Dataset getSlice(SliceND slice) {
 		try {
 			return getSlice(null, slice);
-		} catch (Exception e) {
+		} catch (DatasetException e) {
 			logger.error("Problem slicing lazy dataset", e);
 		}
 		return null;
 	}
 
 	@Override
-	public Dataset getSlice(IMonitor monitor, Slice... slice) throws Exception {
+	public Dataset getSlice(IMonitor monitor, Slice... slice) throws DatasetException {
 		if (slice == null || slice.length == 0) {
 			return getSlice(monitor, new SliceND(shape));
 		}
@@ -406,12 +407,12 @@ public class LazyDataset extends LazyDatasetBase implements Serializable, Clonea
 	}
 
 	@Override
-	public Dataset getSlice(IMonitor monitor, int[] start, int[] stop, int[] step) throws Exception {
+	public Dataset getSlice(IMonitor monitor, int[] start, int[] stop, int[] step) throws DatasetException {
 		return getSlice(monitor, new SliceND(shape, start, stop, step));
 	}
 
 	@Override
-	public Dataset getSlice(IMonitor monitor, SliceND slice) throws Exception {
+	public Dataset getSlice(IMonitor monitor, SliceND slice) throws DatasetException {
 
 		if (loader != null && !loader.isFileReadable())
 			return null; // TODO add interaction to use plot (or remote) server to load dataset
@@ -424,7 +425,7 @@ public class LazyDataset extends LazyDatasetBase implements Serializable, Clonea
 		} else {
 			try {
 				a = DatasetUtils.convertToDataset(loader.getDataset(monitor, nslice));
-			} catch (Exception e) {
+			} catch (DatasetException e) {
 				// return a fake dataset to show that this has not worked, should not be used in general though.
 				logger.debug("Problem getting {}: {}", String.format("slice %s %s %s", Arrays.toString(slice.getStart()), Arrays.toString(slice.getStop()),
 								Arrays.toString(slice.getStep())), e);
