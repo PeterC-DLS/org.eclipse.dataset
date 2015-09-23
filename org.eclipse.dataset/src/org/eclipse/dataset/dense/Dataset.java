@@ -281,7 +281,7 @@ public interface Dataset extends IErrorDataset {
 	public Dataset real();
 
 	/**
-	 * @return real part of dataset as new dataset
+	 * @return view of real part of dataset
 	 */
 	public Dataset realView();
 
