@@ -25,6 +25,7 @@ import org.apache.commons.math.stat.descriptive.SummaryStatistics;
 import org.eclipse.dataset.IDataset;
 import org.eclipse.dataset.ILazyDataset;
 import org.eclipse.dataset.IMonitor;
+import org.eclipse.dataset.MetadataException;
 import org.eclipse.dataset.PositionIterator;
 import org.eclipse.dataset.Slice;
 import org.eclipse.dataset.SliceND;
@@ -196,7 +197,7 @@ public abstract class AbstractDataset extends LazyDatasetBase implements Dataset
 		List<MetadataType> all = null;
 		try {
 			all = a.getMetadata(null);
-		} catch (Exception e) {
+		} catch (MetadataException e) {
 		}
 		if (all == null)
 			return null;

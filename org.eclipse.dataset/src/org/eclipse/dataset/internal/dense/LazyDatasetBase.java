@@ -23,8 +23,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.dataset.DatasetException;
 import org.eclipse.dataset.IDataset;
 import org.eclipse.dataset.ILazyDataset;
+import org.eclipse.dataset.MetadataException;
 import org.eclipse.dataset.SliceND;
 import org.eclipse.dataset.dense.BroadcastIterator;
 import org.eclipse.dataset.dense.DTypeUtils;
@@ -145,7 +147,7 @@ public abstract class LazyDatasetBase implements ILazyDataset, Serializable {
 		List<T> ml = null;
 		try {
 			ml = (List<T>) getMetadata(metadata.getClass());
-		} catch (Exception e) {
+		} catch (MetadataException e) {
 			logger.error("Problem retrieving metadata of class {}: {}", metadata.getClass().getCanonicalName(), e);
 		}
 
@@ -162,7 +164,7 @@ public abstract class LazyDatasetBase implements ILazyDataset, Serializable {
 		List<IMetadata> ml = null;
 		try {
 			ml = getMetadata(IMetadata.class);
-		} catch (Exception e) {
+		} catch (MetadataException e) {
 			logger.error("Problem retrieving metadata of class {}: {}", IMetadata.class.getCanonicalName(), e);
 		}
 
@@ -210,7 +212,7 @@ public abstract class LazyDatasetBase implements ILazyDataset, Serializable {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T extends MetadataType> List<T> getMetadata(Class<T> clazz) throws Exception {
+	public <T extends MetadataType> List<T> getMetadata(Class<T> clazz) throws MetadataException {
 		if (metadata == null)
 			return null;
 
@@ -788,7 +790,7 @@ public abstract class LazyDatasetBase implements ILazyDataset, Serializable {
 	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	private static Object processObject(MetadatasetAnnotationOperation op, Object o) throws Exception {
+	private static Object processObject(MetadatasetAnnotationOperation op, Object o) throws DatasetException {
 		if (o == null)
 			return o;
 
@@ -880,7 +882,7 @@ public abstract class LazyDatasetBase implements ILazyDataset, Serializable {
 			if (el != null && !el.isEmpty()) {
 				 return el.get(0);
 			}
-		} catch (Exception e) {
+		} catch (MetadataException e) {
 		}
 		return null;
 	}
