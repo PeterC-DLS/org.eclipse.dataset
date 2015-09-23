@@ -262,6 +262,18 @@ public class DatasetFactory {
 	}
 
 	/**
+	 * Create a dataset from an object which could be a Java list, array (of arrays...) or Number. Ragged sequences or
+	 * arrays are padded with zeros.
+	 * 
+	 * @param obj
+	 * @return compound dataset with contents given by input
+	 */
+	public static CompoundDataset createCompoundDatasetFromObject(Object obj) {
+		Dataset result = createFromObject(obj);
+		return DatasetUtils.createCompoundDatasetFromLastAxis(result, true);
+	}
+
+	/**
 	 * Create dataset of appropriate type from list
 	 * 
 	 * @param objectList
