@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.dataset.ILazyDataset;
+import org.eclipse.dataset.dense.Dataset;
+import org.eclipse.dataset.dense.DatasetFactory;
 import org.eclipse.dataset.internal.dense.BooleanDataset;
 import org.eclipse.dataset.internal.dense.DoubleDataset;
 import org.eclipse.dataset.internal.dense.ShortDataset;
@@ -27,7 +29,7 @@ public class SubMetadata extends SliceableTestMetadata {
 
 	public SubMetadata(ILazyDataset ld, DoubleDataset[] array, List<ShortDataset> list, Map<String, BooleanDataset> map, List<DoubleDataset[]> l2) {
 		super(ld, array, list, map, l2);
-		ldb = new DoubleDataset(ld.getShape());
+		ldb = DatasetFactory.zeros(ld.getShape(), Dataset.FLOAT64);
 	}
 
 	public ILazyDataset getLazyDataset2() {
