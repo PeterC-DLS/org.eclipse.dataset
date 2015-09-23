@@ -176,8 +176,7 @@ public class LazyWriteableDataset extends LazyDynamicDataset implements ILazyWri
 	}
 
 	@Override
-<<<<<<< HEAD
-	public void setSlice(IMonitor monitor, IDataset data, SliceND slice) throws Exception {
+	public void setSlice(IMonitor monitor, IDataset data, SliceND slice) throws DatasetException {
 		if (saver == null || !saver.isFileWriteable()) {
 			throw new DatasetException(new IOException("Cannot write to file!"));
 		}
