@@ -27,6 +27,7 @@ import org.eclipse.dataset.dense.DatasetFactory;
 import org.eclipse.dataset.dense.DatasetUtils;
 import org.eclipse.dataset.dense.DTypeUtils;
 import org.eclipse.dataset.dense.IndexIterator;
+import org.eclipse.dataset.dense.SliceIterator;
 import org.eclipse.dataset.internal.utils.MissingFromMath2;
 
 
@@ -565,7 +566,7 @@ public class ComplexDoubleDataset extends CompoundDoubleDataset { // CLASS_TYPE
 			rdata[riter.index+1] = data[siter.index+1];
 		}
 
-		result.setName(name + BLOCK_OPEN + Slice.createString(siter.shape, siter.start, siter.stop, siter.step) + BLOCK_CLOSE);
+		result.setName(name + BLOCK_OPEN + siter.toString() + BLOCK_CLOSE);
 		return result;
 	}
 

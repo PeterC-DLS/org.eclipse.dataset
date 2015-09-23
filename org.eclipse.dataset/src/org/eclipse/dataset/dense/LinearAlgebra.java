@@ -40,7 +40,6 @@ import org.eclipse.dataset.internal.dense.AbstractDataset;
 import org.eclipse.dataset.internal.dense.ComplexDoubleDataset;
 import org.eclipse.dataset.internal.dense.CompoundLongDataset;
 import org.eclipse.dataset.internal.dense.DoubleDataset;
-import org.eclipse.dataset.internal.dense.SliceIterator;
 import org.eclipse.dataset.internal.utils.MissingFromMath2;
 
 

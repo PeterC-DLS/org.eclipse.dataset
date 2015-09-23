@@ -16,6 +16,7 @@ import java.text.MessageFormat;
 
 import org.eclipse.dataset.dense.Dataset;
 import org.eclipse.dataset.dense.IndexIterator;
+import org.eclipse.dataset.dense.SliceIterator;
 
 /**
  * Extend dataset for objects

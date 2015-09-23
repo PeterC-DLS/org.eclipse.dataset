@@ -15,7 +15,7 @@ import java.util.Arrays;
 
 import org.eclipse.dataset.dense.Dataset;
 import org.eclipse.dataset.dense.DatasetFactory;
-import org.eclipse.dataset.internal.dense.SliceIterator;
+import org.eclipse.dataset.dense.SliceIterator;
 import org.junit.Test;
 
 /**

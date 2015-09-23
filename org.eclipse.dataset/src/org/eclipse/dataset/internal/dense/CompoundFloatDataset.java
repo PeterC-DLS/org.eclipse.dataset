@@ -31,6 +31,7 @@ import org.eclipse.dataset.dense.DTypeUtils;
 import org.eclipse.dataset.dense.IndexIterator;
 import org.eclipse.dataset.dense.IntegerIterator;
 import org.eclipse.dataset.dense.IntegersIterator;
+import org.eclipse.dataset.dense.SliceIterator;
 
 /**
  * Extend compound dataset for float values // PRIM_TYPE
@@ -850,7 +851,7 @@ public class CompoundFloatDataset extends AbstractCompoundDataset {
 				rdata[riter.index + i] = data[siter.index + i];
 		}
 
-		result.setName(name + BLOCK_OPEN + Slice.createString(siter.shape, siter.start, siter.stop, siter.step) + BLOCK_CLOSE);
+		result.setName(name + BLOCK_OPEN + siter.toString() + BLOCK_CLOSE);
 		return result;
 	}
 

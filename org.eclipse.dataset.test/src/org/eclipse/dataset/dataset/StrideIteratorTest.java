@@ -20,8 +20,8 @@ import org.eclipse.dataset.IDatasetIterator;
 import org.eclipse.dataset.dense.Dataset;
 import org.eclipse.dataset.dense.DatasetFactory;
 import org.eclipse.dataset.dense.IndexIterator;
-import org.eclipse.dataset.internal.dense.SliceIterator;
-import org.eclipse.dataset.internal.dense.StrideIterator;
+import org.eclipse.dataset.dense.SliceIterator;
+import org.eclipse.dataset.dense.StrideIterator;
 import org.junit.Test;
 
 /**

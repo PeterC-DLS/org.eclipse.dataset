@@ -10,13 +10,13 @@
  *    Peter Chang - initial API and implementation and/or initial documentation
  *******************************************************************************/
 
-package org.eclipse.dataset.internal.dense;
+package org.eclipse.dataset.dense;
 
 
 import java.util.Arrays;
 
+import org.eclipse.dataset.Slice;
 import org.eclipse.dataset.SliceND;
-import org.eclipse.dataset.dense.IndexIterator;
 
 /**
  * Class to run over a slice of a dataset
@@ -265,5 +265,10 @@ public class SliceIterator extends IndexIterator {
 	@Override
 	public int[] getShape() {
 		return sshape;
+	}
+
+	@Override
+	public String toString() {
+		return Slice.createString(shape, start, stop, step);
 	}
 }

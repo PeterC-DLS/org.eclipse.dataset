@@ -25,6 +25,8 @@ import org.eclipse.dataset.dense.Dataset;
 import org.eclipse.dataset.dense.DatasetUtils;
 import org.eclipse.dataset.dense.DTypeUtils;
 import org.eclipse.dataset.dense.IndexIterator;
+import org.eclipse.dataset.dense.SliceIterator;
+import org.eclipse.dataset.dense.StrideIterator;
 
 /**
  * Generic container class for data that is compound in nature

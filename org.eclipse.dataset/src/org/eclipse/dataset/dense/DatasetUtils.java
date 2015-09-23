@@ -38,7 +38,6 @@ import org.eclipse.dataset.internal.dense.FloatDataset;
 import org.eclipse.dataset.internal.dense.IntegerDataset;
 import org.eclipse.dataset.internal.dense.LongDataset;
 import org.eclipse.dataset.internal.dense.ShortDataset;
-import org.eclipse.dataset.internal.dense.SliceIterator;
 import org.eclipse.dataset.internal.dense.StringDataset;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

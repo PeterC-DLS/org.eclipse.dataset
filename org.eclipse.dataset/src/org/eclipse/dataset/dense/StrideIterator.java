@@ -10,11 +10,12 @@
  *    Peter Chang - initial API and implementation and/or initial documentation
  *******************************************************************************/
 
-package org.eclipse.dataset.internal.dense;
+package org.eclipse.dataset.dense;
 
 import java.util.Arrays;
 
 import org.eclipse.dataset.SliceND;
+import org.eclipse.dataset.internal.dense.AbstractDataset;
 
 
 /**

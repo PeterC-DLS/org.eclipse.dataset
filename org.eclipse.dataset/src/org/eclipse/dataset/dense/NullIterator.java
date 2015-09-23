@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  */
 
-package org.eclipse.dataset.internal.dense;
+package org.eclipse.dataset.dense;
 
 public class NullIterator extends SliceIterator {
 	/**
