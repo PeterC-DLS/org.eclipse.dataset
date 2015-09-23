@@ -24,7 +24,6 @@ import org.apache.commons.math.complex.Complex;
 import org.eclipse.dataset.IDataset;
 import org.eclipse.dataset.IDatasetIterator;
 import org.eclipse.dataset.PositionIterator;
-import org.eclipse.dataset.Slice;
 import org.eclipse.dataset.dense.BooleanIterator;
 import org.eclipse.dataset.dense.BroadcastIterator;
 import org.eclipse.dataset.dense.Dataset;
@@ -197,28 +196,6 @@ public class FloatDataset extends AbstractDataset {
 		int[] pos = new int[result.shape.length];
 		result.fillData(obj, 0, pos);
 		return result;
-	}
-	
-	/**
-	 * @param stop
-	 * @return a new 1D dataset, filled with values determined by parameters
-	 * @deprecated Use {@link #createRange(double)}
-	 */
-	@Deprecated
-	public static FloatDataset arange(final double stop) {
-		return createRange(0, stop, 1);
-	}
-	
-	/**
-	 * @param start
-	 * @param stop
-	 * @param step
-	 * @return a new 1D dataset, filled with values determined by parameters
-	 * @deprecated Use {@link #createRange(double, double, double)}
-	 */
-	@Deprecated
-	public static FloatDataset arange(final double start, final double stop, final double step) {
-		return createRange(start, stop, step);
 	}
 	
 	/**

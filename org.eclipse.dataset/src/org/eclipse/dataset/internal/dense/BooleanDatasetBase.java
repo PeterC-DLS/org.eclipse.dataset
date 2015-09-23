@@ -23,7 +23,6 @@ import java.util.TreeSet;
 import org.eclipse.dataset.IDataset;
 import org.eclipse.dataset.IDatasetIterator;
 import org.eclipse.dataset.PositionIterator;
-import org.eclipse.dataset.Slice;
 import org.eclipse.dataset.dense.BooleanIterator;
 import org.eclipse.dataset.dense.BroadcastIterator;
 import org.eclipse.dataset.dense.Dataset;

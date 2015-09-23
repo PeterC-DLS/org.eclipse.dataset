@@ -20,7 +20,6 @@ import java.util.Arrays;
 import org.apache.commons.math.complex.Complex;
 import org.apache.commons.math.stat.descriptive.SummaryStatistics;
 import org.eclipse.dataset.IDataset;
-import org.eclipse.dataset.Slice;
 import org.eclipse.dataset.dense.BroadcastIterator;
 import org.eclipse.dataset.dense.Dataset;
 import org.eclipse.dataset.dense.DatasetFactory;
@@ -170,28 +169,6 @@ public class ComplexFloatDataset extends CompoundFloatDataset { // CLASS_TYPE
 		int[] pos = new int[result.shape.length];
 		result.fillData(obj, 0, pos);
 		return result;
-	}
-
-	/**
-	 * @param stop
-	 * @return a new 1D dataset, filled with values determined by parameters
-	 * @deprecated Use {@link #createRange(double)}
-	 */
-	@Deprecated
-	public static ComplexFloatDataset arange(final double stop) {
-		return createRange(0, stop, 1);
-	}
-
-	/**
-	 * @param start
-	 * @param stop
-	 * @param step
-	 * @return a new 1D dataset, filled with values determined by parameters
-	 * @deprecated Use {@link #createRange(double, double, double)}
-	 */
-	@Deprecated
-	public static ComplexFloatDataset arange(final double start, final double stop, final double step) {
-		return createRange(start, stop, step);
 	}
 
 	/**

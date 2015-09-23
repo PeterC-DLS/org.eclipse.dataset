@@ -20,7 +20,6 @@ import org.apache.commons.math.complex.Complex;
 import org.eclipse.dataset.IDataset;
 import org.eclipse.dataset.IDatasetIterator;
 import org.eclipse.dataset.PositionIterator;
-import org.eclipse.dataset.Slice;
 import org.eclipse.dataset.dense.BooleanIterator;
 import org.eclipse.dataset.dense.BroadcastIterator;
 import org.eclipse.dataset.dense.CompoundDataset;
@@ -271,28 +270,6 @@ public class CompoundByteDataset extends AbstractCompoundDataset {
 	public static CompoundByteDataset createFromObject(final Object obj) {
 		ByteDataset result = ByteDataset.createFromObject(obj); // CLASS_TYPE
 		return (CompoundByteDataset) DatasetUtils.createCompoundDatasetFromLastAxis(result, true);
-	}
-
-	/**
-	 * @param stop
-	 * @return a new 1D dataset, filled with values determined by parameters
-	 * @deprecated Use {@link #createRange(int, double)}
-	 */
-	@Deprecated
-	public static CompoundByteDataset arange(final int itemSize, final double stop) {
-		return createRange(itemSize, 0, stop, 1);
-	}
-
-	/**
-	 * @param start
-	 * @param stop
-	 * @param step
-	 * @return a new 1D dataset, filled with values determined by parameters
-	 * @deprecated Use {@link #createRange(int, double, double, double)}
-	 */
-	@Deprecated
-	public static CompoundByteDataset arange(final int itemSize, final double start, final double stop, final double step) {
-		return createRange(itemSize, start, stop, step);
 	}
 
 	/**
