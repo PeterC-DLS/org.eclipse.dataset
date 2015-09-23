@@ -20,7 +20,6 @@ import org.eclipse.dataset.IDatasetIterator;
 import org.eclipse.dataset.internal.dense.BooleanDataset;
 import org.eclipse.dataset.internal.dense.ComplexDoubleDataset;
 import org.eclipse.dataset.internal.dense.ComplexFloatDataset;
-import org.eclipse.dataset.internal.dense.IntegerDataset;
 
 /**
  * Comparison and logical methods
