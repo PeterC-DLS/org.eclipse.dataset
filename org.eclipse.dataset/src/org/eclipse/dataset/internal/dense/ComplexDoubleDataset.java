@@ -469,7 +469,10 @@ public class ComplexDoubleDataset extends CompoundDoubleDataset { // CLASS_TYPE
 		setItem(new double[] {dr, di}, pos); // PRIM_TYPE
 	}
 
-	public DoubleDataset imag() { // CLASS_TYPE
+	/**
+	 * @return imaginary part of dataset as new dataset
+	 */
+	public DoubleDataset imaginary() { // CLASS_TYPE
 		DoubleDataset rdataset = new DoubleDataset(shape); // CLASS_TYPE
 		IndexIterator iter = getIterator();
 		IndexIterator riter = rdataset.getIterator();
@@ -484,7 +487,7 @@ public class ComplexDoubleDataset extends CompoundDoubleDataset { // CLASS_TYPE
 	/**
 	 * @return view of imaginary values
 	 */
-	public DoubleDataset imagView() { // CLASS_TYPE
+	public DoubleDataset imaginaryView() { // CLASS_TYPE
 		return getElementsView(1);
 	}
 
