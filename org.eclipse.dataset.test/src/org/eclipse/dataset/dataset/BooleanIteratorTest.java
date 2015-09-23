@@ -29,14 +29,14 @@ public class BooleanIteratorTest {
 
 	@Before
 	public void setUpClass() {
-		a = new DoubleDataset(new double[] { 0, 1, 3, 5, -7, -9 });
-		b = new DoubleDataset(new double[] { 0.01, 1.2, 2.9, 5, -7.1, -9 });
+		a = DatasetFactory.createFromObject(new double[] { 0, 1, 3, 5, -7, -9 });
+		b = DatasetFactory.createFromObject(new double[] { 0.01, 1.2, 2.9, 5, -7.1, -9 });
 	}
 
 	@Test
 	public void testEqualTo() {
 		Dataset c = a.clone().reshape(2, 3);
-		BooleanDataset s = new BooleanDataset(new boolean[] {false, true, false, true, false, true});
+		BooleanDataset s = (BooleanDataset) DatasetFactory.createFromObject(new boolean[] {false, true, false, true, false, true});
 
 		List<Integer> inds = new ArrayList<Integer>();
 
@@ -44,14 +44,14 @@ public class BooleanIteratorTest {
 		while (iter.hasNext())
 			inds.add((int) c.getElementLongAbs(iter.index));
 
-		checkDatasets((IntegerDataset) DatasetFactory.createFromList(inds), new IntegerDataset(new int[] {1,5,-9}, null));
+		checkDatasets((IntegerDataset) DatasetFactory.createFromList(inds), (IntegerDataset) DatasetFactory.createFromObject(new int[] {1,5,-9}));
 
 		iter = c.getBooleanIterator(s, false);
 		inds.clear();
 		while (iter.hasNext())
 			inds.add((int) c.getElementLongAbs(iter.index));
 
-		checkDatasets((IntegerDataset) DatasetFactory.createFromList(inds), new IntegerDataset(new int[] {0, 3,-7}, null));
+		checkDatasets((IntegerDataset) DatasetFactory.createFromList(inds), (IntegerDataset) DatasetFactory.createFromObject(new int[] {0, 3,-7}));
 	}
 
 	public void checkDatasets(IntegerDataset calc, IntegerDataset expected) {

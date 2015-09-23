@@ -41,9 +41,9 @@ public class ComparisonsTest {
 		AbstractDatasetTest.checkDatasets(Comparisons.equalTo(3, a), new BooleanDataset(
 				new boolean[] {false, false, true, false, false, false}));
 
-		DoubleDataset ta = new DoubleDataset(new int [] {20, 10});
+		DoubleDataset ta = (DoubleDataset) DatasetFactory.zeros(new int [] {20, 10}, Dataset.FLOAT64);
 		ta.fill(Double.NaN);
-		DoubleDataset tb = new DoubleDataset(new int [] {20, 10});
+		DoubleDataset tb = (DoubleDataset) DatasetFactory.zeros(new int [] {20, 10}, Dataset.FLOAT64);
 		tb.fill(Double.NaN);
 		
 		BooleanDataset bd = new BooleanDataset(ta.getShape());
@@ -54,7 +54,7 @@ public class ComparisonsTest {
 		bd.fill(Boolean.TRUE);
 		AbstractDatasetTest.checkDatasets(Comparisons.equalTo(ta, tb), bd);
 
-		c = Comparisons.equalTo(new DoubleDataset(new int[]{}).fill(1), 1);
+		c = Comparisons.equalTo(DatasetFactory.createFromObject(1.), 1);
 		AbstractDatasetTest.checkDatasets(c, new BooleanDataset(new boolean[] {true}));
 
 		c = Comparisons.equalTo(a, 3);

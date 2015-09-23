@@ -233,6 +233,30 @@ public interface Dataset extends IErrorDataset {
 	public int[] getNDPosition(int n);
 
 	/**
+	 * @param i
+	 * @return the index on the data array corresponding to that location
+	 */
+	public int get1DIndex(int i);
+
+	/**
+	 * @param i
+	 * @return the index on the data array corresponding to that location
+	 */
+	public int get1DIndex(int i, int j);
+
+	/**
+	 * Function that uses the knowledge of the dataset to calculate the index in the data array
+	 * that corresponds to the n-dimensional position given by the int array. The input values
+	 * <b>must</b> be inside the arrays, this should be ok as this function is mainly in code which
+	 * will be run inside the get and set functions
+	 * 
+	 * @param pos
+	 *            the integer array specifying the n-D position
+	 * @return the index on the data array corresponding to that location
+	 */
+	public int get1DIndex(int[] pos);
+
+	/**
 	 * Check that axis is in range [-rank,rank)
 	 * 
 	 * @param axis
@@ -1314,4 +1338,22 @@ public interface Dataset extends IErrorDataset {
 	 * @return root mean square along axis in dataset
 	 */
 	public Dataset rootMeanSquare(int axis);
+
+	/**
+	 * Get value from store
+	 * 
+	 * @param key
+	 * @return value
+	 */
+	public Object getStoredValue(String key);
+
+	/**
+	 * Set value in store
+	 * <p>
+	 * This is a <b>private method</b>: do not use!
+	 * 
+	 * @param key
+	 * @param obj
+	 */
+	public void setStoredValue(String key, Object obj);
 }

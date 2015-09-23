@@ -1786,7 +1786,7 @@ public class Maths {
 		assert x.getRank() == 1;
 		assert d.getRank() == 1;
 	
-		DoubleDataset r = new DoubleDataset(x0.getShape());
+		DoubleDataset r = (DoubleDataset) DatasetFactory.zeros(x0.getShape(), Dataset.FLOAT64);
 	
 		DoubleDataset dx = (DoubleDataset) DatasetUtils.cast(x, Dataset.FLOAT64);
 		Dataset dx0 = DatasetUtils.convertToDataset(x0);

@@ -58,7 +58,7 @@ public class StatsTest {
 		start += System.nanoTime();
 		System.out.printf("New residual takes %.3fms\n", start*1e-6);
 
-		DoubleDataset tw = new DoubleDataset(ta.getSize());
+		DoubleDataset tw = (DoubleDataset) DatasetFactory.zeros(ta.getShape(), Dataset.FLOAT64);;
 		double wv = 2.5;
 		tw.fill(wv);
 		double wres = Stats.weightedResidual(ta, tb, tw);

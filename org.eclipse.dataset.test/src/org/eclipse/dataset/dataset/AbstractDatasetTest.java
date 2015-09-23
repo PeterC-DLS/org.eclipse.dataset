@@ -541,7 +541,7 @@ public class AbstractDatasetTest {
 		final int ncols = cols/scols;
 
 		start = System.currentTimeMillis();
-		DoubleDataset b = new DoubleDataset(rows, cols);
+		DoubleDataset b = (DoubleDataset) DatasetFactory.zeros(new int[] {rows, cols}, Dataset.FLOAT64);
 		final double[] da = (double[]) a.getBuffer();
 		final double[] db = b.getData();
 		if (scols == 1) {

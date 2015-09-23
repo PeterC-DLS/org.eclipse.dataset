@@ -1159,15 +1159,6 @@ public class DatasetUtils {
 	 * @param data can be null
 	 * @return Converted dataset or null
 	 */
-	public static AbstractDataset convertToAbstractDataset(IDataset data) {
-		return (AbstractDataset) convertToDataset(data);
-	}
-
-	/**
-	 * Convert (if necessary) a dataset obeying the interface to our implementation
-	 * @param data can be null
-	 * @return Converted dataset or null
-	 */
 	public static Dataset convertToDataset(IDataset data) {
 		if (data == null) 
 			return null;
@@ -1455,7 +1446,7 @@ public class DatasetUtils {
 			nshape[i+1] = shape[i];
 		}
 
-		IntegerDataset index = new IntegerDataset(nshape);
+		IntegerDataset index = (IntegerDataset) DatasetFactory.zeros(nshape, Dataset.INT32);
 
 		if (rank == 1) {
 			final int alen = shape[0];
@@ -1903,7 +1894,7 @@ public class DatasetUtils {
 		if (values.getRank() != 1) {
 			throw new IllegalArgumentException("Values dataset must be 1D");
 		}
-		IntegerDataset indexes = new IntegerDataset(values.getSize());
+		IntegerDataset indexes = (IntegerDataset) DatasetFactory.zeros(values.getShapeRef(), Dataset.INT32);
 		indexes.fill(-1);
 
 		IndexIterator it = a.getIterator();
@@ -1986,7 +1977,7 @@ public class DatasetUtils {
 		if (values.getRank() != 1) {
 			throw new IllegalArgumentException("Values dataset must be 1D");
 		}
-		IntegerDataset indexes = new IntegerDataset(a.getSize());
+		IntegerDataset indexes = (IntegerDataset) DatasetFactory.zeros(a.getShapeRef(), Dataset.INT32);
 		indexes.fill(-1);
 
 		IndexIterator it = a.getIterator();
@@ -2303,7 +2294,7 @@ public class DatasetUtils {
 		List<IntegerDataset> posns = new ArrayList<IntegerDataset>();
 		int[] iShape = indices.getShapeRef();
 		for (int i = 0; i < rank; i++) {
-			posns.add(new IntegerDataset(iShape));
+			posns.add((IntegerDataset) DatasetFactory.zeros(iShape, Dataset.INT32));
 		}
 		IDatasetIterator it = indices.getIterator(true);
 		int[] pos = it.getPos();
@@ -2349,7 +2340,7 @@ public class DatasetUtils {
 		}
 
 		Dataset p = positions.get(0);
-		IntegerDataset indexes = new IntegerDataset(p.getShapeRef());
+		IntegerDataset indexes = (IntegerDataset) DatasetFactory.zeros(p.getShapeRef(), Dataset.INT32);
 		IDatasetIterator it = p.getIterator(true);
 		int[] iPos = it.getPos();
 		int[] tPos = new int[rank];

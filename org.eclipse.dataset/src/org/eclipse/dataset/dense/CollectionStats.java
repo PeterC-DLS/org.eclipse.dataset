@@ -19,8 +19,6 @@ import java.util.List;
 
 import org.eclipse.dataset.DatasetException;
 import org.eclipse.dataset.IDataset;
-import org.eclipse.dataset.IDatasetIterator;
-import org.eclipse.dataset.PositionIterator;
 import org.eclipse.dataset.internal.dense.DoubleDataset;
 
 /**
@@ -77,20 +75,20 @@ public class CollectionStats {
 			                               final StatFunction   function) throws DatasetException {
 		
 		int[] shape = assertShapes(sets);
-		final DoubleDataset result = new DoubleDataset(shape);
+		final DoubleDataset result = (DoubleDataset) DatasetFactory.zeros(shape, Dataset.FLOAT64);
         final double[] rData = result.getData();
-        final IDatasetIterator iter = new PositionIterator(shape);
+        final IndexIterator iter = result.getIterator(true);
         final int[] pos = iter.getPos();
 
         final int len = sets.size();
-		final DoubleDataset pixel = new DoubleDataset(len);
+		final DoubleDataset pixel = (DoubleDataset) DatasetFactory.zeros(new int[] {len}, Dataset.FLOAT64);
 		final double[] pData = pixel.getData();
-        for (int i = 0; iter.hasNext(); i++) {
+		while (iter.hasNext()) {
 			for (int ipix = 0; ipix < len; ipix++) {
 				pData[ipix] = sets.get(ipix).getDouble(pos);
 			}
 			pixel.setDirty();
-			rData[i] = function.evaluate(pixel);
+			rData[iter.index] = function.evaluate(pixel);
 		}
         
         return result;

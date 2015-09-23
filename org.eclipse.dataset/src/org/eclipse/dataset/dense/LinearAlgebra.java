@@ -35,9 +35,7 @@ import org.apache.commons.math.linear.SingularValueDecomposition;
 import org.apache.commons.math.linear.SingularValueDecompositionImpl;
 import org.eclipse.dataset.IDatasetIterator;
 import org.eclipse.dataset.PositionIterator;
-import org.eclipse.dataset.internal.dense.AbstractCompoundDataset;
 import org.eclipse.dataset.internal.dense.AbstractDataset;
-import org.eclipse.dataset.internal.dense.ComplexDoubleDataset;
 import org.eclipse.dataset.internal.dense.CompoundLongDataset;
 import org.eclipse.dataset.internal.dense.DoubleDataset;
 import org.eclipse.dataset.internal.utils.MissingFromMath2;
@@ -741,7 +739,7 @@ public class LinearAlgebra {
 				}
 			}
 		} else {
-			AbstractCompoundDataset ca = (AbstractCompoundDataset) a;
+			CompoundDataset ca = (CompoundDataset) a;
 			if (ca instanceof CompoundLongDataset) {
 				long[] t = new long[is];
 				long[] s = new long[is];
@@ -1058,7 +1056,7 @@ public class LinearAlgebra {
 	 */
 	public static Dataset[] calcSingularValueDecomposition(Dataset a) {
 		SingularValueDecomposition svd = new SingularValueDecompositionImpl(createRealMatrix(a));
-		return new Dataset[] {createDataset(svd.getU()), new DoubleDataset(svd.getSingularValues()),
+		return new Dataset[] {createDataset(svd.getU()), DatasetFactory.createFromObject(svd.getSingularValues()),
 				createDataset(svd.getV())};
 	}
 
@@ -1111,9 +1109,9 @@ public class LinearAlgebra {
 
 		if (MissingFromMath2.hasComplexEigenvalues(evd)) {
 			double[] iev = evd.getImagEigenvalues();
-			return new ComplexDoubleDataset(rev, iev);
+			return DatasetFactory.createCompoundDatasetFromObject(new double[][] {rev, iev});
 		}
-		return new DoubleDataset(rev);
+		return DatasetFactory.createFromObject(rev);
 	}
 
 	/**
@@ -1128,9 +1126,9 @@ public class LinearAlgebra {
 		double[] rev = evd.getRealEigenvalues();
 		if (MissingFromMath2.hasComplexEigenvalues(evd)) {
 			double[] iev = evd.getImagEigenvalues();
-			results[0] = new ComplexDoubleDataset(rev, iev);
+			results[0] = DatasetFactory.createCompoundDatasetFromObject(new double[][] {rev, iev});
 		} else {
-			results[0] = new DoubleDataset(rev);
+			results[0] = DatasetFactory.createFromObject(rev);
 		}
 		results[1] = createDataset(evd.getV());
 		return results;
@@ -1272,7 +1270,7 @@ public class LinearAlgebra {
 	}
 
 	private static Dataset createDataset(RealVector v) {
-		DoubleDataset r = new DoubleDataset(v.getDimension());
+		DoubleDataset r = (DoubleDataset) DatasetFactory.zeros(new int[] {v.getDimension()}, Dataset.FLOAT64);
 		int size = r.getSize();
 		if (v instanceof ArrayRealVector) {
 			double[] data = ((ArrayRealVector) v).getDataRef();
@@ -1288,7 +1286,7 @@ public class LinearAlgebra {
 	}
 
 	private static Dataset createDataset(RealMatrix m) {
-		DoubleDataset r = new DoubleDataset(m.getRowDimension(), m.getColumnDimension());
+		DoubleDataset r = (DoubleDataset) DatasetFactory.zeros(new int[] {m.getRowDimension(), m.getColumnDimension()}, Dataset.FLOAT64);
 		if (m instanceof Array2DRowRealMatrix) {
 			double[][] data = ((Array2DRowRealMatrix) m).getDataRef();
 			IndexIterator it = r.getIterator(true);

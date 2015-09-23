@@ -901,17 +901,8 @@ public abstract class AbstractDataset extends LazyDatasetBase implements Dataset
 		return get1DIndexFromShape(shape, pos);
 	}
 
-	/**
-	 * Function that uses the knowledge of the dataset to calculate the index in the data array
-	 * that corresponds to the n-dimensional position given by the int array. The input values
-	 * <b>must</b> be inside the arrays, this should be ok as this function is mainly in code which
-	 * will be run inside the get and set functions
-	 * 
-	 * @param n
-	 *            the integer array specifying the n-D position
-	 * @return the index on the data array corresponding to that location
-	 */
-	public int get1DIndex(final int... n) {
+	@Override
+	public int get1DIndex(final int[] n) {
 		final int imax = n.length;
 		final int rank = shape.length;
 		if (imax == 0) {
@@ -935,7 +926,8 @@ public abstract class AbstractDataset extends LazyDatasetBase implements Dataset
 	 * @param i
 	 * @return the index on the data array corresponding to that location
 	 */
-	protected int get1DIndex(int i) {
+	@Override
+	public int get1DIndex(int i) {
 		if (shape.length > 1) {
 			logger.debug("This dataset is not 1D but was addressed as such");
 //			throw new IllegalArgumentException("This dataset is not 1D but was addressed as such");
@@ -955,7 +947,8 @@ public abstract class AbstractDataset extends LazyDatasetBase implements Dataset
 	 * @param j
 	 * @return the index on the data array corresponding to that location
 	 */
-	protected int get1DIndex(int i, int j) {
+	@Override
+	public int get1DIndex(int i, int j) {
 		if (shape.length != 2) {
 			logger.debug("This dataset is not 2D but was addressed as such");
 //			throw new IllegalArgumentException("This dataset is not 2D but was addressed as such");
@@ -1561,12 +1554,7 @@ public abstract class AbstractDataset extends LazyDatasetBase implements Dataset
 	private static final String STORE_INDEX = "Index";
 	protected static final String STORE_BROADCAST = "Broadcast";
 
-	/**
-	 * Get value from store
-	 * 
-	 * @param key
-	 * @return value
-	 */
+	@Override
 	public Object getStoredValue(String key) {
 		if (storedValues == null) {
 			return null;
@@ -1583,6 +1571,7 @@ public abstract class AbstractDataset extends LazyDatasetBase implements Dataset
 	 * @param key
 	 * @param obj
 	 */
+	@Override
 	public void setStoredValue(String key, Object obj) {
 		if (storedValues == null) {
 			storedValues = new HashMap<String, Object>();

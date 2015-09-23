@@ -44,7 +44,7 @@ public class Stats {
 	private static final String STORE_QUARTILE3 = "quartile3";
 
 	// calculates statistics and returns sorted dataset (0th element if compound)
-	private static Dataset calcQuartileStats(final AbstractDataset a) {
+	private static Dataset calcQuartileStats(final Dataset a) {
 		Dataset s = null;
 		final int is = a.getElementsPerItem();
 
@@ -77,7 +77,7 @@ public class Stats {
 		return s;
 	}
 
-	static private Object getQStatistics(final AbstractDataset a, final String stat) {
+	static private Object getQStatistics(final Dataset a, final String stat) {
 		Object m = a.getStoredValue(stat);
 		if (m == null) {
 			calcQuartileStats(a);
@@ -86,7 +86,7 @@ public class Stats {
 		return m;
 	}
 
-	static private Dataset getQStatistics(final AbstractDataset a, int axis, final String stat) {
+	static private Dataset getQStatistics(final Dataset a, int axis, final String stat) {
 		axis = a.checkAxis(axis);
 		Object obj = a.getStoredValue(stat);
 		final int is = a.getElementsPerItem();
@@ -215,7 +215,7 @@ public class Stats {
 		if (q < 0 || q > 1) {
 			throw new IllegalArgumentException("Quantile requested is outside [0,1]");
 		}
-		final Dataset s = calcQuartileStats(DatasetUtils.convertToAbstractDataset(a));
+		final Dataset s = calcQuartileStats(a);
 		return pQuantile(s, q);
 	}
 
@@ -227,7 +227,7 @@ public class Stats {
 	 */
 	public static double[] quantile(final Dataset a, final double... values) {
 		final double[] points  = new double[values.length];
-		final Dataset s = calcQuartileStats(DatasetUtils.convertToAbstractDataset(a));
+		final Dataset s = calcQuartileStats(a);
 		for (int i = 0; i < points.length; i++) {
 			final double q = values[i];
 			if (q < 0 || q > 1) {
@@ -287,7 +287,7 @@ public class Stats {
 	 * @return median
 	 */
 	public static Dataset median(final Dataset a, final int axis) {
-		return getQStatistics(DatasetUtils.convertToAbstractDataset(a), axis, STORE_MEDIAN + "-" + axis);
+		return getQStatistics(a, axis, STORE_MEDIAN + "-" + axis);
 	}
 
 	/**
@@ -295,7 +295,7 @@ public class Stats {
 	 * @return median
 	 */
 	public static Object median(final Dataset a) {
-		return getQStatistics(DatasetUtils.convertToAbstractDataset(a), STORE_MEDIAN);
+		return getQStatistics(a, STORE_MEDIAN);
 	}
 
 	/**
@@ -304,15 +304,14 @@ public class Stats {
 	 * @return range
 	 */
 	public static Object iqr(final Dataset a) {
-		AbstractDataset aa = DatasetUtils.convertToAbstractDataset(a);
-		final int is = aa.getElementsPerItem();
+		final int is = a.getElementsPerItem();
 		if (is == 1) {
-			double q3 = ((Double) getQStatistics(aa, STORE_QUARTILE3));
-			return Double.valueOf(q3 - ((Double) aa.getStoredValue(STORE_QUARTILE1)).doubleValue());
+			double q3 = ((Double) getQStatistics(a, STORE_QUARTILE3));
+			return Double.valueOf(q3 - ((Double) a.getStoredValue(STORE_QUARTILE1)).doubleValue());
 		}
 
-		double[] q1 = (double[]) getQStatistics(aa, STORE_QUARTILE1);
-		double[] q3 = (double[]) getQStatistics(aa, STORE_QUARTILE3);
+		double[] q1 = (double[]) getQStatistics(a, STORE_QUARTILE1);
+		double[] q3 = (double[]) getQStatistics(a, STORE_QUARTILE3);
 		for (int j = 0; j < is; j++) {
 			q3[j] -= q1[j];
 		}
@@ -326,13 +325,12 @@ public class Stats {
 	 * @return range
 	 */
 	public static Dataset iqr(final Dataset a, final int axis) {
-		AbstractDataset aa = DatasetUtils.convertToAbstractDataset(a);
-		Dataset q3 = getQStatistics(aa, axis, STORE_QUARTILE3 + "-" + axis);
+		Dataset q3 = getQStatistics(a, axis, STORE_QUARTILE3 + "-" + axis);
 
-		return Maths.subtract(q3, aa.getStoredValue(STORE_QUARTILE1 + "-" + axis));
+		return Maths.subtract(q3, a.getStoredValue(STORE_QUARTILE1 + "-" + axis));
 	}
 
-	static private Object getHigherStatistic(final AbstractDataset a, final boolean ignoreNaNs, String stat) {
+	static private Object getHigherStatistic(final Dataset a, final boolean ignoreNaNs, String stat) {
 		Object obj = a.getStoredValue(stat);
 		if (obj == null) {
 			calculateHigherMoments(a, ignoreNaNs);
@@ -342,7 +340,7 @@ public class Stats {
 		return obj;
 	}
 
-	static private DoubleDataset getHigherStatistic(final AbstractDataset a, final boolean ignoreNaNs, int axis, String stat) {
+	static private DoubleDataset getHigherStatistic(final Dataset a, final boolean ignoreNaNs, int axis, String stat) {
 		axis = a.checkAxis(axis);
 	
 		DoubleDataset obj = (DoubleDataset) a.getStoredValue(stat);
@@ -354,7 +352,7 @@ public class Stats {
 		return obj;
 	}
 
-	static private void calculateHigherMoments(final AbstractDataset a, final boolean ignoreNaNs) {
+	static private void calculateHigherMoments(final Dataset a, final boolean ignoreNaNs) {
 		final int is = a.getElementsPerItem();
 		final IndexIterator iter = a.getIterator();
 
@@ -422,7 +420,7 @@ public class Stats {
 		}
 	}
 
-	static private void calculateHigherMoments(final AbstractDataset a, final boolean ignoreNaNs, final int axis) {
+	static private void calculateHigherMoments(final Dataset a, final boolean ignoreNaNs, final int axis) {
 		final int rank = a.getRank();
 		final int is = a.getElementsPerItem();
 		final int[] oshape = a.getShape();
@@ -435,8 +433,8 @@ public class Stats {
 	
 	
 		if (is == 1) {
-			sk = new DoubleDataset(nshape);
-			ku = new DoubleDataset(nshape);
+			sk = DatasetFactory.zeros(nshape, Dataset.FLOAT64);
+			ku = DatasetFactory.zeros(nshape, Dataset.FLOAT64);
 			final IDatasetIterator qiter = sk.getIterator(true);
 			final int[] qpos = qiter.getPos();
 			final int[] spos = oshape;
@@ -553,7 +551,7 @@ public class Stats {
 	 * @return skewness
 	 */
 	public static Object skewness(final Dataset a, final boolean ignoreNaNs) {
-		return getHigherStatistic(DatasetUtils.convertToAbstractDataset(a), ignoreNaNs, AbstractDataset.storeName(ignoreNaNs, STORE_SKEWNESS));
+		return getHigherStatistic(a, ignoreNaNs, AbstractDataset.storeName(ignoreNaNs, STORE_SKEWNESS));
 	}
 
 	/**
@@ -571,7 +569,7 @@ public class Stats {
 	 * @return kurtosis
 	 */
 	public static Object kurtosis(final Dataset a, final boolean ignoreNaNs) {
-		return getHigherStatistic(DatasetUtils.convertToAbstractDataset(a), ignoreNaNs, AbstractDataset.storeName(ignoreNaNs, STORE_KURTOSIS));
+		return getHigherStatistic(a, ignoreNaNs, AbstractDataset.storeName(ignoreNaNs, STORE_KURTOSIS));
 	}
 
 	/**
@@ -591,7 +589,7 @@ public class Stats {
 	 * @return skewness
 	 */
 	public static Dataset skewness(final Dataset a, final boolean ignoreNaNs, final int axis) {
-		return getHigherStatistic(DatasetUtils.convertToAbstractDataset(a), ignoreNaNs, axis, AbstractDataset.storeName(ignoreNaNs, STORE_SKEWNESS + "-" + axis));
+		return getHigherStatistic(a, ignoreNaNs, axis, AbstractDataset.storeName(ignoreNaNs, STORE_SKEWNESS + "-" + axis));
 	}
 
 	/**
@@ -611,7 +609,7 @@ public class Stats {
 	 * @return kurtosis
 	 */
 	public static Dataset kurtosis(final Dataset a, final boolean ignoreNaNs, final int axis) {
-		return getHigherStatistic(DatasetUtils.convertToAbstractDataset(a), ignoreNaNs, axis, AbstractDataset.storeName(ignoreNaNs, STORE_KURTOSIS + "-" + axis));
+		return getHigherStatistic(a, ignoreNaNs, axis, AbstractDataset.storeName(ignoreNaNs, STORE_KURTOSIS + "-" + axis));
 	}
 
 	/**

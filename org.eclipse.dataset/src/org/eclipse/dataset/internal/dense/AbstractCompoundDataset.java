@@ -48,13 +48,13 @@ public abstract class AbstractCompoundDataset extends AbstractDataset implements
 	}
 
 	@Override
-	protected int get1DIndex(final int i) {
+	public int get1DIndex(final int i) {
 		int n = super.get1DIndex(i);
 		return stride == null ? isize * n : n;
 	}
 
 	@Override
-	protected int get1DIndex(final int i, final int j) {
+	public int get1DIndex(final int i, final int j) {
 		int n = super.get1DIndex(i, j);
 		return stride == null ? isize * n : n;
 	}

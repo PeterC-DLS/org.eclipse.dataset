@@ -16,7 +16,7 @@ import org.eclipse.dataset.DoubleUtils;
 import org.eclipse.dataset.IDataset;
 import org.eclipse.dataset.dense.CollectionStats;
 import org.eclipse.dataset.dense.Dataset;
-import org.eclipse.dataset.internal.dense.DoubleDataset;
+import org.eclipse.dataset.dense.DatasetFactory;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -30,18 +30,18 @@ public class CollectionStatsTest {
    private static List<IDataset> SETS1D, SETS2D;
    static {
 	   SETS1D = new ArrayList<IDataset>(5);
-	   SETS1D.add(new DoubleDataset(new double[]{1,  2,1,  4,5  }, 5));
-	   SETS1D.add(new DoubleDataset(new double[]{500,2,1,  4,5  }, 5));
-	   SETS1D.add(new DoubleDataset(new double[]{1,  2,1,  4,5  }, 5));
-	   SETS1D.add(new DoubleDataset(new double[]{1,  2,3,  4,500}, 5));
-	   SETS1D.add(new DoubleDataset(new double[]{1,  2,300,4,5  }, 5));
+	   SETS1D.add(DatasetFactory.createFromObject(new double[]{1,  2,1,  4,5  }).reshape(5));
+	   SETS1D.add(DatasetFactory.createFromObject(new double[]{500,2,1,  4,5  }).reshape(5));
+	   SETS1D.add(DatasetFactory.createFromObject(new double[]{1,  2,1,  4,5  }).reshape(5));
+	   SETS1D.add(DatasetFactory.createFromObject(new double[]{1,  2,3,  4,500}).reshape(5));
+	   SETS1D.add(DatasetFactory.createFromObject(new double[]{1,  2,300,4,5  }).reshape(5));
 	   
 	   SETS2D = new ArrayList<IDataset>(5);
-	   SETS2D.add(new DoubleDataset(new double[]{1,  2,1,4  }, 2,2));
-	   SETS2D.add(new DoubleDataset(new double[]{500,2,1,4  }, 2,2));
-	   SETS2D.add(new DoubleDataset(new double[]{1,  2,1,4  }, 2,2));
-	   SETS2D.add(new DoubleDataset(new double[]{1,  2,3,500}, 2,2));
-	   SETS2D.add(new DoubleDataset(new double[]{1,  2,300,4}, 2,2));
+	   SETS2D.add(DatasetFactory.createFromObject(new double[]{1,  2,1,4  }).reshape(2,2));
+	   SETS2D.add(DatasetFactory.createFromObject(new double[]{500,2,1,4  }).reshape(2,2));
+	   SETS2D.add(DatasetFactory.createFromObject(new double[]{1,  2,1,4  }).reshape(2,2));
+	   SETS2D.add(DatasetFactory.createFromObject(new double[]{1,  2,3,500}).reshape(2,2));
+	   SETS2D.add(DatasetFactory.createFromObject(new double[]{1,  2,300,4}).reshape(2,2));
    }
    
    @Test
