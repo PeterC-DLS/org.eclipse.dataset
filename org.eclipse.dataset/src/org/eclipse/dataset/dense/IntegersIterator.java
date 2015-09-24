@@ -19,8 +19,8 @@ import java.util.List;
 import org.eclipse.dataset.IDatasetIterator;
 import org.eclipse.dataset.PositionIterator;
 import org.eclipse.dataset.Slice;
-import org.eclipse.dataset.internal.dense.BooleanDataset;
-import org.eclipse.dataset.internal.dense.IntegerDataset;
+import org.eclipse.dataset.dense.BooleanDataset;
+import org.eclipse.dataset.dense.IntegerDataset;
 
 /**
  * Class to run over an array of integer datasets and return its items

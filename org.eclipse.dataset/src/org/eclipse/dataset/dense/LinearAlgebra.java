@@ -36,8 +36,8 @@ import org.apache.commons.math.linear.SingularValueDecompositionImpl;
 import org.eclipse.dataset.IDatasetIterator;
 import org.eclipse.dataset.PositionIterator;
 import org.eclipse.dataset.internal.dense.AbstractDataset;
-import org.eclipse.dataset.internal.dense.CompoundLongDataset;
-import org.eclipse.dataset.internal.dense.DoubleDataset;
+import org.eclipse.dataset.dense.CompoundLongDataset;
+import org.eclipse.dataset.dense.DoubleDataset;
 import org.eclipse.dataset.internal.utils.MissingFromMath2;
 
 

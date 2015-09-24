@@ -12,7 +12,7 @@
 
 package org.eclipse.dataset.dense;
 
-import org.eclipse.dataset.internal.dense.IntegerDataset;
+import org.eclipse.dataset.dense.IntegerDataset;
 
 /**
  * Class to run over an integer dataset and return its items

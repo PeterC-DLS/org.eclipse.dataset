@@ -29,6 +29,7 @@ import org.eclipse.dataset.dense.BroadcastIterator;
 import org.eclipse.dataset.dense.Dataset;
 import org.eclipse.dataset.dense.DatasetFactory;
 import org.eclipse.dataset.dense.DatasetUtils;
+import org.eclipse.dataset.dense.DoubleDataset; // CLASS_TYPE
 import org.eclipse.dataset.dense.DTypeUtils;
 import org.eclipse.dataset.dense.IndexIterator;
 import org.eclipse.dataset.dense.IntegerIterator;
@@ -39,7 +40,7 @@ import org.eclipse.dataset.dense.SliceIterator;
 /**
  * Extend dataset for double values // PRIM_TYPE
  */
-public class DoubleDataset extends AbstractDataset {
+public class DoubleDatasetImpl extends AbstractDataset implements DoubleDataset { // CLASS_TYPE
 	// pin UID to base class
 	private static final long serialVersionUID = Dataset.serialVersionUID;
 
@@ -69,14 +70,14 @@ public class DoubleDataset extends AbstractDataset {
 		return FLOAT64; // DATA_TYPE
 	}
 
-	public DoubleDataset() {
+	public DoubleDatasetImpl() {
 	}
 
 	/**
 	 * Create a zero-filled dataset of given shape
 	 * @param shape
 	 */
-	public DoubleDataset(final int... shape) {
+	public DoubleDatasetImpl(final int... shape) {
 		if (shape.length == 1) {
 			size = shape[0];
 			if (size < 0) {
@@ -96,7 +97,7 @@ public class DoubleDataset extends AbstractDataset {
 	 * @param shape
 	 *            (can be null to create 1D dataset)
 	 */
-	public DoubleDataset(final double[] data, int... shape) { // PRIM_TYPE
+	public DoubleDatasetImpl(final double[] data, int... shape) { // PRIM_TYPE
 		if (data == null) {
 			throw new IllegalArgumentException("Data must not be null");
 		}
@@ -117,7 +118,7 @@ public class DoubleDataset extends AbstractDataset {
 	 * Copy a dataset
 	 * @param dataset
 	 */
-	public DoubleDataset(final DoubleDataset dataset) {
+	public DoubleDatasetImpl(final DoubleDatasetImpl dataset) {
 		copyToView(dataset, this, true, true);
 		if (dataset.stride == null) {
 			odata = data = dataset.data.clone();
@@ -137,7 +138,7 @@ public class DoubleDataset extends AbstractDataset {
 	 * Cast a dataset to this class type
 	 * @param dataset
 	 */
-	public DoubleDataset(final Dataset dataset) {
+	public DoubleDatasetImpl(final Dataset dataset) {
 		copyToView(dataset, this, true, false);
 		offset = 0;
 		stride = null;
@@ -158,7 +159,7 @@ public class DoubleDataset extends AbstractDataset {
 		if (getRank() == 0) // already true for zero-rank dataset
 			return true;
 
-		DoubleDataset other = (DoubleDataset) obj;
+		DoubleDatasetImpl other = (DoubleDatasetImpl) obj;
 		IndexIterator iter = getIterator();
 		IndexIterator oiter = other.getIterator();
 		while (iter.hasNext() && oiter.hasNext()) {
@@ -174,8 +175,8 @@ public class DoubleDataset extends AbstractDataset {
 	}
 
 	@Override
-	public DoubleDataset clone() {
-		return new DoubleDataset(this);
+	public DoubleDatasetImpl clone() {
+		return new DoubleDatasetImpl(this);
 	}
 
 	/**
@@ -185,8 +186,8 @@ public class DoubleDataset extends AbstractDataset {
 	 * @param obj
 	 * @return dataset with contents given by input
 	 */
-	public static DoubleDataset createFromObject(final Object obj) {
-		DoubleDataset result = new DoubleDataset();
+	public static DoubleDatasetImpl createFromObject(final Object obj) {
+		DoubleDatasetImpl result = new DoubleDatasetImpl();
 
 		result.shape = DatasetUtils.getShapeFromObject(obj);
 		result.size = DatasetUtils.calculateSize(result.shape);
@@ -203,7 +204,7 @@ public class DoubleDataset extends AbstractDataset {
 	 * @param stop // NAN_OMIT
 	 * @return a new 1D dataset, filled with values determined by parameters // NAN_OMIT
 	 */ // NAN_OMIT
-	public static DoubleDataset createRange(final double stop) { // NAN_OMIT
+	public static DoubleDatasetImpl createRange(final double stop) { // NAN_OMIT
 		return createRange(0, stop, 1); // NAN_OMIT
 	} // NAN_OMIT
 	 // NAN_OMIT
@@ -214,9 +215,9 @@ public class DoubleDataset extends AbstractDataset {
 	 * @param step // NAN_OMIT
 	 * @return a new 1D dataset, filled with values determined by parameters // NAN_OMIT
 	 */ // NAN_OMIT
-	public static DoubleDataset createRange(final double start, final double stop, final double step) { // NAN_OMIT
+	public static DoubleDatasetImpl createRange(final double start, final double stop, final double step) { // NAN_OMIT
 		int size = calcSteps(start, stop, step); // NAN_OMIT
-		DoubleDataset result = new DoubleDataset(size); // NAN_OMIT
+		DoubleDatasetImpl result = new DoubleDatasetImpl(size); // NAN_OMIT
 		for (int i = 0; i < size; i++) { // NAN_OMIT
 			result.data[i] = (start + i * step); // PRIM_TYPE // NAN_OMIT // ADD_CAST
 		} // NAN_OMIT
@@ -227,12 +228,12 @@ public class DoubleDataset extends AbstractDataset {
 	 * @param shape
 	 * @return a dataset filled with ones
 	 */
-	public static DoubleDataset ones(final int... shape) {
-		return new DoubleDataset(shape).fill(1);
+	public static DoubleDatasetImpl ones(final int... shape) {
+		return new DoubleDatasetImpl(shape).fill(1);
 	}
 
 	@Override
-	public DoubleDataset fill(final Object obj) {
+	public DoubleDatasetImpl fill(final Object obj) {
 		double dv = DTypeUtils.toReal(obj); // PRIM_TYPE // FROM_OBJECT
 		IndexIterator iter = getIterator();
 		while (iter.hasNext()) {
@@ -247,6 +248,7 @@ public class DoubleDataset extends AbstractDataset {
 	 * This is a typed version of {@link #getBuffer()}
 	 * @return data buffer as linear array
 	 */
+	@Override
 	public double[] getData() { // PRIM_TYPE
 		return data;
 	}
@@ -259,8 +261,8 @@ public class DoubleDataset extends AbstractDataset {
 	}
 
 	@Override
-	public DoubleDataset getView() {
-		DoubleDataset view = new DoubleDataset();
+	public DoubleDatasetImpl getView() {
+		DoubleDatasetImpl view = new DoubleDatasetImpl();
 		copyToView(this, view, true, true);
 		view.setData();
 		return view;
@@ -274,6 +276,7 @@ public class DoubleDataset extends AbstractDataset {
 	 *            absolute index
 	 * @return value
 	 */
+	@Override
 	public double getAbs(final int index) { // PRIM_TYPE
 		return data[index];
 	}
@@ -313,6 +316,7 @@ public class DoubleDataset extends AbstractDataset {
 	 * @param val
 	 *            new value
 	 */
+	@Override
 	public void setAbs(final int index, final double val) { // PRIM_TYPE
 		data[index] = val;
 		setDirty();
@@ -337,6 +341,7 @@ public class DoubleDataset extends AbstractDataset {
 	 * @param i
 	 * @return item in given position
 	 */
+	@Override
 	public double get(final int i) { // PRIM_TYPE
 		return data[get1DIndex(i)];
 	}
@@ -346,6 +351,7 @@ public class DoubleDataset extends AbstractDataset {
 	 * @param j
 	 * @return item in given position
 	 */
+	@Override
 	public double get(final int i, final int j) { // PRIM_TYPE
 		return data[get1DIndex(i, j)];
 	}
@@ -354,6 +360,7 @@ public class DoubleDataset extends AbstractDataset {
 	 * @param pos
 	 * @return item in given position
 	 */
+	@Override
 	public double get(final int... pos) { // PRIM_TYPE
 		return data[get1DIndex(pos)];
 	}
@@ -499,6 +506,7 @@ public class DoubleDataset extends AbstractDataset {
 	 * @param value
 	 * @param i
 	 */
+	@Override
 	public void setItem(final double value, final int i) { // PRIM_TYPE
 		setAbs(get1DIndex(i), value);
 	}
@@ -510,6 +518,7 @@ public class DoubleDataset extends AbstractDataset {
 	 * @param i
 	 * @param j
 	 */
+	@Override
 	public void setItem(final double value, final int i, final int j) { // PRIM_TYPE
 		setAbs(get1DIndex(i, j), value);
 	}
@@ -520,6 +529,7 @@ public class DoubleDataset extends AbstractDataset {
 	 * @param value
 	 * @param pos
 	 */
+	@Override
 	public void setItem(final double value, final int... pos) { // PRIM_TYPE
 		setAbs(get1DIndex(pos), value);
 	}
@@ -562,13 +572,13 @@ public class DoubleDataset extends AbstractDataset {
 	}
 
 	@Override
-	public DoubleDataset sort(Integer axis) {
+	public DoubleDatasetImpl sort(Integer axis) {
 		if (axis == null) { // BOOLEAN_OMIT
 			Arrays.sort(data); // BOOLEAN_OMIT
 		} else { // BOOLEAN_OMIT
 			axis = checkAxis(axis); // BOOLEAN_OMIT
 			 // BOOLEAN_OMIT 
-			DoubleDataset ads = new DoubleDataset(shape[axis]); // BOOLEAN_OMIT
+			DoubleDatasetImpl ads = new DoubleDatasetImpl(shape[axis]); // BOOLEAN_OMIT
 			PositionIterator pi = getPositionIterator(axis); // BOOLEAN_OMIT
 			int[] pos = pi.getPos(); // BOOLEAN_OMIT
 			boolean[] hit = pi.getOmit(); // BOOLEAN_OMIT
@@ -585,14 +595,14 @@ public class DoubleDataset extends AbstractDataset {
 	}
 
 	@Override
-	public DoubleDataset getUniqueItems() {
+	public DoubleDatasetImpl getUniqueItems() {
 		Set<Double> set = new TreeSet<Double>(); // CLASS_TYPE
 		IndexIterator it = getIterator();
 		while (it.hasNext()) {
 			set.add(data[it.index]);
 		}
 
-		DoubleDataset u = new DoubleDataset(set.size()); // CLASS_TYPE
+		DoubleDatasetImpl u = new DoubleDatasetImpl(set.size()); // CLASS_TYPE
 		int i = 0;
 		double[] udata = u.getData(); // PRIM_TYPE
 		for (Double v : set) { // CLASS_TYPE
@@ -602,8 +612,8 @@ public class DoubleDataset extends AbstractDataset {
 	}
 
 	@Override
-	public DoubleDataset getSlice(final SliceIterator siter) {
-		DoubleDataset result = new DoubleDataset(siter.getShape());
+	public DoubleDatasetImpl getSlice(final SliceIterator siter) {
+		DoubleDatasetImpl result = new DoubleDatasetImpl(siter.getShape());
 		double[] rdata = result.data; // PRIM_TYPE
 
 		for (int i = 0; siter.hasNext(); i++)
@@ -617,14 +627,14 @@ public class DoubleDataset extends AbstractDataset {
 	public void fillDataset(Dataset result, IndexIterator iter) {
 		IndexIterator riter = result.getIterator();
 
-		double[] rdata = ((DoubleDataset) result).data; // PRIM_TYPE
+		double[] rdata = ((DoubleDatasetImpl) result).data; // PRIM_TYPE
 
 		while (riter.hasNext() && iter.hasNext())
 			rdata[riter.index] = data[iter.index];
 	}
 
 	@Override
-	public DoubleDataset setByBoolean(final Object obj, Dataset selection) {
+	public DoubleDatasetImpl setByBoolean(final Object obj, Dataset selection) {
 		if (obj instanceof Dataset) {
 			final Dataset ds = (Dataset) obj;
 			final int length = ((Number) selection.sum()).intValue();
@@ -652,7 +662,7 @@ public class DoubleDataset extends AbstractDataset {
 	}
 
 	@Override
-	public DoubleDataset setBy1DIndex(final Object obj, final Dataset index) {
+	public DoubleDatasetImpl setBy1DIndex(final Object obj, final Dataset index) {
 		if (obj instanceof Dataset) {
 			final Dataset ds = (Dataset) obj;
 			if (index.getSize() != ds.getSize()) {
@@ -679,7 +689,7 @@ public class DoubleDataset extends AbstractDataset {
 	}
 
 	@Override
-	public DoubleDataset setByIndexes(final Object obj, final Object... indexes) {
+	public DoubleDatasetImpl setByIndexes(final Object obj, final Object... indexes) {
 		final IntegersIterator iter = new IntegersIterator(shape, indexes);
 		final int[] pos = iter.getPos();
 
@@ -707,7 +717,7 @@ public class DoubleDataset extends AbstractDataset {
 	}
 
 	@Override
-	DoubleDataset setSlicedView(Dataset view, Dataset d) {
+	DoubleDatasetImpl setSlicedView(Dataset view, Dataset d) {
 		final BroadcastIterator it = BroadcastIterator.createIterator(view, d);
 
 		while (it.hasNext()) {
@@ -717,7 +727,7 @@ public class DoubleDataset extends AbstractDataset {
 	}
 
 	@Override
-	public DoubleDataset setSlice(final Object obj, final IndexIterator siter) {
+	public DoubleDatasetImpl setSlice(final Object obj, final IndexIterator siter) {
 
 		if (obj instanceof IDataset) {
 			final IDataset ds = (IDataset) obj;
@@ -898,7 +908,7 @@ public class DoubleDataset extends AbstractDataset {
 	}
 
 	@Override
-	public DoubleDataset iadd(final Object b) {
+	public DoubleDatasetImpl iadd(final Object b) {
 		Dataset bds = b instanceof Dataset ? (Dataset) b : DatasetFactory.createFromObject(b); // NAN_OMIT
 		boolean useLong = bds.getElementClass().equals(Long.class); // NAN_OMIT
 		if (bds.getSize() == 1) { // NAN_OMIT
@@ -932,7 +942,7 @@ public class DoubleDataset extends AbstractDataset {
 	}
 
 	@Override
-	public DoubleDataset isubtract(final Object b) {
+	public DoubleDatasetImpl isubtract(final Object b) {
 		Dataset bds = b instanceof Dataset ? (Dataset) b : DatasetFactory.createFromObject(b); // NAN_OMIT
 		boolean useLong = bds.getElementClass().equals(Long.class); // NAN_OMIT
 		if (bds.getSize() == 1) { // NAN_OMIT
@@ -967,7 +977,7 @@ public class DoubleDataset extends AbstractDataset {
 	}
 
 	@Override
-	public DoubleDataset imultiply(final Object b) {
+	public DoubleDatasetImpl imultiply(final Object b) {
 		Dataset bds = b instanceof Dataset ? (Dataset) b : DatasetFactory.createFromObject(b); // NAN_OMIT
 		boolean useLong = bds.getElementClass().equals(Long.class); // NAN_OMIT
 		if (bds.getSize() == 1) { // NAN_OMIT
@@ -1001,7 +1011,7 @@ public class DoubleDataset extends AbstractDataset {
 	}
 
 	@Override
-	public DoubleDataset idivide(final Object b) {
+	public DoubleDatasetImpl idivide(final Object b) {
 		Dataset bds = b instanceof Dataset ? (Dataset) b : DatasetFactory.createFromObject(b); // NAN_OMIT
 		boolean useLong = bds.getElementClass().equals(Long.class); // NAN_OMIT
 		if (bds.getSize() == 1) { // NAN_OMIT
@@ -1052,7 +1062,7 @@ public class DoubleDataset extends AbstractDataset {
 	}
 
 	@Override
-	public DoubleDataset ifloor() {
+	public DoubleDatasetImpl ifloor() {
 		IndexIterator it = getIterator(); // REAL_ONLY
 		while (it.hasNext()) { // REAL_ONLY
 			data[it.index] = Math.floor(data[it.index]); // PRIM_TYPE // REAL_ONLY // ADD_CAST
@@ -1062,7 +1072,7 @@ public class DoubleDataset extends AbstractDataset {
 	}
 
 	@Override
-	public DoubleDataset iremainder(final Object b) {
+	public DoubleDatasetImpl iremainder(final Object b) {
 		Dataset bds = b instanceof Dataset ? (Dataset) b : DatasetFactory.createFromObject(b); // NAN_OMIT
 		boolean useLong = bds.getElementClass().equals(Long.class); // NAN_OMIT
 		if (bds.getSize() == 1) { // NAN_OMIT
@@ -1105,7 +1115,7 @@ public class DoubleDataset extends AbstractDataset {
 	}
 
 	@Override
-	public DoubleDataset ipower(final Object b) {
+	public DoubleDatasetImpl ipower(final Object b) {
 		Dataset bds = b instanceof Dataset ? (Dataset) b : DatasetFactory.createFromObject(b); // NAN_OMIT
 		if (bds.getSize() == 1) { // NAN_OMIT
 			final double vr = bds.getElementDoubleAbs(0); // NAN_OMIT

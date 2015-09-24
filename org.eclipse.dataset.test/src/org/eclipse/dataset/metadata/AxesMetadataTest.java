@@ -21,7 +21,7 @@ import org.eclipse.dataset.ILazyDataset;
 import org.eclipse.dataset.Slice;
 import org.eclipse.dataset.dense.Dataset;
 import org.eclipse.dataset.dense.Random;
-import org.eclipse.dataset.internal.dense.DoubleDataset;
+import org.eclipse.dataset.dense.DoubleDataset;
 import org.eclipse.dataset.metadata.AxesMetadata;
 import org.eclipse.dataset.metadata.AxesMetadataImpl;
 import org.eclipse.dataset.metadata.ErrorMetadataImpl;

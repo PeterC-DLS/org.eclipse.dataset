@@ -22,21 +22,21 @@ import org.apache.commons.math.complex.Complex;
 import org.eclipse.dataset.BinaryOperation;
 import org.eclipse.dataset.IDataset;
 import org.eclipse.dataset.PositionIterator;
-import org.eclipse.dataset.internal.dense.BooleanDataset;
-import org.eclipse.dataset.internal.dense.ByteDataset;
-import org.eclipse.dataset.internal.dense.ComplexDoubleDataset;
-import org.eclipse.dataset.internal.dense.ComplexFloatDataset;
-import org.eclipse.dataset.internal.dense.CompoundByteDataset;
-import org.eclipse.dataset.internal.dense.CompoundDoubleDataset;
-import org.eclipse.dataset.internal.dense.CompoundFloatDataset;
-import org.eclipse.dataset.internal.dense.CompoundIntegerDataset;
-import org.eclipse.dataset.internal.dense.CompoundLongDataset;
-import org.eclipse.dataset.internal.dense.CompoundShortDataset;
-import org.eclipse.dataset.internal.dense.DoubleDataset;
-import org.eclipse.dataset.internal.dense.FloatDataset;
-import org.eclipse.dataset.internal.dense.IntegerDataset;
-import org.eclipse.dataset.internal.dense.LongDataset;
-import org.eclipse.dataset.internal.dense.ShortDataset;
+import org.eclipse.dataset.dense.BooleanDataset;
+import org.eclipse.dataset.dense.ByteDataset;
+import org.eclipse.dataset.dense.ComplexDoubleDataset;
+import org.eclipse.dataset.dense.ComplexFloatDataset;
+import org.eclipse.dataset.dense.CompoundByteDataset;
+import org.eclipse.dataset.dense.CompoundDoubleDataset;
+import org.eclipse.dataset.dense.CompoundFloatDataset;
+import org.eclipse.dataset.dense.CompoundIntegerDataset;
+import org.eclipse.dataset.dense.CompoundLongDataset;
+import org.eclipse.dataset.dense.CompoundShortDataset;
+import org.eclipse.dataset.dense.DoubleDataset;
+import org.eclipse.dataset.dense.FloatDataset;
+import org.eclipse.dataset.dense.IntegerDataset;
+import org.eclipse.dataset.dense.LongDataset;
+import org.eclipse.dataset.dense.ShortDataset;
 
 /**
  * Mathematics class

@@ -20,7 +20,7 @@ import org.eclipse.dataset.IMonitor;
 import org.eclipse.dataset.PositionIterator;
 import org.eclipse.dataset.Slice;
 import org.eclipse.dataset.SliceND;
-import org.eclipse.dataset.internal.dense.IntegerDataset;
+import org.eclipse.dataset.dense.IntegerDataset;
 
 /**
  * <p>

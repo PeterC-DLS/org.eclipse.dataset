@@ -14,6 +14,7 @@ package org.eclipse.dataset.internal.dense;
 
 import java.text.MessageFormat;
 
+import org.eclipse.dataset.dense.BooleanDataset;
 import org.eclipse.dataset.dense.BroadcastIterator;
 import org.eclipse.dataset.dense.Dataset;
 import org.eclipse.dataset.dense.DatasetFactory;
@@ -24,11 +25,11 @@ import org.eclipse.dataset.dense.SliceIterator;
 /**
  * Extend boolean base dataset for boolean values
  */
-public class BooleanDataset extends BooleanDatasetBase {
+public class BooleanDatasetImpl extends BooleanDatasetBaseImpl {
 	// pin UID to base class
 	private static final long serialVersionUID = Dataset.serialVersionUID;
 
-	public BooleanDataset() {
+	public BooleanDatasetImpl() {
 		super();
 	}
 
@@ -36,7 +37,7 @@ public class BooleanDataset extends BooleanDatasetBase {
 	 * Create a false-filled dataset of given shape
 	 * @param shape
 	 */
-	public BooleanDataset(final int... shape) {
+	public BooleanDatasetImpl(final int... shape) {
 		super(shape);
 	}
 
@@ -45,7 +46,7 @@ public class BooleanDataset extends BooleanDatasetBase {
 	 * @param data
 	 * @param shape (can be null to create 1D dataset)
 	 */
-	public BooleanDataset(final boolean[] data, int... shape) {
+	public BooleanDatasetImpl(final boolean[] data, int... shape) {
 		super(data, shape);
 	}
 
@@ -53,7 +54,7 @@ public class BooleanDataset extends BooleanDatasetBase {
 	 * Copy a dataset
 	 * @param dataset
 	 */
-	public BooleanDataset(final BooleanDataset dataset) {
+	public BooleanDatasetImpl(final BooleanDataset dataset) {
 		super(dataset);
 	}
 
@@ -61,27 +62,27 @@ public class BooleanDataset extends BooleanDatasetBase {
 	 * Cast a dataset to this class type
 	 * @param dataset
 	 */
-	public BooleanDataset(final Dataset dataset) {
+	public BooleanDatasetImpl(final Dataset dataset) {
 		super(dataset);
 	}
 
 	@Override
-	public BooleanDataset getView() {
-		BooleanDataset view = new BooleanDataset();
+	public BooleanDatasetImpl getView() {
+		BooleanDatasetImpl view = new BooleanDatasetImpl();
 		copyToView(this, view, true, true);
 		view.data = data;
 		return view;
 	}
 
 	@Override
-	public BooleanDataset clone() {
-		return new BooleanDataset(this);
+	public BooleanDatasetImpl clone() {
+		return new BooleanDatasetImpl(this);
 	}
 
 	@Override
-	public BooleanDataset getSlice(SliceIterator siter) {
-		BooleanDataset slice = new BooleanDataset();
-		BooleanDatasetBase base = super.getSlice(siter);
+	public BooleanDatasetImpl getSlice(SliceIterator siter) {
+		BooleanDatasetImpl slice = new BooleanDatasetImpl();
+		BooleanDatasetBaseImpl base = super.getSlice(siter);
 		copyToView(base, slice, false, false);
 		slice.setData();
 		return slice;
@@ -94,18 +95,18 @@ public class BooleanDataset extends BooleanDatasetBase {
 	 * @param obj
 	 * @return dataset with contents given by input
 	 */
-	public static BooleanDataset createFromObject(final Object obj) {
-		BooleanDatasetBase result = BooleanDatasetBase.createFromObject(obj);
-		return new BooleanDataset(result.data, result.shape);
+	public static BooleanDatasetImpl createFromObject(final Object obj) {
+		BooleanDatasetBaseImpl result = BooleanDatasetBaseImpl.createFromObject(obj);
+		return new BooleanDatasetImpl(result.data, result.shape);
 	}
 
 	/**
 	 * @param shape
 	 * @return a dataset filled with trues
 	 */
-	public static BooleanDataset ones(final int... shape) {
-		BooleanDatasetBase result = BooleanDatasetBase.ones(shape);
-		return new BooleanDataset(result.data, result.shape);
+	public static BooleanDatasetImpl ones(final int... shape) {
+		BooleanDatasetBaseImpl result = BooleanDatasetBaseImpl.ones(shape);
+		return new BooleanDatasetImpl(result.data, result.shape);
 	}
 
 	@Override
@@ -235,17 +236,17 @@ public class BooleanDataset extends BooleanDatasetBase {
 	}
 
 	@Override
-	public BooleanDataset getSlice(final int[] start, final int[] stop, final int[] step) {
-		BooleanDatasetBase result = (BooleanDatasetBase) super.getSlice(start, stop, step);
+	public BooleanDatasetImpl getSlice(final int[] start, final int[] stop, final int[] step) {
+		BooleanDatasetBaseImpl result = (BooleanDatasetBaseImpl) super.getSlice(start, stop, step);
 
-		return new BooleanDataset(result.data, result.shape);
+		return new BooleanDatasetImpl(result.data, result.shape);
 	}
 
 	/**
 	 * OR
 	 */
 	@Override
-	public BooleanDataset iadd(final Object b) {
+	public BooleanDatasetImpl iadd(final Object b) {
 		Dataset bds = b instanceof Dataset ? (Dataset) b : DatasetFactory.createFromObject(b);
 		final BroadcastIterator it = BroadcastIterator.createIterator(this, bds);
 		while (it.hasNext()) {
@@ -259,7 +260,7 @@ public class BooleanDataset extends BooleanDatasetBase {
 	 * XOR
 	 */
 	@Override
-	public BooleanDataset isubtract(final Object b) {
+	public BooleanDatasetImpl isubtract(final Object b) {
 		Dataset bds = b instanceof Dataset ? (Dataset) b : DatasetFactory.createFromObject(b);
 		final BroadcastIterator it = BroadcastIterator.createIterator(this, bds);
 		while (it.hasNext()) {
@@ -273,7 +274,7 @@ public class BooleanDataset extends BooleanDatasetBase {
 	 * AND
 	 */
 	@Override
-	public BooleanDataset imultiply(final Object b) {
+	public BooleanDatasetImpl imultiply(final Object b) {
 		Dataset bds = b instanceof Dataset ? (Dataset) b : DatasetFactory.createFromObject(b);
 		final BroadcastIterator it = BroadcastIterator.createIterator(this, bds);
 		while (it.hasNext()) {
@@ -284,18 +285,18 @@ public class BooleanDataset extends BooleanDatasetBase {
 	}
 
 	@Override
-	public BooleanDataset idivide(final Object b) {
+	public BooleanDatasetImpl idivide(final Object b) {
 		return imultiply(b);
 	}
 
 	@Override
-	public BooleanDataset iremainder(final Object b) {
+	public BooleanDatasetImpl iremainder(final Object b) {
 		logger.error("Unsupported method for class");
 		throw new UnsupportedOperationException("Unsupported method for class");
 	}
 
 	@Override
-	public BooleanDataset ipower(final Object b) {
+	public BooleanDatasetImpl ipower(final Object b) {
 		logger.error("Unsupported method for class");
 		throw new UnsupportedOperationException("Unsupported method for class");
 	}

@@ -19,7 +19,7 @@ import java.util.List;
 
 import org.eclipse.dataset.DatasetException;
 import org.eclipse.dataset.IDataset;
-import org.eclipse.dataset.internal.dense.DoubleDataset;
+import org.eclipse.dataset.dense.DoubleDataset;
 
 /**
  * Statistics of data set lists. Used for image processing.

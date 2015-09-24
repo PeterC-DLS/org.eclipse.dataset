@@ -12,7 +12,8 @@ package org.eclipse.dataset.dataset;
 import static org.junit.Assert.assertEquals;
 
 import org.eclipse.dataset.dense.IndexIterator;
-import org.eclipse.dataset.internal.dense.ObjectDataset;
+import org.eclipse.dataset.dense.ObjectDataset;
+import org.eclipse.dataset.internal.dense.ObjectDatasetImpl;
 import org.junit.Test;
 
 public class ObjectDatasetTest {
@@ -20,21 +21,21 @@ public class ObjectDatasetTest {
 	@Test
 	public void testConstructor() {
 		Object[] da = { "0", (byte) 1, (short) 2, (int) 3, (float) 4, (double) 5, "6", "7", "8", "9", "10", "11" };
-		ObjectDataset a = new ObjectDataset(da, null);
+		ObjectDataset a = new ObjectDatasetImpl(da, null);
 
 		IndexIterator it = a.getIterator();
 		for (int i = 0; it.hasNext(); i++) {
 			assertEquals(i, Double.parseDouble(a.getStringAbs(it.index)), 1e-5*i);
 		}
 
-		ObjectDataset b = new ObjectDataset(da, 3, 4);
+		ObjectDataset b = new ObjectDatasetImpl(da, 3, 4);
 
 		it = b.getIterator();
 		for (int i = 0; it.hasNext(); i++) {
 			assertEquals(i, Double.parseDouble(b.getStringAbs(it.index)), 1e-5*i);
 		}
 
-		ObjectDataset c = new ObjectDataset(a.getSliceView(new int[] {1}, null, new int[] {2}));
+		ObjectDataset c = new ObjectDatasetImpl(a.getSliceView(new int[] {1}, null, new int[] {2}));
 		it = c.getIterator();
 		for (int i = 0; it.hasNext(); i++) {
 			assertEquals(2*i+1, Double.parseDouble(c.getStringAbs(it.index)), 1e-5 * i);

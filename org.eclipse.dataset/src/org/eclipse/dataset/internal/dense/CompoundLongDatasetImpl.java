@@ -10,7 +10,7 @@
  *    Peter Chang - initial API and implementation and/or initial documentation
  *******************************************************************************/
 
-// This is generated from CompoundDoubleDataset.java by fromcpddouble.py
+// This is generated from CompoundDoubleDatasetImpl.java by fromcpddouble.py
 
 package org.eclipse.dataset.internal.dense;
 
@@ -23,6 +23,7 @@ import org.eclipse.dataset.PositionIterator;
 import org.eclipse.dataset.dense.BooleanIterator;
 import org.eclipse.dataset.dense.BroadcastIterator;
 import org.eclipse.dataset.dense.CompoundDataset;
+import org.eclipse.dataset.dense.CompoundLongDataset; // CLASS_TYPE
 import org.eclipse.dataset.dense.Dataset;
 import org.eclipse.dataset.dense.DatasetFactory;
 import org.eclipse.dataset.dense.DatasetUtils;
@@ -33,24 +34,24 @@ import org.eclipse.dataset.dense.IntegersIterator;
 import org.eclipse.dataset.dense.SliceIterator;
 
 /**
- * Extend compound dataset for int values // PRIM_TYPE
+ * Extend compound dataset for long values // PRIM_TYPE
  */
-public class CompoundIntegerDataset extends AbstractCompoundDataset {
+public class CompoundLongDatasetImpl extends AbstractCompoundDataset implements CompoundLongDataset { // CLASS_TYPE
 	// pin UID to base class
 	private static final long serialVersionUID = Dataset.serialVersionUID;
 
-	protected int[] data; // subclass alias // PRIM_TYPE
+	protected long[] data; // subclass alias // PRIM_TYPE
 
 	@Override
 	protected void setData() {
-		data = (int[]) odata; // PRIM_TYPE
+		data = (long[]) odata; // PRIM_TYPE
 	}
 
-	protected int[] createArray(final int size) { // PRIM_TYPE
-		int[] array = null; // PRIM_TYPE
+	protected long[] createArray(final int size) { // PRIM_TYPE
+		long[] array = null; // PRIM_TYPE
 
 		try {
-			array = new int[isize * size]; // PRIM_TYPE
+			array = new long[isize * size]; // PRIM_TYPE
 		} catch (OutOfMemoryError e) {
 			logger.error("The size of the dataset ({}) that is being created is too large "
 					+ "and there is not enough memory to hold it.", size);
@@ -62,13 +63,13 @@ public class CompoundIntegerDataset extends AbstractCompoundDataset {
 
 	@Override
 	public int getDType() {
-		return Dataset.ARRAYINT32; // DATA_TYPE
+		return Dataset.ARRAYINT64; // DATA_TYPE
 	}
 
-	public CompoundIntegerDataset() {
+	public CompoundLongDatasetImpl() {
 	}
 
-	public CompoundIntegerDataset(final int itemSize) {
+	public CompoundLongDatasetImpl(final int itemSize) {
 		isize = itemSize;
 	}
 
@@ -77,7 +78,7 @@ public class CompoundIntegerDataset extends AbstractCompoundDataset {
 	 * @param itemSize
 	 * @param shape
 	 */
-	public CompoundIntegerDataset(final int itemSize, final int[] shape) {
+	public CompoundLongDatasetImpl(final int itemSize, final int[] shape) {
 		isize = itemSize;
 		if (shape.length == 1) {
 			size = shape[0];
@@ -96,7 +97,7 @@ public class CompoundIntegerDataset extends AbstractCompoundDataset {
 	 * Copy a dataset
 	 * @param dataset
 	 */
-	public CompoundIntegerDataset(final CompoundIntegerDataset dataset) {
+	public CompoundLongDatasetImpl(final CompoundLongDatasetImpl dataset) {
 		isize = dataset.isize;
 
 		copyToView(dataset, this, true, true);
@@ -120,7 +121,7 @@ public class CompoundIntegerDataset extends AbstractCompoundDataset {
 	 * Create a dataset using given dataset
 	 * @param dataset
 	 */
-	public CompoundIntegerDataset(final CompoundDataset dataset) {
+	public CompoundLongDatasetImpl(final CompoundDataset dataset) {
 		copyToView(dataset, this, true, false);
 		offset = 0;
 		stride = null;
@@ -131,7 +132,7 @@ public class CompoundIntegerDataset extends AbstractCompoundDataset {
 		IndexIterator iter = dataset.getIterator();
 		for (int j = 0; iter.hasNext();) {
 			for (int i = 0; i < isize; i++) {
-				data[j++] = (int) dataset.getElementLongAbs(iter.index + i); // GET_ELEMENT_WITH_CAST
+				data[j++] = dataset.getElementLongAbs(iter.index + i); // GET_ELEMENT_WITH_CAST
 			}
 		}
 	}
@@ -143,7 +144,7 @@ public class CompoundIntegerDataset extends AbstractCompoundDataset {
 	 * @param shape
 	 *            (can be null to create 1D dataset)
 	 */
-	public CompoundIntegerDataset(final int itemSize, final int[] data, int... shape) { // PRIM_TYPE
+	public CompoundLongDatasetImpl(final int itemSize, final long[] data, int... shape) { // PRIM_TYPE
 		if (data == null) {
 			throw new IllegalArgumentException("Data must not be null");
 		}
@@ -165,7 +166,7 @@ public class CompoundIntegerDataset extends AbstractCompoundDataset {
 	 * Create a dataset using given datasets
 	 * @param datasets
 	 */
-	public CompoundIntegerDataset(final Dataset... datasets) {
+	public CompoundLongDatasetImpl(final Dataset... datasets) {
 		if (datasets.length < 1) {
 			throw new IllegalArgumentException("Array of datasets must have length greater than zero");
 		}
@@ -184,10 +185,10 @@ public class CompoundIntegerDataset extends AbstractCompoundDataset {
 			iters[i] = datasets[i].getIterator();
 
 		for (int j = 0; iters[0].hasNext();) {
-			data[j++] = (int) datasets[0].getElementLongAbs(iters[0].index); // GET_ELEMENT_WITH_CAST
+			data[j++] = datasets[0].getElementLongAbs(iters[0].index); // GET_ELEMENT_WITH_CAST
 			for (int i = 1; i < datasets.length; i++) {
 				iters[i].hasNext();
-				data[j++] = (int) datasets[i].getElementLongAbs(iters[i].index); // GET_ELEMENT_WITH_CAST
+				data[j++] = datasets[i].getElementLongAbs(iters[i].index); // GET_ELEMENT_WITH_CAST
 			}
 		}
 	}
@@ -201,7 +202,7 @@ public class CompoundIntegerDataset extends AbstractCompoundDataset {
 	 *            repeat first element
 	 * @param dataset
 	 */
-	public CompoundIntegerDataset(final int itemSize, final boolean repeat, final Dataset dataset) {
+	public CompoundLongDatasetImpl(final int itemSize, final boolean repeat, final Dataset dataset) {
 		isize = itemSize;
 		size = dataset.getSize();
 		shape = dataset.getShape();
@@ -214,7 +215,7 @@ public class CompoundIntegerDataset extends AbstractCompoundDataset {
 		if (repeat) {
 			int i = 0;
 			while (iter.hasNext()) {
-				final int v = (int) dataset.getElementLongAbs(iter.index); // PRIM_TYPE // GET_ELEMENT_WITH_CAST
+				final long v = dataset.getElementLongAbs(iter.index); // PRIM_TYPE // GET_ELEMENT_WITH_CAST
 				for (int k = 0; k < isize; k++)
 					data[i++] = v;
 			}
@@ -223,7 +224,7 @@ public class CompoundIntegerDataset extends AbstractCompoundDataset {
 			int i = 0;
 			while (iter.hasNext()) {
 				for (int k = 0; k < kmax; k++)
-					data[i + k] = (int) dataset.getElementLongAbs(iter.index + k); // GET_ELEMENT_WITH_CAST
+					data[i + k] = dataset.getElementLongAbs(iter.index + k); // GET_ELEMENT_WITH_CAST
 				i += isize;
 			}
 		}
@@ -238,7 +239,7 @@ public class CompoundIntegerDataset extends AbstractCompoundDataset {
 		if (getRank() == 0) // already true for zero-rank dataset
 			return true;
 
-		CompoundIntegerDataset other = (CompoundIntegerDataset) obj;
+		CompoundLongDatasetImpl other = (CompoundLongDatasetImpl) obj;
 		IndexIterator iter = getIterator();
 		IndexIterator oiter = other.getIterator();
 		while (iter.hasNext() && oiter.hasNext()) {
@@ -256,8 +257,8 @@ public class CompoundIntegerDataset extends AbstractCompoundDataset {
 	}
 
 	@Override
-	public CompoundIntegerDataset clone() {
-		return new CompoundIntegerDataset(this);
+	public CompoundLongDatasetImpl clone() {
+		return new CompoundLongDatasetImpl(this);
 	}
 
 	/**
@@ -267,16 +268,16 @@ public class CompoundIntegerDataset extends AbstractCompoundDataset {
 	 * @param obj
 	 * @return dataset with contents given by input
 	 */
-	public static CompoundIntegerDataset createFromObject(final Object obj) {
-		IntegerDataset result = IntegerDataset.createFromObject(obj); // CLASS_TYPE
-		return (CompoundIntegerDataset) DatasetUtils.createCompoundDatasetFromLastAxis(result, true);
+	public static CompoundLongDatasetImpl createFromObject(final Object obj) {
+		LongDatasetImpl result = LongDatasetImpl.createFromObject(obj); // CLASS_TYPE
+		return (CompoundLongDatasetImpl) DatasetUtils.createCompoundDatasetFromLastAxis(result, true);
 	}
 
 	/**
 	 * @param stop
 	 * @return a new 1D dataset, filled with values determined by parameters
 	 */
-	public static CompoundIntegerDataset createRange(final int itemSize, final double stop) {
+	public static CompoundLongDatasetImpl createRange(final int itemSize, final double stop) {
 		return createRange(itemSize, 0., stop, 1.);
 	}
 
@@ -286,12 +287,12 @@ public class CompoundIntegerDataset extends AbstractCompoundDataset {
 	 * @param step
 	 * @return a new 1D dataset, filled with values determined by parameters
 	 */
-	public static CompoundIntegerDataset createRange(final int itemSize, final double start, final double stop,
+	public static CompoundLongDatasetImpl createRange(final int itemSize, final double start, final double stop,
 			final double step) {
 		int size = calcSteps(start, stop, step);
-		CompoundIntegerDataset result = new CompoundIntegerDataset(itemSize, new int[] { size });
+		CompoundLongDatasetImpl result = new CompoundLongDatasetImpl(itemSize, new int[] { size });
 		for (int i = 0; i < size; i++) {
-			result.data[i * result.isize] = (int) (start + i * step); // PRIM_TYPE // ADD_CAST
+			result.data[i * result.isize] = (long) (start + i * step); // PRIM_TYPE // ADD_CAST
 		}
 		return result;
 	}
@@ -300,8 +301,8 @@ public class CompoundIntegerDataset extends AbstractCompoundDataset {
 	 * @param shape
 	 * @return a dataset filled with ones
 	 */
-	public static CompoundIntegerDataset ones(final int itemSize, final int... shape) {
-		return new CompoundIntegerDataset(itemSize, shape).fill(1);
+	public static CompoundLongDatasetImpl ones(final int itemSize, final int... shape) {
+		return new CompoundLongDatasetImpl(itemSize, shape).fill(1);
 	}
 
 	/**
@@ -310,21 +311,21 @@ public class CompoundIntegerDataset extends AbstractCompoundDataset {
 	 * @param shareData
 	 * @return compound dataset
 	 */
-	public static CompoundIntegerDataset createCompoundDatasetWithLastDimension(final Dataset a, final boolean shareData) {
+	public static CompoundLongDatasetImpl createCompoundDatasetWithLastDimension(final Dataset a, final boolean shareData) {
 		if (a.getElementsPerItem() != 1) {
 			logger.error("Need a single-element dataset");
 			throw new IllegalArgumentException("Need a single-element dataset");
 		}
-		if (a.getDType() != Dataset.INT32) { // DATA_TYPE
-			logger.error("Dataset type must be int"); // PRIM_TYPE
-			throw new IllegalArgumentException("Dataset type must be int"); // PRIM_TYPE
+		if (a.getDType() != Dataset.INT64) { // DATA_TYPE
+			logger.error("Dataset type must be long"); // PRIM_TYPE
+			throw new IllegalArgumentException("Dataset type must be long"); // PRIM_TYPE
 		}
 
 		final int[] shape = a.getShape();
 		final int rank = shape.length - 1;
 		final int is = rank < 0 ? 1 : shape[rank];
 
-		CompoundIntegerDataset result = new CompoundIntegerDataset(is);
+		CompoundLongDatasetImpl result = new CompoundLongDatasetImpl(is);
 
 		result.shape = rank > 0 ? Arrays.copyOf(shape, rank) : (rank < 0 ? new int[] {} : new int[] {1});
 		result.size = DatasetUtils.calculateSize(result.shape);
@@ -335,8 +336,8 @@ public class CompoundIntegerDataset extends AbstractCompoundDataset {
 	}
 
 	@Override
-	public IntegerDataset asNonCompoundDataset(final boolean shareData) { // CLASS_TYPE
-		IntegerDataset result = new IntegerDataset(); // CLASS_TYPE
+	public LongDatasetImpl asNonCompoundDataset(final boolean shareData) { // CLASS_TYPE
+		LongDatasetImpl result = new LongDatasetImpl(); // CLASS_TYPE
 		final int is = getElementsPerItem();
 		final int rank = is == 1 ? shape.length : shape.length + 1;
 		final int[] nshape = Arrays.copyOf(shape, rank);
@@ -352,8 +353,8 @@ public class CompoundIntegerDataset extends AbstractCompoundDataset {
 	}
 
 	@Override
-	public CompoundIntegerDataset fill(final Object obj) {
-		int[] vr = DTypeUtils.toIntegerArray(obj, isize); // PRIM_TYPE // CLASS_TYPE
+	public CompoundLongDatasetImpl fill(final Object obj) {
+		long[] vr = DTypeUtils.toLongArray(obj, isize); // PRIM_TYPE // CLASS_TYPE
 		IndexIterator iter = getIterator();
 
 		while (iter.hasNext()) {
@@ -369,7 +370,8 @@ public class CompoundIntegerDataset extends AbstractCompoundDataset {
 	 * This is a typed version of {@link #getBuffer()}
 	 * @return data buffer as linear array
 	 */
-	public int[] getData() { // PRIM_TYPE
+	@Override
+	public long[] getData() { // PRIM_TYPE
 		return data;
 	}
 
@@ -381,8 +383,8 @@ public class CompoundIntegerDataset extends AbstractCompoundDataset {
 	}
 
 	@Override
-	public CompoundIntegerDataset getView() {
-		CompoundIntegerDataset view = new CompoundIntegerDataset(isize);
+	public CompoundLongDatasetImpl getView() {
+		CompoundLongDatasetImpl view = new CompoundLongDatasetImpl(isize);
 		copyToView(this, view, true, true);
 		view.setData();
 		return view;
@@ -396,8 +398,9 @@ public class CompoundIntegerDataset extends AbstractCompoundDataset {
 	 *            absolute index
 	 * @return values
 	 */
-	public int[] getAbs(final int index) { // PRIM_TYPE
-		int[] result = new int[isize]; // PRIM_TYPE
+	@Override
+	public long[] getAbs(final int index) { // PRIM_TYPE
+		long[] result = new long[isize]; // PRIM_TYPE
 		for (int i = 0; i < isize; i++)
 			result[i] = data[index + i];
 		return result;
@@ -411,7 +414,8 @@ public class CompoundIntegerDataset extends AbstractCompoundDataset {
 	 *            absolute index
 	 * @param values
 	 */
-	public void getAbs(final int index, final int[] values) { // PRIM_TYPE
+	@Override
+	public void getAbs(final int index, final long[] values) { // PRIM_TYPE
 		for (int i = 0; i < isize; i++)
 			values[i] = data[index + i];
 	}
@@ -438,7 +442,7 @@ public class CompoundIntegerDataset extends AbstractCompoundDataset {
 
 	@Override
 	public void setItemDirect(final int dindex, final int sindex, final Object src) {
-		int[] dsrc = (int[]) src; // PRIM_TYPE
+		long[] dsrc = (long[]) src; // PRIM_TYPE
 		for (int i = 0; i < isize; i++)
 			data[dindex + i] = dsrc[sindex + i];
 	}
@@ -452,7 +456,8 @@ public class CompoundIntegerDataset extends AbstractCompoundDataset {
 	 * @param val
 	 *            new values
 	 */
-	public void setAbs(final int index, final int[] val) { // PRIM_TYPE
+	@Override
+	public void setAbs(final int index, final long[] val) { // PRIM_TYPE
 		for (int i = 0; i < isize; i++)
 			data[index + i] = val[i];
 		setDirty();
@@ -467,24 +472,25 @@ public class CompoundIntegerDataset extends AbstractCompoundDataset {
 	 * @param val
 	 *            new value
 	 */
-	public void setAbs(final int index, final int val) { // PRIM_TYPE
+	@Override
+	public void setAbs(final int index, final long val) { // PRIM_TYPE
 		data[index] = val;
 		setDirty();
 	}
 
 	@Override
 	public Object getObject(final int i) {
-		return getIntArray(i); // PRIM_TYPE
+		return getLongArray(i); // PRIM_TYPE
 	}
 
 	@Override
 	public Object getObject(final int i, final int j) {
-		return getIntArray(i, j); // PRIM_TYPE
+		return getLongArray(i, j); // PRIM_TYPE
 	}
 
 	@Override
 	public Object getObject(final int... pos) {
-		return getIntArray(pos); // PRIM_TYPE
+		return getLongArray(pos); // PRIM_TYPE
 	}
 
 	@Override
@@ -546,7 +552,7 @@ public class CompoundIntegerDataset extends AbstractCompoundDataset {
 		int[] result = new int[isize];
 		int index = get1DIndex(i);
 		for (int k = 0; k < isize; k++)
-			result[k] = data[index + k]; // OMIT_UPCAST
+			result[k] = (int) data[index + k]; // OMIT_UPCAST
 		return result;
 	}
 
@@ -555,7 +561,7 @@ public class CompoundIntegerDataset extends AbstractCompoundDataset {
 		int[] result = new int[isize];
 		int index = get1DIndex(i, j);
 		for (int k = 0; k < isize; k++)
-			result[k] = data[index + k]; // OMIT_UPCAST
+			result[k] = (int) data[index + k]; // OMIT_UPCAST
 		return result;
 	}
 
@@ -564,7 +570,7 @@ public class CompoundIntegerDataset extends AbstractCompoundDataset {
 		int[] result = new int[isize];
 		int index = get1DIndex(pos);
 		for (int k = 0; k < isize; k++)
-			result[k] = data[index + k]; // OMIT_UPCAST
+			result[k] = (int) data[index + k]; // OMIT_UPCAST
 		return result;
 	}
 
@@ -687,7 +693,7 @@ public class CompoundIntegerDataset extends AbstractCompoundDataset {
 
 	@Override
 	public Object getObjectAbs(final int index) {
-		int[] result = new int[isize]; // PRIM_TYPE
+		long[] result = new long[isize]; // PRIM_TYPE
 		for (int i = 0; i < isize; i++)
 			result[i] = data[index + i];
 		return result;
@@ -710,18 +716,18 @@ public class CompoundIntegerDataset extends AbstractCompoundDataset {
 
 	@Override
 	public void setObjectAbs(final int index, final Object obj) {
-		int[] oa = DTypeUtils.toIntegerArray(obj, isize); // PRIM_TYPE // CLASS_TYPE
+		long[] oa = DTypeUtils.toLongArray(obj, isize); // PRIM_TYPE // CLASS_TYPE
 		setAbs(index, oa);
 	}
 
 	@Override
 	public void set(final Object obj, final int i) {
-		setItem(DTypeUtils.toIntegerArray(obj, isize), i); // CLASS_TYPE
+		setItem(DTypeUtils.toLongArray(obj, isize), i); // CLASS_TYPE
 	}
 
 	@Override
 	public void set(final Object obj, final int i, final int j) {
-		setItem(DTypeUtils.toIntegerArray(obj, isize), i, j); // CLASS_TYPE
+		setItem(DTypeUtils.toLongArray(obj, isize), i, j); // CLASS_TYPE
 	}
 
 	@Override
@@ -730,7 +736,7 @@ public class CompoundIntegerDataset extends AbstractCompoundDataset {
 			pos = new int[shape.length];
 		}
 
-		setItem(DTypeUtils.toIntegerArray(obj, isize), pos); // CLASS_TYPE
+		setItem(DTypeUtils.toLongArray(obj, isize), pos); // CLASS_TYPE
 	}
 
 	/**
@@ -739,7 +745,8 @@ public class CompoundIntegerDataset extends AbstractCompoundDataset {
 	 * @param d
 	 * @param i
 	 */
-	public void setItem(final int[] d, final int i) { // PRIM_TYPE
+	@Override
+	public void setItem(final long[] d, final int i) { // PRIM_TYPE
 		if (d.length > isize) {
 			throw new IllegalArgumentException("Array is larger than number of elements in an item");
 		}
@@ -753,7 +760,8 @@ public class CompoundIntegerDataset extends AbstractCompoundDataset {
 	 * @param i
 	 * @param j
 	 */
-	public void setItem(final int[] d, final int i, final int j) { // PRIM_TYPE
+	@Override
+	public void setItem(final long[] d, final int i, final int j) { // PRIM_TYPE
 		if (d.length > isize) {
 			throw new IllegalArgumentException("Array is larger than number of elements in an item");
 		}
@@ -766,7 +774,8 @@ public class CompoundIntegerDataset extends AbstractCompoundDataset {
 	 * @param d
 	 * @param pos
 	 */
-	public void setItem(final int[] d, final int... pos) { // PRIM_TYPE
+	@Override
+	public void setItem(final long[] d, final int... pos) { // PRIM_TYPE
 		if (d.length > isize) {
 			throw new IllegalArgumentException("Array is larger than number of elements in an item");
 		}
@@ -775,14 +784,14 @@ public class CompoundIntegerDataset extends AbstractCompoundDataset {
 
 	private void setDoubleArrayAbs(final int index, final double[] d) {
 		for (int i = 0; i < isize; i++)
-			data[index + i] = (int) d[i]; // ADD_CAST
+			data[index + i] = (long) d[i]; // ADD_CAST
 	}
 
 	@Override
 	public void resize(int... newShape) {
 		IndexIterator iter = getIterator();
 		int nsize = DatasetUtils.calculateSize(newShape);
-		int[] ndata = createArray(nsize); // PRIM_TYPE
+		long[] ndata = createArray(nsize); // PRIM_TYPE
 
 		int i = 0;
 		while (iter.hasNext() && i < nsize) {
@@ -800,12 +809,12 @@ public class CompoundIntegerDataset extends AbstractCompoundDataset {
 	}
 
 	@Override
-	public IntegerDataset real() { // CLASS_TYPE
-		IntegerDataset rdataset = new IntegerDataset(shape); // CLASS_TYPE
+	public LongDatasetImpl real() { // CLASS_TYPE
+		LongDatasetImpl rdataset = new LongDatasetImpl(shape); // CLASS_TYPE
 		IndexIterator iter = getIterator();
 		IndexIterator riter = rdataset.getIterator();
 
-		int[] rdata = rdataset.data; // PRIM_TYPE
+		long[] rdata = rdataset.data; // PRIM_TYPE
 		while (iter.hasNext() && riter.hasNext())
 			rdata[riter.index] = data[iter.index];
 
@@ -818,9 +827,9 @@ public class CompoundIntegerDataset extends AbstractCompoundDataset {
 	}
 
 	@Override
-	public CompoundIntegerDataset getSlice(final SliceIterator siter) {
-		CompoundIntegerDataset result = new CompoundIntegerDataset(isize, siter.getShape());
-		int[] rdata = result.data; // PRIM_TYPE
+	public CompoundLongDatasetImpl getSlice(final SliceIterator siter) {
+		CompoundLongDatasetImpl result = new CompoundLongDatasetImpl(isize, siter.getShape());
+		long[] rdata = result.data; // PRIM_TYPE
 		IndexIterator riter = result.getIterator();
 
 		while (siter.hasNext() && riter.hasNext()) {
@@ -833,14 +842,14 @@ public class CompoundIntegerDataset extends AbstractCompoundDataset {
 	}
 
 	@Override
-	public IntegerDataset getElementsView(int element) { // CLASS_TYPE
+	public LongDatasetImpl getElementsView(int element) { // CLASS_TYPE
 		if (element < 0)
 			element += isize;
 		if (element < 0 || element > isize) {
 			throw new IllegalArgumentException(String.format("Invalid choice of element: %d/%d", element, isize));
 		}
 
-		IntegerDataset view = new IntegerDataset(shape); // CLASS_TYPE
+		LongDatasetImpl view = new LongDatasetImpl(shape); // CLASS_TYPE
 
 		copyToView(this, view, true, true);
 		view.setData();
@@ -857,8 +866,8 @@ public class CompoundIntegerDataset extends AbstractCompoundDataset {
 	}
 
 	@Override
-	public IntegerDataset getElements(int element) { // CLASS_TYPE
-		final IntegerDataset elements = new IntegerDataset(shape); // CLASS_TYPE
+	public LongDatasetImpl getElements(int element) { // CLASS_TYPE
+		final LongDatasetImpl elements = new LongDatasetImpl(shape); // CLASS_TYPE
 
 		copyElements(elements, element);
 		return elements;
@@ -876,7 +885,7 @@ public class CompoundIntegerDataset extends AbstractCompoundDataset {
 		}
 
 		final IndexIterator it = getIterator(element);
-		final int[] elements = ((IntegerDataset) destination).data; // CLASS_TYPE // PRIM_TYPE
+		final long[] elements = ((LongDatasetImpl) destination).data; // CLASS_TYPE // PRIM_TYPE
 
 		int n = 0;
 		while (it.hasNext()) {
@@ -897,7 +906,7 @@ public class CompoundIntegerDataset extends AbstractCompoundDataset {
 		}
 
 		final IndexIterator it = getIterator(element);
-		final int[] elements = ((IntegerDataset) source).data; // CLASS_TYPE // PRIM_TYPE
+		final long[] elements = ((LongDatasetImpl) source).data; // CLASS_TYPE // PRIM_TYPE
 
 		int n = 0;
 		while (it.hasNext()) {
@@ -911,7 +920,7 @@ public class CompoundIntegerDataset extends AbstractCompoundDataset {
 	public void fillDataset(Dataset result, IndexIterator iter) {
 		IndexIterator riter = result.getIterator();
 
-		int[] rdata = ((CompoundIntegerDataset) result).data; // PRIM_TYPE
+		long[] rdata = ((CompoundLongDatasetImpl) result).data; // PRIM_TYPE
 
 		while (riter.hasNext() && iter.hasNext()) {
 			for (int i = 0; i < isize; i++)
@@ -920,7 +929,7 @@ public class CompoundIntegerDataset extends AbstractCompoundDataset {
 	}
 
 	@Override
-	public CompoundIntegerDataset setByBoolean(final Object o, Dataset selection) {
+	public CompoundLongDatasetImpl setByBoolean(final Object o, Dataset selection) {
 		if (o instanceof Dataset) {
 			Dataset ds = (Dataset) o;
 			final int length = ((Number) selection.sum()).intValue();
@@ -939,18 +948,18 @@ public class CompoundIntegerDataset extends AbstractCompoundDataset {
 
 				while (biter.hasNext() && iter.hasNext()) {
 					for (int i = 0; i < isize; i++)
-						data[biter.index + i] = (int) ds.getElementLongAbs(iter.index + i); // GET_ELEMENT_WITH_CAST
+						data[biter.index + i] = ds.getElementLongAbs(iter.index + i); // GET_ELEMENT_WITH_CAST
 				}
 			} else {
 				while (biter.hasNext() && iter.hasNext()) {
-					data[biter.index] = (int) ds.getElementLongAbs(iter.index); // GET_ELEMENT_WITH_CAST
+					data[biter.index] = ds.getElementLongAbs(iter.index); // GET_ELEMENT_WITH_CAST
 					for (int i = 1; i < isize; i++)
 						data[biter.index + i] = 0;
 				}
 			}
 		} else {
 			try {
-				final int[] vr = DTypeUtils.toIntegerArray(o, isize); // PRIM_TYPE // CLASS_TYPE
+				final long[] vr = DTypeUtils.toLongArray(o, isize); // PRIM_TYPE // CLASS_TYPE
 
 				final BooleanIterator biter = getBooleanIterator(selection);
 
@@ -967,7 +976,7 @@ public class CompoundIntegerDataset extends AbstractCompoundDataset {
 	}
 
 	@Override
-	public CompoundIntegerDataset setBy1DIndex(final Object o, Dataset index) {
+	public CompoundLongDatasetImpl setBy1DIndex(final Object o, Dataset index) {
 		if (o instanceof Dataset) {
 			Dataset ds = (Dataset) o;
 			if (index.getSize() != ds.getSize()) {
@@ -990,18 +999,18 @@ public class CompoundIntegerDataset extends AbstractCompoundDataset {
 				}
 				while (iter.hasNext() && oiter.hasNext()) {
 					for (int i = 0; i < isize; i++)
-						data[iter.index + i] = (int) ds.getElementLongAbs(oiter.index + i); // GET_ELEMENT_WITH_CAST
+						data[iter.index + i] = ds.getElementLongAbs(oiter.index + i); // GET_ELEMENT_WITH_CAST
 				}
 			} else {
 				while (iter.hasNext() && oiter.hasNext()) {
-					data[iter.index] = (int) ds.getElementLongAbs(oiter.index); // GET_ELEMENT_WITH_CAST
+					data[iter.index] = ds.getElementLongAbs(oiter.index); // GET_ELEMENT_WITH_CAST
 					for (int i = 1; i < isize; i++)
 						data[iter.index + i] = 0;
 				}
 			}
 		} else {
 			try {
-				final int[] vr = DTypeUtils.toIntegerArray(o, isize); // PRIM_TYPE // CLASS_TYPE
+				final long[] vr = DTypeUtils.toLongArray(o, isize); // PRIM_TYPE // CLASS_TYPE
 
 				final IntegerIterator iter = new IntegerIterator(index, size, isize);
 
@@ -1017,7 +1026,7 @@ public class CompoundIntegerDataset extends AbstractCompoundDataset {
 	}
 
 	@Override
-	public CompoundIntegerDataset setByIndexes(final Object o, final Object... indexes) {
+	public CompoundLongDatasetImpl setByIndexes(final Object o, final Object... indexes) {
 		final IntegersIterator iter = new IntegersIterator(shape, indexes);
 		final int[] pos = iter.getPos();
 
@@ -1043,14 +1052,14 @@ public class CompoundIntegerDataset extends AbstractCompoundDataset {
 			} else {
 				while (iter.hasNext() && oiter.hasNext()) {
 					int n = get1DIndex(pos);
-					data[n] = (int) ds.getElementLongAbs(oiter.index); // GET_ELEMENT_WITH_CAST
+					data[n] = ds.getElementLongAbs(oiter.index); // GET_ELEMENT_WITH_CAST
 					for (int i = 1; i < isize; i++)
 						data[n + i] = 0;
 				}
 			}
 		} else {
 			try {
-				final int[] vr = DTypeUtils.toIntegerArray(o, isize); // PRIM_TYPE // CLASS_TYPE
+				final long[] vr = DTypeUtils.toLongArray(o, isize); // PRIM_TYPE // CLASS_TYPE
 
 				while (iter.hasNext()) {
 					setAbs(get1DIndex(pos), vr);
@@ -1064,7 +1073,7 @@ public class CompoundIntegerDataset extends AbstractCompoundDataset {
 	}
 
 	@Override
-	CompoundIntegerDataset setSlicedView(Dataset view, Dataset d) {
+	CompoundLongDatasetImpl setSlicedView(Dataset view, Dataset d) {
 		final BroadcastIterator it = BroadcastIterator.createIterator(view, d);
 
 		final int is = view.getElementsPerItem();
@@ -1072,7 +1081,7 @@ public class CompoundIntegerDataset extends AbstractCompoundDataset {
 		if (is > 1) {
 			if (d.getElementsPerItem() == 1) {
 				while (it.hasNext()) {
-					final int bv = (int) it.bDouble; // PRIM_TYPE // ADD_CAST
+					final long bv = (long) it.bDouble; // PRIM_TYPE // ADD_CAST
 					data[it.aIndex] = bv;
 					for (int j = 1; j < is; j++) {
 						data[it.aIndex + j] = bv;
@@ -1080,22 +1089,22 @@ public class CompoundIntegerDataset extends AbstractCompoundDataset {
 				}
 			} else {
 				while (it.hasNext()) {
-					data[it.aIndex] = (int) it.bDouble; // ADD_CAST
+					data[it.aIndex] = (long) it.bDouble; // ADD_CAST
 					for (int j = 1; j < is; j++) {
-						data[it.aIndex + j] = (int) d.getElementLongAbs(it.bIndex + j); // GET_ELEMENT_WITH_CAST
+						data[it.aIndex + j] = d.getElementLongAbs(it.bIndex + j); // GET_ELEMENT_WITH_CAST
 					}
 				}
 			}
 		} else {
 			while (it.hasNext()) {
-				data[it.aIndex] = (int) it.bDouble; // ADD_CAST
+				data[it.aIndex] = (long) it.bDouble; // ADD_CAST
 			}
 		}
 		return this;
 	}
 
 	@Override
-	public CompoundIntegerDataset setSlice(final Object o, final IndexIterator siter) {
+	public CompoundLongDatasetImpl setSlice(final Object o, final IndexIterator siter) {
 		if (o instanceof IDataset) {
 			final IDataset ds = (IDataset) o;
 			final int[] oshape = ds.getShape();
@@ -1117,11 +1126,11 @@ public class CompoundIntegerDataset extends AbstractCompoundDataset {
 
 					while (siter.hasNext() && oiter.hasNext()) {
 						for (int i = 0; i < isize; i++)
-							data[siter.index + i] = (int) ads.getElementLongAbs(oiter.index + i); // GET_ELEMENT_WITH_CAST
+							data[siter.index + i] = ads.getElementLongAbs(oiter.index + i); // GET_ELEMENT_WITH_CAST
 					}
 				} else {
 					while (siter.hasNext() && oiter.hasNext()) {
-						data[siter.index] = (int) ads.getElementLongAbs(oiter.index); // GET_ELEMENT_WITH_CAST
+						data[siter.index] = ads.getElementLongAbs(oiter.index); // GET_ELEMENT_WITH_CAST
 						for (int i = 1; i < isize; i++)
 							data[siter.index + i] = 0;
 					}
@@ -1132,13 +1141,13 @@ public class CompoundIntegerDataset extends AbstractCompoundDataset {
 
 				if (ds.getElementsPerItem() == 1) {
 					while (siter.hasNext() && oiter.hasNext()) {
-						data[siter.index] = ds.getInt(pos); // PRIM_TYPE
+						data[siter.index] = ds.getLong(pos); // PRIM_TYPE
 						for (int i = 1; i < isize; i++)
 							data[siter.index + i] = 0;
 					}
 				} else {
 					while (siter.hasNext() && oiter.hasNext()) {
-						final int[] val = DTypeUtils.toIntegerArray(ds.getObject(pos), isize); // PRIM_TYPE // CLASS_TYPE
+						final long[] val = DTypeUtils.toLongArray(ds.getObject(pos), isize); // PRIM_TYPE // CLASS_TYPE
 						for (int i = 0; i < isize; i++)
 							data[siter.index + i] = val[i];
 					}
@@ -1146,7 +1155,7 @@ public class CompoundIntegerDataset extends AbstractCompoundDataset {
 			}
 		} else {
 			try {
-				final int[] vr = DTypeUtils.toIntegerArray(o, isize); // PRIM_TYPE // CLASS_TYPE
+				final long[] vr = DTypeUtils.toLongArray(o, isize); // PRIM_TYPE // CLASS_TYPE
 
 				while (siter.hasNext()) {
 					for (int i = 0; i < isize; i++)
@@ -1162,7 +1171,7 @@ public class CompoundIntegerDataset extends AbstractCompoundDataset {
 
 	@Override
 	public void copyItemsFromAxes(final int[] pos, final boolean[] axes, final Dataset dest) {
-		int[] ddata = (int[]) dest.getBuffer(); // PRIM_TYPE
+		long[] ddata = (long[]) dest.getBuffer(); // PRIM_TYPE
 
 		if (dest.getElementsPerItem() != isize) {
 			throw new IllegalArgumentException(String.format(
@@ -1187,7 +1196,7 @@ public class CompoundIntegerDataset extends AbstractCompoundDataset {
 
 	@Override
 	public void setItemsOnAxes(final int[] pos, final boolean[] axes, final Object src) {
-		int[] sdata = (int[]) src; // PRIM_TYPE
+		long[] sdata = (long[]) src; // PRIM_TYPE
 
 		SliceIterator siter = getSliceIteratorFromAxes(pos, axes);
 
@@ -1219,7 +1228,7 @@ public class CompoundIntegerDataset extends AbstractCompoundDataset {
 	}
 
 	@Override
-	public CompoundIntegerDataset iadd(final Object b) {
+	public CompoundLongDatasetImpl iadd(final Object b) {
 		Dataset bds = b instanceof Dataset ? (Dataset) b : DatasetFactory.createFromObject(b);
 		boolean useLong = bds.getElementClass().equals(Long.class);
 		int is = bds.getElementsPerItem();
@@ -1304,7 +1313,7 @@ public class CompoundIntegerDataset extends AbstractCompoundDataset {
 	}
 
 	@Override
-	public CompoundIntegerDataset isubtract(final Object b) {
+	public CompoundLongDatasetImpl isubtract(final Object b) {
 		Dataset bds = b instanceof Dataset ? (Dataset) b : DatasetFactory.createFromObject(b);
 		boolean useLong = bds.getElementClass().equals(Long.class);
 		int is = bds.getElementsPerItem();
@@ -1389,7 +1398,7 @@ public class CompoundIntegerDataset extends AbstractCompoundDataset {
 	}
 
 	@Override
-	public CompoundIntegerDataset imultiply(final Object b) {
+	public CompoundLongDatasetImpl imultiply(final Object b) {
 		Dataset bds = b instanceof Dataset ? (Dataset) b : DatasetFactory.createFromObject(b);
 		boolean useLong = bds.getElementClass().equals(Long.class);
 		int is = bds.getElementsPerItem();
@@ -1476,7 +1485,7 @@ public class CompoundIntegerDataset extends AbstractCompoundDataset {
 	}
 
 	@Override
-	public CompoundIntegerDataset idivide(final Object b) {
+	public CompoundLongDatasetImpl idivide(final Object b) {
 		Dataset bds = b instanceof Dataset ? (Dataset) b : DatasetFactory.createFromObject(b);
 		boolean useLong = bds.getElementClass().equals(Long.class);
 		int is = bds.getElementsPerItem();
@@ -1601,12 +1610,12 @@ public class CompoundIntegerDataset extends AbstractCompoundDataset {
 	}
 
 	@Override
-	public CompoundIntegerDataset ifloor() {
+	public CompoundLongDatasetImpl ifloor() {
 		return this;
 	}
 
 	@Override
-	public CompoundIntegerDataset iremainder(final Object b) {
+	public CompoundLongDatasetImpl iremainder(final Object b) {
 		Dataset bds = b instanceof Dataset ? (Dataset) b : DatasetFactory.createFromObject(b);
 		boolean useLong = bds.getElementClass().equals(Long.class);
 		int is = bds.getElementsPerItem();
@@ -1725,7 +1734,7 @@ public class CompoundIntegerDataset extends AbstractCompoundDataset {
 	}
 
 	@Override
-	public CompoundIntegerDataset ipower(final Object b) {
+	public CompoundLongDatasetImpl ipower(final Object b) {
 		Dataset bds = b instanceof Dataset ? (Dataset) b : DatasetFactory.createFromObject(b);
 		final int is = bds.getElementsPerItem();
 		if (bds.getSize() == 1) {
@@ -1740,7 +1749,7 @@ public class CompoundIntegerDataset extends AbstractCompoundDataset {
 							if (Double.isInfinite(v) || Double.isNaN(v)) { // INT_USE
 								data[it.index + i] = 0; // INT_USE
 							} else { // INT_USE
-							data[it.index + i] = (int) (long) v; // PRIM_TYPE_LONG // ADD_CAST
+							data[it.index + i] = (long) v; // PRIM_TYPE_LONG // ADD_CAST
 							} // INT_USE
 						}
 					}
@@ -1753,7 +1762,7 @@ public class CompoundIntegerDataset extends AbstractCompoundDataset {
 							if (Double.isInfinite(v) || Double.isNaN(v)) { // INT_USE
 								data[it.index + i] = 0; // INT_USE
 							} else { // INT_USE
-							data[it.index + i] = (int) (long) v; // PRIM_TYPE_LONG // ADD_CAST
+							data[it.index + i] = (long) v; // PRIM_TYPE_LONG // ADD_CAST
 							} // INT_USE
 						}
 					}
@@ -1765,7 +1774,7 @@ public class CompoundIntegerDataset extends AbstractCompoundDataset {
 						if (Double.isInfinite(v) || Double.isNaN(v)) { // INT_USE
 							data[it.index + i] = 0; // INT_USE
 						} else { // INT_USE
-						data[it.index + i] = (int) (long) v; // PRIM_TYPE_LONG // ADD_CAST
+						data[it.index + i] = (long) v; // PRIM_TYPE_LONG // ADD_CAST
 						} // INT_USE
 					}
 				}
@@ -1776,7 +1785,7 @@ public class CompoundIntegerDataset extends AbstractCompoundDataset {
 						if (Double.isInfinite(v) || Double.isNaN(v)) { // INT_USE
 							data[it.index + i] = 0; // INT_USE
 						} else { // INT_USE
-						data[it.index + i] = (int) (long) v; // PRIM_TYPE_LONG // ADD_CAST
+						data[it.index + i] = (long) v; // PRIM_TYPE_LONG // ADD_CAST
 						} // INT_USE
 					}
 				}
@@ -1791,14 +1800,14 @@ public class CompoundIntegerDataset extends AbstractCompoundDataset {
 					if (Double.isInfinite(v) || Double.isNaN(v)) { // INT_USE
 						data[it.aIndex] = 0; // INT_USE
 					} else { // INT_USE
-					data[it.aIndex] = (int) (long) v; // PRIM_TYPE_LONG // ADD_CAST
+					data[it.aIndex] = (long) v; // PRIM_TYPE_LONG // ADD_CAST
 					} // INT_USE
 					for (int i = 1; i < isize; i++) {
 						v = new Complex(data[it.aIndex + i], 0).pow(zv).getReal();
 						if (Double.isInfinite(v) || Double.isNaN(v)) { // INT_USE
 							data[it.aIndex + i] = 0; // INT_USE
 						} else { // INT_USE
-						data[it.aIndex + i] = (int) (long) v; // PRIM_TYPE_LONG // ADD_CAST
+						data[it.aIndex + i] = (long) v; // PRIM_TYPE_LONG // ADD_CAST
 						} // INT_USE
 					}
 				}
@@ -1808,14 +1817,14 @@ public class CompoundIntegerDataset extends AbstractCompoundDataset {
 					if (Double.isInfinite(v) || Double.isNaN(v)) { // INT_USE
 						data[it.aIndex] = 0; // INT_USE
 					} else { // INT_USE
-					data[it.aIndex] = (int) (long) v; // PRIM_TYPE_LONG // ADD_CAST
+					data[it.aIndex] = (long) v; // PRIM_TYPE_LONG // ADD_CAST
 					} // INT_USE
 					for (int i = 1; i < isize; i++) {
 						v = Math.pow(data[it.aIndex + i], bds.getElementDoubleAbs(it.bIndex + i));
 						if (Double.isInfinite(v) || Double.isNaN(v)) { // INT_USE
 							data[it.aIndex + i] = 0; // INT_USE
 						} else { // INT_USE
-						data[it.aIndex + i] = (int) (long) v; // PRIM_TYPE_LONG // ADD_CAST
+						data[it.aIndex + i] = (long) v; // PRIM_TYPE_LONG // ADD_CAST
 						} // INT_USE
 					}
 				}

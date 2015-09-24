@@ -429,7 +429,7 @@ public class LazyDataset extends LazyDatasetBase implements Serializable, Clonea
 				// return a fake dataset to show that this has not worked, should not be used in general though.
 				logger.debug("Problem getting {}: {}", String.format("slice %s %s %s", Arrays.toString(slice.getStart()), Arrays.toString(slice.getStop()),
 								Arrays.toString(slice.getStep())), e);
-				a = new DoubleDataset(1);
+				a = new DoubleDatasetImpl(1);
 			}
 			a.setName(name + AbstractDataset.BLOCK_OPEN + nslice.toString() + AbstractDataset.BLOCK_CLOSE);
 			if (metadata != null && a instanceof LazyDatasetBase) {

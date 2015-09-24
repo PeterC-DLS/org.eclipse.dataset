@@ -16,10 +16,14 @@ import org.eclipse.dataset.dense.CompoundDataset;
 import org.eclipse.dataset.dense.Dataset;
 import org.eclipse.dataset.dense.DatasetFactory;
 import org.eclipse.dataset.dense.RGBDataset;
-import org.eclipse.dataset.internal.dense.CompoundShortDataset;
-import org.eclipse.dataset.internal.dense.DoubleDataset;
-import org.eclipse.dataset.internal.dense.FloatDataset;
-import org.eclipse.dataset.internal.dense.ShortDataset;
+import org.eclipse.dataset.dense.CompoundShortDataset;
+import org.eclipse.dataset.dense.DoubleDataset;
+import org.eclipse.dataset.dense.FloatDataset;
+import org.eclipse.dataset.dense.ShortDataset;
+import org.eclipse.dataset.internal.dense.CompoundShortDatasetImpl;
+import org.eclipse.dataset.internal.dense.DoubleDatasetImpl;
+import org.eclipse.dataset.internal.dense.FloatDatasetImpl;
+import org.eclipse.dataset.internal.dense.ShortDatasetImpl;
 import org.junit.Test;
 
 /**
@@ -86,21 +90,21 @@ public class RGBDatasetTest {
 				191, 63, 191,  // Mauve
 				};
 
-		RGBDataset rgb = RGBDataset.createFromCompoundDataset(new CompoundShortDataset(3, rgbs, 6));
-		Dataset g = new ShortDataset(new short[] {76,  169,   74,  216,  141,  115}, 6);
+		RGBDataset rgb = RGBDataset.createFromCompoundDataset(new CompoundShortDatasetImpl(3, rgbs, 6));
+		Dataset g = new ShortDatasetImpl(new short[] {76,  169,   74,  216,  141,  115}, 6);
 		TestUtils.assertDatasetEquals(g, rgb.createGreyDataset(Dataset.INT16), 1, 1);
 
-		Dataset h = new ShortDataset(new short[] {0, 60, 120, 180, 240, 300}, 6);
-		Dataset v = new FloatDataset(new float[] {1, 0.75f, 0.5f, 1, 1, 0.75f}, 6);
-		Dataset s = new DoubleDataset(new double[] {1, 1, 1, 0.5, 0.5, 0.667}, 6);
+		Dataset h = new ShortDatasetImpl(new short[] {0, 60, 120, 180, 240, 300}, 6);
+		Dataset v = new FloatDatasetImpl(new float[] {1, 0.75f, 0.5f, 1, 1, 0.75f}, 6);
+		Dataset s = new DoubleDatasetImpl(new double[] {1, 1, 1, 0.5, 0.5, 0.667}, 6);
 		RGBDataset a = RGBDataset.createFromHSV(h, s, v);
 		TestUtils.assertDatasetEquals(rgb, a, 1, 1);
 		h.isubtract(360);
 		a = RGBDataset.createFromHSV(h, s, v);
 		TestUtils.assertDatasetEquals(rgb, a, 1, 1);
 
-		Dataset l = new FloatDataset(new float[] {0.5f, 0.375f, 0.25f, 0.75f, 0.75f, 0.5f}, 6);
-		s = new DoubleDataset(new double[] {1, 1, 1, 1, 1, 0.5}, 6);
+		Dataset l = new FloatDatasetImpl(new float[] {0.5f, 0.375f, 0.25f, 0.75f, 0.75f, 0.5f}, 6);
+		s = new DoubleDatasetImpl(new double[] {1, 1, 1, 1, 1, 0.5}, 6);
 		a = RGBDataset.createFromHSL(h, s, l);
 		TestUtils.assertDatasetEquals(rgb, a, 1, 1);
 

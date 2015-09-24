@@ -13,26 +13,28 @@
 package org.eclipse.dataset.dense;
 
 import java.math.BigInteger;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.dataset.IDataset;
-import org.eclipse.dataset.internal.dense.BooleanDataset;
-import org.eclipse.dataset.internal.dense.ByteDataset;
-import org.eclipse.dataset.internal.dense.ComplexDoubleDataset;
-import org.eclipse.dataset.internal.dense.ComplexFloatDataset;
-import org.eclipse.dataset.internal.dense.CompoundByteDataset;
-import org.eclipse.dataset.internal.dense.CompoundDoubleDataset;
-import org.eclipse.dataset.internal.dense.CompoundFloatDataset;
-import org.eclipse.dataset.internal.dense.CompoundIntegerDataset;
-import org.eclipse.dataset.internal.dense.CompoundLongDataset;
-import org.eclipse.dataset.internal.dense.CompoundShortDataset;
-import org.eclipse.dataset.internal.dense.DoubleDataset;
-import org.eclipse.dataset.internal.dense.FloatDataset;
-import org.eclipse.dataset.internal.dense.IntegerDataset;
-import org.eclipse.dataset.internal.dense.LongDataset;
-import org.eclipse.dataset.internal.dense.ObjectDataset;
-import org.eclipse.dataset.internal.dense.ShortDataset;
-import org.eclipse.dataset.internal.dense.StringDataset;
+import org.eclipse.dataset.internal.dense.BooleanDatasetImpl;
+import org.eclipse.dataset.internal.dense.ByteDatasetImpl;
+import org.eclipse.dataset.internal.dense.ComplexDoubleDatasetImpl;
+import org.eclipse.dataset.internal.dense.ComplexFloatDatasetImpl;
+import org.eclipse.dataset.internal.dense.CompoundByteDatasetImpl;
+import org.eclipse.dataset.internal.dense.CompoundDoubleDatasetImpl;
+import org.eclipse.dataset.internal.dense.CompoundFloatDatasetImpl;
+import org.eclipse.dataset.internal.dense.CompoundIntegerDatasetImpl;
+import org.eclipse.dataset.internal.dense.CompoundLongDatasetImpl;
+import org.eclipse.dataset.internal.dense.CompoundShortDatasetImpl;
+import org.eclipse.dataset.internal.dense.DoubleDatasetImpl;
+import org.eclipse.dataset.internal.dense.FloatDatasetImpl;
+import org.eclipse.dataset.internal.dense.IntegerDatasetImpl;
+import org.eclipse.dataset.internal.dense.LongDatasetImpl;
+import org.eclipse.dataset.internal.dense.ObjectDatasetImpl;
+import org.eclipse.dataset.internal.dense.ShortDatasetImpl;
+import org.eclipse.dataset.internal.dense.StringDatasetImpl;
 
 public class DatasetFactory {
 
@@ -63,21 +65,21 @@ public class DatasetFactory {
 		case Dataset.BOOL:
 			break;
 		case Dataset.INT8:
-			return ByteDataset.createRange(start, stop, step);
+			return ByteDatasetImpl.createRange(start, stop, step);
 		case Dataset.INT16:
-			return ShortDataset.createRange(start, stop, step);
+			return ShortDatasetImpl.createRange(start, stop, step);
 		case Dataset.INT32:
-			return IntegerDataset.createRange(start, stop, step);
+			return IntegerDatasetImpl.createRange(start, stop, step);
 		case Dataset.INT64:
-			return LongDataset.createRange(start, stop, step);
+			return LongDatasetImpl.createRange(start, stop, step);
 		case Dataset.FLOAT32:
-			return FloatDataset.createRange(start, stop, step);
+			return FloatDatasetImpl.createRange(start, stop, step);
 		case Dataset.FLOAT64:
-			return DoubleDataset.createRange(start, stop, step);
+			return DoubleDatasetImpl.createRange(start, stop, step);
 		case Dataset.COMPLEX64:
-			return ComplexFloatDataset.createRange(start, stop, step);
+			return ComplexFloatDatasetImpl.createRange(start, stop, step);
 		case Dataset.COMPLEX128:
-			return ComplexDoubleDataset.createRange(start, stop, step);
+			return ComplexDoubleDatasetImpl.createRange(start, stop, step);
 		}
 		throw new IllegalArgumentException("dtype not known");
 	}
@@ -115,32 +117,32 @@ public class DatasetFactory {
 			break;
 		case Dataset.ARRAYINT8:
 		case Dataset.INT8:
-			return CompoundIntegerDataset.createRange(itemSize, start, stop, step);
+			return CompoundByteDatasetImpl.createRange(itemSize, start, stop, step);
 		case Dataset.ARRAYINT16:
 		case Dataset.INT16:
-			return CompoundShortDataset.createRange(itemSize, start, stop, step);
+			return CompoundShortDatasetImpl.createRange(itemSize, start, stop, step);
 		case Dataset.ARRAYINT32:
 		case Dataset.INT32:
-			return CompoundIntegerDataset.createRange(itemSize, start, stop, step);
+			return CompoundIntegerDatasetImpl.createRange(itemSize, start, stop, step);
 		case Dataset.ARRAYINT64:
 		case Dataset.INT64:
-			return CompoundLongDataset.createRange(itemSize, start, stop, step);
+			return CompoundLongDatasetImpl.createRange(itemSize, start, stop, step);
 		case Dataset.ARRAYFLOAT32:
 		case Dataset.FLOAT32:
-			return CompoundFloatDataset.createRange(itemSize, start, stop, step);
+			return CompoundFloatDatasetImpl.createRange(itemSize, start, stop, step);
 		case Dataset.ARRAYFLOAT64:
 		case Dataset.FLOAT64:
-			return CompoundDoubleDataset.createRange(itemSize, start, stop, step);
+			return CompoundDoubleDatasetImpl.createRange(itemSize, start, stop, step);
 		case Dataset.COMPLEX64:
 			if (itemSize != 2) {
 				throw new IllegalArgumentException("Item size must be equal to 2");
 			}
-			return ComplexFloatDataset.createRange(start, stop, step);
+			return ComplexFloatDatasetImpl.createRange(start, stop, step);
 		case Dataset.COMPLEX128:
 			if (itemSize != 2) {
 				throw new IllegalArgumentException("Item size must be equal to 2");
 			}
-			return ComplexFloatDataset.createRange(start, stop, step);
+			return ComplexFloatDatasetImpl.createRange(start, stop, step);
 		}
 		throw new IllegalArgumentException("dtype not known");
 	}
@@ -200,39 +202,39 @@ public class DatasetFactory {
 
 		switch (dtype) {
 		case Dataset.BOOL:
-			return BooleanDataset.createFromObject(obj);
+			return BooleanDatasetImpl.createFromObject(obj);
 		case Dataset.INT8:
-			return ByteDataset.createFromObject(obj);
+			return ByteDatasetImpl.createFromObject(obj);
 		case Dataset.INT16:
-			return ShortDataset.createFromObject(obj);
+			return ShortDatasetImpl.createFromObject(obj);
 		case Dataset.INT32:
-			return IntegerDataset.createFromObject(obj);
+			return IntegerDatasetImpl.createFromObject(obj);
 		case Dataset.INT64:
-			return LongDataset.createFromObject(obj);
+			return LongDatasetImpl.createFromObject(obj);
 		case Dataset.ARRAYINT8:
-			return CompoundByteDataset.createFromObject(obj);
+			return CompoundByteDatasetImpl.createFromObject(obj);
 		case Dataset.ARRAYINT16:
-			return CompoundShortDataset.createFromObject(obj);
+			return CompoundShortDatasetImpl.createFromObject(obj);
 		case Dataset.ARRAYINT32:
-			return CompoundIntegerDataset.createFromObject(obj);
+			return CompoundIntegerDatasetImpl.createFromObject(obj);
 		case Dataset.ARRAYINT64:
-			return CompoundLongDataset.createFromObject(obj);
+			return CompoundLongDatasetImpl.createFromObject(obj);
 		case Dataset.FLOAT32:
-			return FloatDataset.createFromObject(obj);
+			return FloatDatasetImpl.createFromObject(obj);
 		case Dataset.FLOAT64:
-			return DoubleDataset.createFromObject(obj);
+			return DoubleDatasetImpl.createFromObject(obj);
 		case Dataset.ARRAYFLOAT32:
-			return CompoundFloatDataset.createFromObject(obj);
+			return CompoundFloatDatasetImpl.createFromObject(obj);
 		case Dataset.ARRAYFLOAT64:
-			return CompoundDoubleDataset.createFromObject(obj);
+			return CompoundDoubleDatasetImpl.createFromObject(obj);
 		case Dataset.COMPLEX64:
-			return ComplexFloatDataset.createFromObject(obj);
+			return ComplexFloatDatasetImpl.createFromObject(obj);
 		case Dataset.COMPLEX128:
-			return ComplexDoubleDataset.createFromObject(obj);
+			return ComplexDoubleDatasetImpl.createFromObject(obj);
 		case Dataset.STRING:
-			return StringDataset.createFromObject(obj);
+			return StringDatasetImpl.createFromObject(obj);
 		case Dataset.OBJECT:
-			return ObjectDataset.createFromObject(obj);
+			return ObjectDatasetImpl.createFromObject(obj);
 		default:
 			throw new IllegalArgumentException("Dataset type is not known");
 		}
@@ -241,21 +243,21 @@ public class DatasetFactory {
 	private static Dataset createFromPrimitiveArray(final Object array, final int dtype) {
 		switch (dtype) {
 		case Dataset.BOOL:
-			return new BooleanDataset((boolean []) array);
+			return new BooleanDatasetImpl((boolean []) array);
 		case Dataset.INT8:
-			return new ByteDataset((byte []) array);
+			return new ByteDatasetImpl((byte []) array);
 		case Dataset.INT16:
-			return new ShortDataset((short []) array);
+			return new ShortDatasetImpl((short []) array);
 		case Dataset.INT32:
-			return new IntegerDataset((int []) array, null);
+			return new IntegerDatasetImpl((int []) array, null);
 		case Dataset.INT64:
-			return new LongDataset((long []) array);
+			return new LongDatasetImpl((long []) array);
 		case Dataset.FLOAT32:
-			return new FloatDataset((float []) array);
+			return new FloatDatasetImpl((float []) array);
 		case Dataset.FLOAT64:
-			return new DoubleDataset((double []) array);
+			return new DoubleDatasetImpl((double []) array);
 		case Dataset.STRING:
-			return new StringDataset((String []) array);
+			return new StringDatasetImpl((String []) array);
 		default:
 			return null;
 		}
@@ -316,35 +318,35 @@ public class DatasetFactory {
 	public static Dataset zeros(final int[] shape, final int dtype) {
 		switch (dtype) {
 		case Dataset.BOOL:
-			return new BooleanDataset(shape);
+			return new BooleanDatasetImpl(shape);
 		case Dataset.INT8:
 		case Dataset.ARRAYINT8:
-			return new ByteDataset(shape);
+			return new ByteDatasetImpl(shape);
 		case Dataset.INT16:
 		case Dataset.ARRAYINT16:
-			return new ShortDataset(shape);
+			return new ShortDatasetImpl(shape);
 		case Dataset.RGB:
 			return new RGBDataset(shape);
 		case Dataset.INT32:
 		case Dataset.ARRAYINT32:
-			return new IntegerDataset(shape);
+			return new IntegerDatasetImpl(shape);
 		case Dataset.INT64:
 		case Dataset.ARRAYINT64:
-			return new LongDataset(shape);
+			return new LongDatasetImpl(shape);
 		case Dataset.FLOAT32:
 		case Dataset.ARRAYFLOAT32:
-			return new FloatDataset(shape);
+			return new FloatDatasetImpl(shape);
 		case Dataset.FLOAT64:
 		case Dataset.ARRAYFLOAT64:
-			return new DoubleDataset(shape);
+			return new DoubleDatasetImpl(shape);
 		case Dataset.COMPLEX64:
-			return new ComplexFloatDataset(shape);
+			return new ComplexFloatDatasetImpl(shape);
 		case Dataset.COMPLEX128:
-			return new ComplexDoubleDataset(shape);
+			return new ComplexDoubleDatasetImpl(shape);
 		case Dataset.STRING:
-			return new StringDataset(shape);
+			return new StringDatasetImpl(shape);
 		case Dataset.OBJECT:
-			return new ObjectDataset(shape);
+			return new ObjectDatasetImpl(shape);
 		}
 		throw new IllegalArgumentException("dtype not known or unsupported");
 	}
@@ -363,10 +365,10 @@ public class DatasetFactory {
 		switch (dtype) {
 		case Dataset.INT8:
 		case Dataset.ARRAYINT8:
-			return new CompoundByteDataset(itemSize, shape);
+			return new CompoundByteDatasetImpl(itemSize, shape);
 		case Dataset.INT16:
 		case Dataset.ARRAYINT16:
-			return new CompoundShortDataset(itemSize, shape);
+			return new CompoundShortDatasetImpl(itemSize, shape);
 		case Dataset.RGB:
 			if (itemSize != 3) {
 				throw new IllegalArgumentException("Number of elements not compatible with RGB type");
@@ -374,26 +376,26 @@ public class DatasetFactory {
 			return new RGBDataset(shape);
 		case Dataset.INT32:
 		case Dataset.ARRAYINT32:
-			return new CompoundIntegerDataset(itemSize, shape);
+			return new CompoundIntegerDatasetImpl(itemSize, shape);
 		case Dataset.INT64:
 		case Dataset.ARRAYINT64:
-			return new CompoundLongDataset(itemSize, shape);
+			return new CompoundLongDatasetImpl(itemSize, shape);
 		case Dataset.FLOAT32:
 		case Dataset.ARRAYFLOAT32:
-			return new CompoundFloatDataset(itemSize, shape);
+			return new CompoundFloatDatasetImpl(itemSize, shape);
 		case Dataset.FLOAT64:
 		case Dataset.ARRAYFLOAT64:
-			return new CompoundDoubleDataset(itemSize, shape);
+			return new CompoundDoubleDatasetImpl(itemSize, shape);
 		case Dataset.COMPLEX64:
 			if (itemSize != 2) {
 				throw new IllegalArgumentException("Number of elements not compatible with complex type");
 			}
-			return new ComplexFloatDataset(shape);
+			return new ComplexFloatDatasetImpl(shape);
 		case Dataset.COMPLEX128:
 			if (itemSize != 2) {
 				throw new IllegalArgumentException("Number of elements not compatible with complex type");
 			}
-			return new ComplexDoubleDataset(shape);
+			return new ComplexDoubleDatasetImpl(shape);
 		}
 		throw new IllegalArgumentException("dtype not a known compound type");
 	}
@@ -450,25 +452,25 @@ public class DatasetFactory {
 	public static Dataset ones(final int[] shape, final int dtype) {
 		switch (dtype) {
 		case Dataset.BOOL:
-			return BooleanDataset.ones(shape);
+			return BooleanDatasetImpl.ones(shape);
 		case Dataset.INT8:
-			return ByteDataset.ones(shape);
+			return ByteDatasetImpl.ones(shape);
 		case Dataset.INT16:
-			return ShortDataset.ones(shape);
+			return ShortDatasetImpl.ones(shape);
 		case Dataset.RGB:
 			return new RGBDataset(shape).fill(1);
 		case Dataset.INT32:
-			return IntegerDataset.ones(shape);
+			return IntegerDatasetImpl.ones(shape);
 		case Dataset.INT64:
-			return LongDataset.ones(shape);
+			return LongDatasetImpl.ones(shape);
 		case Dataset.FLOAT32:
-			return FloatDataset.ones(shape);
+			return FloatDatasetImpl.ones(shape);
 		case Dataset.FLOAT64:
-			return DoubleDataset.ones(shape);
+			return DoubleDatasetImpl.ones(shape);
 		case Dataset.COMPLEX64:
-			return ComplexFloatDataset.ones(shape);
+			return ComplexFloatDatasetImpl.ones(shape);
 		case Dataset.COMPLEX128:
-			return ComplexDoubleDataset.ones(shape);
+			return ComplexDoubleDatasetImpl.ones(shape);
 		}
 		throw new IllegalArgumentException("dtype not known");
 	}
@@ -487,10 +489,10 @@ public class DatasetFactory {
 		switch (dtype) {
 		case Dataset.INT8:
 		case Dataset.ARRAYINT8:
-			return CompoundByteDataset.ones(itemSize, shape);
+			return CompoundByteDatasetImpl.ones(itemSize, shape);
 		case Dataset.INT16:
 		case Dataset.ARRAYINT16:
-			return CompoundShortDataset.ones(itemSize, shape);
+			return CompoundShortDatasetImpl.ones(itemSize, shape);
 		case Dataset.RGB:
 			if (itemSize != 3) {
 				throw new IllegalArgumentException("Number of elements not compatible with RGB type");
@@ -498,26 +500,26 @@ public class DatasetFactory {
 			return new RGBDataset(shape).fill(1);
 		case Dataset.INT32:
 		case Dataset.ARRAYINT32:
-			return CompoundIntegerDataset.ones(itemSize, shape);
+			return CompoundIntegerDatasetImpl.ones(itemSize, shape);
 		case Dataset.INT64:
 		case Dataset.ARRAYINT64:
-			return CompoundLongDataset.ones(itemSize, shape);
+			return CompoundLongDatasetImpl.ones(itemSize, shape);
 		case Dataset.FLOAT32:
 		case Dataset.ARRAYFLOAT32:
-			return CompoundFloatDataset.ones(itemSize, shape);
+			return CompoundFloatDatasetImpl.ones(itemSize, shape);
 		case Dataset.FLOAT64:
 		case Dataset.ARRAYFLOAT64:
-			return CompoundDoubleDataset.ones(itemSize, shape);
+			return CompoundDoubleDatasetImpl.ones(itemSize, shape);
 		case Dataset.COMPLEX64:
 			if (itemSize != 2) {
 				throw new IllegalArgumentException("Number of elements not compatible with complex type");
 			}
-			return ComplexFloatDataset.ones(shape);
+			return ComplexFloatDatasetImpl.ones(shape);
 		case Dataset.COMPLEX128:
 			if (itemSize != 2) {
 				throw new IllegalArgumentException("Number of elements not compatible with complex type");
 			}
-			return ComplexDoubleDataset.ones(shape);
+			return ComplexDoubleDatasetImpl.ones(shape);
 		}
 		throw new IllegalArgumentException("dtype not a known compound type");
 	}

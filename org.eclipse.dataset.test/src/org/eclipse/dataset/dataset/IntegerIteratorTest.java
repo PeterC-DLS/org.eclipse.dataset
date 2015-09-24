@@ -17,8 +17,10 @@ import org.eclipse.dataset.dense.Dataset;
 import org.eclipse.dataset.dense.DatasetFactory;
 import org.eclipse.dataset.dense.IndexIterator;
 import org.eclipse.dataset.dense.IntegerIterator;
-import org.eclipse.dataset.internal.dense.DoubleDataset;
-import org.eclipse.dataset.internal.dense.IntegerDataset;
+import org.eclipse.dataset.internal.dense.DoubleDatasetImpl;
+import org.eclipse.dataset.internal.dense.IntegerDatasetImpl;
+import org.eclipse.dataset.dense.DoubleDataset;
+import org.eclipse.dataset.dense.IntegerDataset;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -28,14 +30,14 @@ public class IntegerIteratorTest {
 
 	@Before
 	public void setUpClass() {
-		a = new DoubleDataset(new double[] { 0, 1, 3, 5, -7, -9 });
-		b = new DoubleDataset(new double[] { 0.01, 1.2, 2.9, 5, -7.1, -9 });
+		a = new DoubleDatasetImpl(new double[] { 0, 1, 3, 5, -7, -9 });
+		b = new DoubleDatasetImpl(new double[] { 0.01, 1.2, 2.9, 5, -7.1, -9 });
 	}
 
 	@Test
 	public void testEqualTo() {
 		Dataset c = a.clone().reshape(2, 3);
-		IntegerDataset s = new IntegerDataset(new int[] {0, 3, 4}, null);
+		IntegerDataset s = new IntegerDatasetImpl(new int[] {0, 3, 4}, null);
 
 		List<Integer> inds = new ArrayList<Integer>();
 
@@ -44,7 +46,7 @@ public class IntegerIteratorTest {
 			inds.add((int) c.getElementLongAbs(iter.index));
 
 		checkDatasets((IntegerDataset) DatasetFactory.createFromList(inds),
-				new IntegerDataset(new int[] {0,5,-7}, null));
+				new IntegerDatasetImpl(new int[] {0,5,-7}, null));
 	}
 
 	public void checkDatasets(IntegerDataset calc, IntegerDataset expected) {

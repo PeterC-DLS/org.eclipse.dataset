@@ -23,9 +23,9 @@ import org.eclipse.dataset.ILazyDataset;
 import org.eclipse.dataset.Slice;
 import org.eclipse.dataset.dense.Dataset;
 import org.eclipse.dataset.dense.Random;
-import org.eclipse.dataset.internal.dense.BooleanDataset;
-import org.eclipse.dataset.internal.dense.DoubleDataset;
-import org.eclipse.dataset.internal.dense.ShortDataset;
+import org.eclipse.dataset.dense.BooleanDataset;
+import org.eclipse.dataset.dense.DoubleDataset;
+import org.eclipse.dataset.dense.ShortDataset;
 import org.junit.Test;
 
 public class SliceableMetadataTest {

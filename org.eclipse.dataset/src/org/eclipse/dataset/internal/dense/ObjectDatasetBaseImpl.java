@@ -10,7 +10,7 @@
  *    Peter Chang - initial API and implementation and/or initial documentation
  *******************************************************************************/
 
-// This is generated from DoubleDataset.java by fromdouble.py
+// This is generated from DoubleDatasetImpl.java by fromdouble.py
 
 package org.eclipse.dataset.internal.dense;
 
@@ -28,6 +28,7 @@ import org.eclipse.dataset.dense.BroadcastIterator;
 import org.eclipse.dataset.dense.Dataset;
 import org.eclipse.dataset.dense.DatasetFactory;
 import org.eclipse.dataset.dense.DatasetUtils;
+import org.eclipse.dataset.dense.ObjectDataset; // CLASS_TYPE
 import org.eclipse.dataset.dense.DTypeUtils;
 import org.eclipse.dataset.dense.IndexIterator;
 import org.eclipse.dataset.dense.IntegerIterator;
@@ -38,7 +39,7 @@ import org.eclipse.dataset.dense.SliceIterator;
 /**
  * Extend dataset for Object values // PRIM_TYPE
  */
-public class ObjectDatasetBase extends AbstractDataset {
+public class ObjectDatasetBaseImpl extends AbstractDataset implements ObjectDataset { // CLASS_TYPE
 	// pin UID to base class
 	private static final long serialVersionUID = Dataset.serialVersionUID;
 
@@ -68,14 +69,14 @@ public class ObjectDatasetBase extends AbstractDataset {
 		return OBJECT; // DATA_TYPE
 	}
 
-	public ObjectDatasetBase() {
+	public ObjectDatasetBaseImpl() {
 	}
 
 	/**
 	 * Create a zero-filled dataset of given shape
 	 * @param shape
 	 */
-	public ObjectDatasetBase(final int... shape) {
+	public ObjectDatasetBaseImpl(final int... shape) {
 		if (shape.length == 1) {
 			size = shape[0];
 			if (size < 0) {
@@ -95,7 +96,7 @@ public class ObjectDatasetBase extends AbstractDataset {
 	 * @param shape
 	 *            (can be null to create 1D dataset)
 	 */
-	public ObjectDatasetBase(final Object[] data, int... shape) { // PRIM_TYPE
+	public ObjectDatasetBaseImpl(final Object[] data, int... shape) { // PRIM_TYPE
 		if (data == null) {
 			throw new IllegalArgumentException("Data must not be null");
 		}
@@ -116,7 +117,7 @@ public class ObjectDatasetBase extends AbstractDataset {
 	 * Copy a dataset
 	 * @param dataset
 	 */
-	public ObjectDatasetBase(final ObjectDatasetBase dataset) {
+	public ObjectDatasetBaseImpl(final ObjectDatasetBaseImpl dataset) {
 		copyToView(dataset, this, true, true);
 		if (dataset.stride == null) {
 			odata = data = dataset.data.clone();
@@ -136,7 +137,7 @@ public class ObjectDatasetBase extends AbstractDataset {
 	 * Cast a dataset to this class type
 	 * @param dataset
 	 */
-	public ObjectDatasetBase(final Dataset dataset) {
+	public ObjectDatasetBaseImpl(final Dataset dataset) {
 		copyToView(dataset, this, true, false);
 		offset = 0;
 		stride = null;
@@ -157,7 +158,7 @@ public class ObjectDatasetBase extends AbstractDataset {
 		if (getRank() == 0) // already true for zero-rank dataset
 			return true;
 
-		ObjectDatasetBase other = (ObjectDatasetBase) obj;
+		ObjectDatasetBaseImpl other = (ObjectDatasetBaseImpl) obj;
 		IndexIterator iter = getIterator();
 		IndexIterator oiter = other.getIterator();
 		while (iter.hasNext() && oiter.hasNext()) {
@@ -173,8 +174,8 @@ public class ObjectDatasetBase extends AbstractDataset {
 	}
 
 	@Override
-	public ObjectDatasetBase clone() {
-		return new ObjectDatasetBase(this);
+	public ObjectDatasetBaseImpl clone() {
+		return new ObjectDatasetBaseImpl(this);
 	}
 
 	/**
@@ -184,8 +185,8 @@ public class ObjectDatasetBase extends AbstractDataset {
 	 * @param obj
 	 * @return dataset with contents given by input
 	 */
-	public static ObjectDatasetBase createFromObject(final Object obj) {
-		ObjectDatasetBase result = new ObjectDatasetBase();
+	public static ObjectDatasetBaseImpl createFromObject(final Object obj) {
+		ObjectDatasetBaseImpl result = new ObjectDatasetBaseImpl();
 
 		result.shape = DatasetUtils.getShapeFromObject(obj);
 		result.size = DatasetUtils.calculateSize(result.shape);
@@ -201,12 +202,12 @@ public class ObjectDatasetBase extends AbstractDataset {
 	 * @param shape
 	 * @return a dataset filled with ones
 	 */
-	public static ObjectDatasetBase ones(final int... shape) {
-		return new ObjectDatasetBase(shape).fill(1);
+	public static ObjectDatasetBaseImpl ones(final int... shape) {
+		return new ObjectDatasetBaseImpl(shape).fill(1);
 	}
 
 	@Override
-	public ObjectDatasetBase fill(final Object obj) {
+	public ObjectDatasetBaseImpl fill(final Object obj) {
 		Object dv = obj; // PRIM_TYPE // FROM_OBJECT
 		IndexIterator iter = getIterator();
 		while (iter.hasNext()) {
@@ -221,6 +222,7 @@ public class ObjectDatasetBase extends AbstractDataset {
 	 * This is a typed version of {@link #getBuffer()}
 	 * @return data buffer as linear array
 	 */
+	@Override
 	public Object[] getData() { // PRIM_TYPE
 		return data;
 	}
@@ -233,8 +235,8 @@ public class ObjectDatasetBase extends AbstractDataset {
 	}
 
 	@Override
-	public ObjectDatasetBase getView() {
-		ObjectDatasetBase view = new ObjectDatasetBase();
+	public ObjectDatasetBaseImpl getView() {
+		ObjectDatasetBaseImpl view = new ObjectDatasetBaseImpl();
 		copyToView(this, view, true, true);
 		view.setData();
 		return view;
@@ -248,6 +250,7 @@ public class ObjectDatasetBase extends AbstractDataset {
 	 *            absolute index
 	 * @return value
 	 */
+	@Override
 	public Object getAbs(final int index) { // PRIM_TYPE
 		return data[index];
 	}
@@ -287,6 +290,7 @@ public class ObjectDatasetBase extends AbstractDataset {
 	 * @param val
 	 *            new value
 	 */
+	@Override
 	public void setAbs(final int index, final Object val) { // PRIM_TYPE
 		data[index] = val;
 		setDirty();
@@ -311,6 +315,7 @@ public class ObjectDatasetBase extends AbstractDataset {
 	 * @param i
 	 * @return item in given position
 	 */
+	@Override
 	public Object get(final int i) { // PRIM_TYPE
 		return data[get1DIndex(i)];
 	}
@@ -320,6 +325,7 @@ public class ObjectDatasetBase extends AbstractDataset {
 	 * @param j
 	 * @return item in given position
 	 */
+	@Override
 	public Object get(final int i, final int j) { // PRIM_TYPE
 		return data[get1DIndex(i, j)];
 	}
@@ -328,6 +334,7 @@ public class ObjectDatasetBase extends AbstractDataset {
 	 * @param pos
 	 * @return item in given position
 	 */
+	@Override
 	public Object get(final int... pos) { // PRIM_TYPE
 		return data[get1DIndex(pos)];
 	}
@@ -473,6 +480,7 @@ public class ObjectDatasetBase extends AbstractDataset {
 	 * @param value
 	 * @param i
 	 */
+	@Override
 	public void setItem(final Object value, final int i) { // PRIM_TYPE
 		setAbs(get1DIndex(i), value);
 	}
@@ -484,6 +492,7 @@ public class ObjectDatasetBase extends AbstractDataset {
 	 * @param i
 	 * @param j
 	 */
+	@Override
 	public void setItem(final Object value, final int i, final int j) { // PRIM_TYPE
 		setAbs(get1DIndex(i, j), value);
 	}
@@ -494,6 +503,7 @@ public class ObjectDatasetBase extends AbstractDataset {
 	 * @param value
 	 * @param pos
 	 */
+	@Override
 	public void setItem(final Object value, final int... pos) { // PRIM_TYPE
 		setAbs(get1DIndex(pos), value);
 	}
@@ -536,13 +546,13 @@ public class ObjectDatasetBase extends AbstractDataset {
 	}
 
 	@Override
-	public ObjectDatasetBase sort(Integer axis) {
+	public ObjectDatasetBaseImpl sort(Integer axis) {
 		if (axis == null) {
 			Arrays.sort(data);
 		} else {
 			axis = checkAxis(axis);
 			
-			ObjectDatasetBase ads = new ObjectDatasetBase(shape[axis]);
+			ObjectDatasetBaseImpl ads = new ObjectDatasetBaseImpl(shape[axis]);
 			PositionIterator pi = getPositionIterator(axis);
 			int[] pos = pi.getPos();
 			boolean[] hit = pi.getOmit();
@@ -559,14 +569,14 @@ public class ObjectDatasetBase extends AbstractDataset {
 	}
 
 	@Override
-	public ObjectDatasetBase getUniqueItems() {
+	public ObjectDatasetBaseImpl getUniqueItems() {
 		Set<Object> set = new TreeSet<Object>(); // CLASS_TYPE
 		IndexIterator it = getIterator();
 		while (it.hasNext()) {
 			set.add(data[it.index]);
 		}
 
-		ObjectDataset u = new ObjectDataset(set.size()); // CLASS_TYPE
+		ObjectDatasetBaseImpl u = new ObjectDatasetBaseImpl(set.size()); // CLASS_TYPE
 		int i = 0;
 		Object[] udata = u.getData(); // PRIM_TYPE
 		for (Object v : set) { // CLASS_TYPE
@@ -576,8 +586,8 @@ public class ObjectDatasetBase extends AbstractDataset {
 	}
 
 	@Override
-	public ObjectDatasetBase getSlice(final SliceIterator siter) {
-		ObjectDatasetBase result = new ObjectDatasetBase(siter.getShape());
+	public ObjectDatasetBaseImpl getSlice(final SliceIterator siter) {
+		ObjectDatasetBaseImpl result = new ObjectDatasetBaseImpl(siter.getShape());
 		Object[] rdata = result.data; // PRIM_TYPE
 
 		for (int i = 0; siter.hasNext(); i++)
@@ -591,14 +601,14 @@ public class ObjectDatasetBase extends AbstractDataset {
 	public void fillDataset(Dataset result, IndexIterator iter) {
 		IndexIterator riter = result.getIterator();
 
-		Object[] rdata = ((ObjectDatasetBase) result).data; // PRIM_TYPE
+		Object[] rdata = ((ObjectDatasetBaseImpl) result).data; // PRIM_TYPE
 
 		while (riter.hasNext() && iter.hasNext())
 			rdata[riter.index] = data[iter.index];
 	}
 
 	@Override
-	public ObjectDatasetBase setByBoolean(final Object obj, Dataset selection) {
+	public ObjectDatasetBaseImpl setByBoolean(final Object obj, Dataset selection) {
 		if (obj instanceof Dataset) {
 			final Dataset ds = (Dataset) obj;
 			final int length = ((Number) selection.sum()).intValue();
@@ -626,7 +636,7 @@ public class ObjectDatasetBase extends AbstractDataset {
 	}
 
 	@Override
-	public ObjectDatasetBase setBy1DIndex(final Object obj, final Dataset index) {
+	public ObjectDatasetBaseImpl setBy1DIndex(final Object obj, final Dataset index) {
 		if (obj instanceof Dataset) {
 			final Dataset ds = (Dataset) obj;
 			if (index.getSize() != ds.getSize()) {
@@ -653,7 +663,7 @@ public class ObjectDatasetBase extends AbstractDataset {
 	}
 
 	@Override
-	public ObjectDatasetBase setByIndexes(final Object obj, final Object... indexes) {
+	public ObjectDatasetBaseImpl setByIndexes(final Object obj, final Object... indexes) {
 		final IntegersIterator iter = new IntegersIterator(shape, indexes);
 		final int[] pos = iter.getPos();
 
@@ -681,7 +691,7 @@ public class ObjectDatasetBase extends AbstractDataset {
 	}
 
 	@Override
-	ObjectDatasetBase setSlicedView(Dataset view, Dataset d) {
+	ObjectDatasetBaseImpl setSlicedView(Dataset view, Dataset d) {
 		final BroadcastIterator it = BroadcastIterator.createIterator(view, d);
 
 		while (it.hasNext()) {
@@ -691,7 +701,7 @@ public class ObjectDatasetBase extends AbstractDataset {
 	}
 
 	@Override
-	public ObjectDatasetBase setSlice(final Object obj, final IndexIterator siter) {
+	public ObjectDatasetBaseImpl setSlice(final Object obj, final IndexIterator siter) {
 
 		if (obj instanceof IDataset) {
 			final IDataset ds = (IDataset) obj;
@@ -845,37 +855,37 @@ public class ObjectDatasetBase extends AbstractDataset {
 	}
 
 	@Override
-	public ObjectDatasetBase iadd(final Object b) {
+	public ObjectDatasetBaseImpl iadd(final Object b) {
 		return this;
 	}
 
 	@Override
-	public ObjectDatasetBase isubtract(final Object b) {
+	public ObjectDatasetBaseImpl isubtract(final Object b) {
 		return this;
 	}
 
 	@Override
-	public ObjectDatasetBase imultiply(final Object b) {
+	public ObjectDatasetBaseImpl imultiply(final Object b) {
 		return this;
 	}
 
 	@Override
-	public ObjectDatasetBase idivide(final Object b) {
+	public ObjectDatasetBaseImpl idivide(final Object b) {
 		return this;
 	}
 
 	@Override
-	public ObjectDatasetBase ifloor() {
+	public ObjectDatasetBaseImpl ifloor() {
 		return this;
 	}
 
 	@Override
-	public ObjectDatasetBase iremainder(final Object b) {
+	public ObjectDatasetBaseImpl iremainder(final Object b) {
 		return this;
 	}
 
 	@Override
-	public ObjectDatasetBase ipower(final Object b) {
+	public ObjectDatasetBaseImpl ipower(final Object b) {
 		return this;
 	}
 

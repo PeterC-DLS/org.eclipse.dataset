@@ -10,7 +10,7 @@
  *    Peter Chang - initial API and implementation and/or initial documentation
  *******************************************************************************/
 
-// This is generated from DoubleDataset.java by fromdouble.py
+// This is generated from DoubleDatasetImpl.java by fromdouble.py
 
 package org.eclipse.dataset.internal.dense;
 
@@ -20,7 +20,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.apache.commons.math.complex.Complex;
 import org.eclipse.dataset.IDataset;
 import org.eclipse.dataset.IDatasetIterator;
 import org.eclipse.dataset.PositionIterator;
@@ -29,6 +28,7 @@ import org.eclipse.dataset.dense.BroadcastIterator;
 import org.eclipse.dataset.dense.Dataset;
 import org.eclipse.dataset.dense.DatasetFactory;
 import org.eclipse.dataset.dense.DatasetUtils;
+import org.eclipse.dataset.dense.StringDataset; // CLASS_TYPE
 import org.eclipse.dataset.dense.DTypeUtils;
 import org.eclipse.dataset.dense.IndexIterator;
 import org.eclipse.dataset.dense.IntegerIterator;
@@ -37,24 +37,24 @@ import org.eclipse.dataset.dense.SliceIterator;
 
 
 /**
- * Extend dataset for short values // PRIM_TYPE
+ * Extend dataset for String values // PRIM_TYPE
  */
-public class ShortDataset extends AbstractDataset {
+public class StringDatasetBaseImpl extends AbstractDataset implements StringDataset { // CLASS_TYPE
 	// pin UID to base class
 	private static final long serialVersionUID = Dataset.serialVersionUID;
 
-	protected short[] data; // subclass alias // PRIM_TYPE
+	protected String[] data; // subclass alias // PRIM_TYPE
 
 	@Override
 	protected void setData() {
-		data = (short[]) odata; // PRIM_TYPE
+		data = (String[]) odata; // PRIM_TYPE
 	}
 
-	protected static short[] createArray(final int size) { // PRIM_TYPE
-		short[] array = null; // PRIM_TYPE
+	protected static String[] createArray(final int size) { // PRIM_TYPE
+		String[] array = null; // PRIM_TYPE
 
 		try {
-			array = new short[size]; // PRIM_TYPE
+			array = new String[size]; // PRIM_TYPE
 		} catch (OutOfMemoryError e) {
 			logger.error("The size of the dataset ({}) that is being created is too large "
 					+ "and there is not enough memory to hold it.", size);
@@ -66,17 +66,17 @@ public class ShortDataset extends AbstractDataset {
 
 	@Override
 	public int getDType() {
-		return INT16; // DATA_TYPE
+		return STRING; // DATA_TYPE
 	}
 
-	public ShortDataset() {
+	public StringDatasetBaseImpl() {
 	}
 
 	/**
 	 * Create a zero-filled dataset of given shape
 	 * @param shape
 	 */
-	public ShortDataset(final int... shape) {
+	public StringDatasetBaseImpl(final int... shape) {
 		if (shape.length == 1) {
 			size = shape[0];
 			if (size < 0) {
@@ -96,7 +96,7 @@ public class ShortDataset extends AbstractDataset {
 	 * @param shape
 	 *            (can be null to create 1D dataset)
 	 */
-	public ShortDataset(final short[] data, int... shape) { // PRIM_TYPE
+	public StringDatasetBaseImpl(final String[] data, int... shape) { // PRIM_TYPE
 		if (data == null) {
 			throw new IllegalArgumentException("Data must not be null");
 		}
@@ -117,7 +117,7 @@ public class ShortDataset extends AbstractDataset {
 	 * Copy a dataset
 	 * @param dataset
 	 */
-	public ShortDataset(final ShortDataset dataset) {
+	public StringDatasetBaseImpl(final StringDatasetBaseImpl dataset) {
 		copyToView(dataset, this, true, true);
 		if (dataset.stride == null) {
 			odata = data = dataset.data.clone();
@@ -137,7 +137,7 @@ public class ShortDataset extends AbstractDataset {
 	 * Cast a dataset to this class type
 	 * @param dataset
 	 */
-	public ShortDataset(final Dataset dataset) {
+	public StringDatasetBaseImpl(final Dataset dataset) {
 		copyToView(dataset, this, true, false);
 		offset = 0;
 		stride = null;
@@ -145,7 +145,7 @@ public class ShortDataset extends AbstractDataset {
 		odata = data = createArray(size);
 		IndexIterator iter = dataset.getIterator();
 		for (int i = 0; iter.hasNext(); i++) {
-			data[i] = (short) dataset.getElementLongAbs(iter.index); // GET_ELEMENT_WITH_CAST
+			data[i] = dataset.getStringAbs(iter.index); // GET_ELEMENT_WITH_CAST
 		}
 	}
 
@@ -158,11 +158,11 @@ public class ShortDataset extends AbstractDataset {
 		if (getRank() == 0) // already true for zero-rank dataset
 			return true;
 
-		ShortDataset other = (ShortDataset) obj;
+		StringDatasetBaseImpl other = (StringDatasetBaseImpl) obj;
 		IndexIterator iter = getIterator();
 		IndexIterator oiter = other.getIterator();
 		while (iter.hasNext() && oiter.hasNext()) {
-			if (data[iter.index] != other.data[oiter.index]) // OBJECT_UNEQUAL
+			if (!data[iter.index].equals(other.data[oiter.index])) // OBJECT_UNEQUAL
 				return false;
 		}
 		return true;
@@ -174,8 +174,8 @@ public class ShortDataset extends AbstractDataset {
 	}
 
 	@Override
-	public ShortDataset clone() {
-		return new ShortDataset(this);
+	public StringDatasetBaseImpl clone() {
+		return new StringDatasetBaseImpl(this);
 	}
 
 	/**
@@ -185,8 +185,8 @@ public class ShortDataset extends AbstractDataset {
 	 * @param obj
 	 * @return dataset with contents given by input
 	 */
-	public static ShortDataset createFromObject(final Object obj) {
-		ShortDataset result = new ShortDataset();
+	public static StringDatasetBaseImpl createFromObject(final Object obj) {
+		StringDatasetBaseImpl result = new StringDatasetBaseImpl();
 
 		result.shape = DatasetUtils.getShapeFromObject(obj);
 		result.size = DatasetUtils.calculateSize(result.shape);
@@ -197,43 +197,18 @@ public class ShortDataset extends AbstractDataset {
 		result.fillData(obj, 0, pos);
 		return result;
 	}
-	
-	/**
-	 *
-	 * @param stop
-	 * @return a new 1D dataset, filled with values determined by parameters
-	 */
-	public static ShortDataset createRange(final double stop) {
-		return createRange(0, stop, 1);
-	}
-	
-	/**
-	 *
-	 * @param start
-	 * @param stop
-	 * @param step
-	 * @return a new 1D dataset, filled with values determined by parameters
-	 */
-	public static ShortDataset createRange(final double start, final double stop, final double step) {
-		int size = calcSteps(start, stop, step);
-		ShortDataset result = new ShortDataset(size);
-		for (int i = 0; i < size; i++) {
-			result.data[i] = (short) (start + i * step); // PRIM_TYPE // ADD_CAST
-		}
-		return result;
-	}
 
 	/**
 	 * @param shape
 	 * @return a dataset filled with ones
 	 */
-	public static ShortDataset ones(final int... shape) {
-		return new ShortDataset(shape).fill(1);
+	public static StringDatasetBaseImpl ones(final int... shape) {
+		return new StringDatasetBaseImpl(shape).fill(1);
 	}
 
 	@Override
-	public ShortDataset fill(final Object obj) {
-		short dv = (short) DTypeUtils.toLong(obj); // PRIM_TYPE // FROM_OBJECT
+	public StringDatasetBaseImpl fill(final Object obj) {
+		String dv = obj.toString(); // PRIM_TYPE // FROM_OBJECT
 		IndexIterator iter = getIterator();
 		while (iter.hasNext()) {
 			data[iter.index] = dv;
@@ -247,7 +222,8 @@ public class ShortDataset extends AbstractDataset {
 	 * This is a typed version of {@link #getBuffer()}
 	 * @return data buffer as linear array
 	 */
-	public short[] getData() { // PRIM_TYPE
+	@Override
+	public String[] getData() { // PRIM_TYPE
 		return data;
 	}
 
@@ -259,8 +235,8 @@ public class ShortDataset extends AbstractDataset {
 	}
 
 	@Override
-	public ShortDataset getView() {
-		ShortDataset view = new ShortDataset();
+	public StringDatasetBaseImpl getView() {
+		StringDatasetBaseImpl view = new StringDatasetBaseImpl();
 		copyToView(this, view, true, true);
 		view.setData();
 		return view;
@@ -274,23 +250,24 @@ public class ShortDataset extends AbstractDataset {
 	 *            absolute index
 	 * @return value
 	 */
-	public short getAbs(final int index) { // PRIM_TYPE
+	@Override
+	public String getAbs(final int index) { // PRIM_TYPE
 		return data[index];
 	}
 
 	@Override
 	public boolean getElementBooleanAbs(final int index) {
-		return data[index] != 0; // BOOLEAN_FALSE
+		return false;
 	}
 
 	@Override
 	public double getElementDoubleAbs(final int index) {
-		return data[index]; // BOOLEAN_ZERO
+		return 0;
 	}
 
 	@Override
 	public long getElementLongAbs(final int index) {
-		return data[index]; // BOOLEAN_ZERO // OMIT_CAST_INT
+		return 0;
 	}
 
 	@Override
@@ -300,7 +277,7 @@ public class ShortDataset extends AbstractDataset {
 
 	@Override
 	public String getStringAbs(final int index) {
-		return stringFormat == null ? String.format("%d", data[index]) : // FORMAT_STRING
+		return stringFormat == null ?  data[index] : // FORMAT_STRING
 			stringFormat.format(data[index]);
 	}
 
@@ -313,14 +290,15 @@ public class ShortDataset extends AbstractDataset {
 	 * @param val
 	 *            new value
 	 */
-	public void setAbs(final int index, final short val) { // PRIM_TYPE
+	@Override
+	public void setAbs(final int index, final String val) { // PRIM_TYPE
 		data[index] = val;
 		setDirty();
 	}
 
 	@Override
 	public void setItemDirect(final int dindex, final int sindex, final Object src) {
-		short[] dsrc = (short[]) src; // PRIM_TYPE
+		String[] dsrc = (String[]) src; // PRIM_TYPE
 		data[dindex] = dsrc[sindex];
 	}
 
@@ -330,14 +308,15 @@ public class ShortDataset extends AbstractDataset {
 			throw new IndexOutOfBoundsException("Index given is outside dataset");
 		}
 
-		setAbs(index, (short) DTypeUtils.toLong(obj)); // FROM_OBJECT
+		setAbs(index, obj.toString()); // FROM_OBJECT
 	}
 
 	/**
 	 * @param i
 	 * @return item in given position
 	 */
-	public short get(final int i) { // PRIM_TYPE
+	@Override
+	public String get(final int i) { // PRIM_TYPE
 		return data[get1DIndex(i)];
 	}
 
@@ -346,7 +325,8 @@ public class ShortDataset extends AbstractDataset {
 	 * @param j
 	 * @return item in given position
 	 */
-	public short get(final int i, final int j) { // PRIM_TYPE
+	@Override
+	public String get(final int i, final int j) { // PRIM_TYPE
 		return data[get1DIndex(i, j)];
 	}
 
@@ -354,23 +334,24 @@ public class ShortDataset extends AbstractDataset {
 	 * @param pos
 	 * @return item in given position
 	 */
-	public short get(final int... pos) { // PRIM_TYPE
+	@Override
+	public String get(final int... pos) { // PRIM_TYPE
 		return data[get1DIndex(pos)];
 	}
 
 	@Override
 	public Object getObject(final int i) {
-		return Short.valueOf(get(i)); // CLASS_TYPE
+		return get(i); // CLASS_TYPE
 	}
 
 	@Override
 	public Object getObject(final int i, final int j) {
-		return Short.valueOf(get(i, j)); // CLASS_TYPE
+		return get(i, j); // CLASS_TYPE
 	}
 
 	@Override
 	public Object getObject(final int... pos) {
-		return Short.valueOf(get(pos)); // CLASS_TYPE
+		return get(pos); // CLASS_TYPE
 	}
 
 	@Override
@@ -390,107 +371,107 @@ public class ShortDataset extends AbstractDataset {
 
 	@Override
 	public double getDouble(final int i) {
-		return get(i); // BOOLEAN_ZERO
+		return 0;
 	}
 
 	@Override
 	public double getDouble(final int i, final int j) {
-		return get(i, j); // BOOLEAN_ZERO
+		return 0;
 	}
 
 	@Override
 	public double getDouble(final int... pos) {
-		return get(pos); // BOOLEAN_ZERO
+		return 0;
 	}
 
 	@Override
 	public float getFloat(final int i) {
-		return get(i); // BOOLEAN_ZERO // OMIT_REAL_CAST
+		return 0;
 	}
 
 	@Override
 	public float getFloat(final int i, final int j) {
-		return get(i, j); // BOOLEAN_ZERO // OMIT_REAL_CAST
+		return 0;
 	}
 
 	@Override
 	public float getFloat(final int... pos) {
-		return get(pos); // BOOLEAN_ZERO // OMIT_REAL_CAST
+		return 0;
 	}
 
 	@Override
 	public long getLong(final int i) {
-		return get(i); // BOOLEAN_ZERO // OMIT_UPCAST
+		return 0;
 	}
 
 	@Override
 	public long getLong(final int i, final int j) {
-		return get(i, j); // BOOLEAN_ZERO // OMIT_UPCAST
+		return 0;
 	}
 
 	@Override
 	public long getLong(final int... pos) {
-		return get(pos); // BOOLEAN_ZERO // OMIT_UPCAST
+		return 0;
 	}
 
 	@Override
 	public int getInt(final int i) {
-		return get(i); // BOOLEAN_ZERO // OMIT_UPCAST
+		return 0;
 	}
 
 	@Override
 	public int getInt(final int i, final int j) {
-		return get(i, j); // BOOLEAN_ZERO // OMIT_UPCAST
+		return 0;
 	}
 
 	@Override
 	public int getInt(final int... pos) {
-		return get(pos); // BOOLEAN_ZERO // OMIT_UPCAST
+		return 0;
 	}
 
 	@Override
 	public short getShort(final int i) {
-		return get(i); // BOOLEAN_ZERO // OMIT_UPCAST
+		return 0;
 	}
 
 	@Override
 	public short getShort(final int i, final int j) {
-		return get(i, j); // BOOLEAN_ZERO // OMIT_UPCAST
+		return 0;
 	}
 
 	@Override
 	public short getShort(final int... pos) {
-		return get(pos); // BOOLEAN_ZERO // OMIT_UPCAST
+		return 0;
 	}
 
 	@Override
 	public byte getByte(final int i) {
-		return (byte) get(i); // BOOLEAN_ZERO // OMIT_UPCAST
+		return 0;
 	}
 
 	@Override
 	public byte getByte(final int i, final int j) {
-		return (byte) get(i, j); // BOOLEAN_ZERO // OMIT_UPCAST
+		return 0;
 	}
 
 	@Override
 	public byte getByte(final int... pos) {
-		return (byte) get(pos); // BOOLEAN_ZERO // OMIT_UPCAST
+		return 0;
 	}
 
 	@Override
 	public boolean getBoolean(final int i) {
-		return get(i) != 0; // BOOLEAN_FALSE
+		return false;
 	}
 
 	@Override
 	public boolean getBoolean(final int i, final int j) {
-		return get(i, j) != 0; // BOOLEAN_FALSE
+		return false;
 	}
 
 	@Override
 	public boolean getBoolean(final int... pos) {
-		return get(pos) != 0; // BOOLEAN_FALSE
+		return false;
 	}
 
 	/**
@@ -499,7 +480,8 @@ public class ShortDataset extends AbstractDataset {
 	 * @param value
 	 * @param i
 	 */
-	public void setItem(final short value, final int i) { // PRIM_TYPE
+	@Override
+	public void setItem(final String value, final int i) { // PRIM_TYPE
 		setAbs(get1DIndex(i), value);
 	}
 
@@ -510,7 +492,8 @@ public class ShortDataset extends AbstractDataset {
 	 * @param i
 	 * @param j
 	 */
-	public void setItem(final short value, final int i, final int j) { // PRIM_TYPE
+	@Override
+	public void setItem(final String value, final int i, final int j) { // PRIM_TYPE
 		setAbs(get1DIndex(i, j), value);
 	}
 
@@ -520,18 +503,19 @@ public class ShortDataset extends AbstractDataset {
 	 * @param value
 	 * @param pos
 	 */
-	public void setItem(final short value, final int... pos) { // PRIM_TYPE
+	@Override
+	public void setItem(final String value, final int... pos) { // PRIM_TYPE
 		setAbs(get1DIndex(pos), value);
 	}
 
 	@Override
 	public void set(final Object obj, final int i) {
-		setItem((short) DTypeUtils.toLong(obj), i); // FROM_OBJECT
+		setItem(obj.toString(), i); // FROM_OBJECT
 	}
 
 	@Override
 	public void set(final Object obj, final int i, final int j) {
-		setItem((short) DTypeUtils.toLong(obj), i, j); // FROM_OBJECT
+		setItem(obj.toString(), i, j); // FROM_OBJECT
 	}
 
 	@Override
@@ -540,7 +524,7 @@ public class ShortDataset extends AbstractDataset {
 			pos = new int[shape.length];
 		}
 
-		setItem((short) DTypeUtils.toLong(obj), pos); // FROM_OBJECT
+		setItem(obj.toString(), pos); // FROM_OBJECT
 	}
 
 
@@ -548,7 +532,7 @@ public class ShortDataset extends AbstractDataset {
 	public void resize(int... newShape) {
 		final IndexIterator iter = getIterator();
 		final int nsize = DatasetUtils.calculateSize(newShape);
-		final short[] ndata = createArray(nsize); // PRIM_TYPE
+		final String[] ndata = createArray(nsize); // PRIM_TYPE
 		for (int i = 0; iter.hasNext() && i < nsize; i++) {
 			ndata[i] = data[iter.index];
 		}
@@ -562,13 +546,13 @@ public class ShortDataset extends AbstractDataset {
 	}
 
 	@Override
-	public ShortDataset sort(Integer axis) {
+	public StringDatasetBaseImpl sort(Integer axis) {
 		if (axis == null) {
 			Arrays.sort(data);
 		} else {
 			axis = checkAxis(axis);
 			
-			ShortDataset ads = new ShortDataset(shape[axis]);
+			StringDatasetBaseImpl ads = new StringDatasetBaseImpl(shape[axis]);
 			PositionIterator pi = getPositionIterator(axis);
 			int[] pos = pi.getPos();
 			boolean[] hit = pi.getOmit();
@@ -585,26 +569,26 @@ public class ShortDataset extends AbstractDataset {
 	}
 
 	@Override
-	public ShortDataset getUniqueItems() {
-		Set<Short> set = new TreeSet<Short>(); // CLASS_TYPE
+	public StringDatasetBaseImpl getUniqueItems() {
+		Set<String> set = new TreeSet<String>(); // CLASS_TYPE
 		IndexIterator it = getIterator();
 		while (it.hasNext()) {
 			set.add(data[it.index]);
 		}
 
-		ShortDataset u = new ShortDataset(set.size()); // CLASS_TYPE
+		StringDatasetBaseImpl u = new StringDatasetBaseImpl(set.size()); // CLASS_TYPE
 		int i = 0;
-		short[] udata = u.getData(); // PRIM_TYPE
-		for (Short v : set) { // CLASS_TYPE
+		String[] udata = u.getData(); // PRIM_TYPE
+		for (String v : set) { // CLASS_TYPE
 			udata[i++] = v;
 		}
 		return u;
 	}
 
 	@Override
-	public ShortDataset getSlice(final SliceIterator siter) {
-		ShortDataset result = new ShortDataset(siter.getShape());
-		short[] rdata = result.data; // PRIM_TYPE
+	public StringDatasetBaseImpl getSlice(final SliceIterator siter) {
+		StringDatasetBaseImpl result = new StringDatasetBaseImpl(siter.getShape());
+		String[] rdata = result.data; // PRIM_TYPE
 
 		for (int i = 0; siter.hasNext(); i++)
 			rdata[i] = data[siter.index];
@@ -617,14 +601,14 @@ public class ShortDataset extends AbstractDataset {
 	public void fillDataset(Dataset result, IndexIterator iter) {
 		IndexIterator riter = result.getIterator();
 
-		short[] rdata = ((ShortDataset) result).data; // PRIM_TYPE
+		String[] rdata = ((StringDatasetBaseImpl) result).data; // PRIM_TYPE
 
 		while (riter.hasNext() && iter.hasNext())
 			rdata[riter.index] = data[iter.index];
 	}
 
 	@Override
-	public ShortDataset setByBoolean(final Object obj, Dataset selection) {
+	public StringDatasetBaseImpl setByBoolean(final Object obj, Dataset selection) {
 		if (obj instanceof Dataset) {
 			final Dataset ds = (Dataset) obj;
 			final int length = ((Number) selection.sum()).intValue();
@@ -637,10 +621,10 @@ public class ShortDataset extends AbstractDataset {
 			final BooleanIterator biter = getBooleanIterator(selection);
 
 			while (biter.hasNext() && oiter.hasNext()) {
-				data[biter.index] = (short) ds.getElementLongAbs(oiter.index); // GET_ELEMENT_WITH_CAST
+				data[biter.index] = ds.getStringAbs(oiter.index); // GET_ELEMENT_WITH_CAST
 			}
 		} else {
-			final short dv = (short) DTypeUtils.toLong(obj); // PRIM_TYPE // FROM_OBJECT
+			final String dv = obj.toString(); // PRIM_TYPE // FROM_OBJECT
 			final BooleanIterator biter = getBooleanIterator(selection);
 
 			while (biter.hasNext()) {
@@ -652,7 +636,7 @@ public class ShortDataset extends AbstractDataset {
 	}
 
 	@Override
-	public ShortDataset setBy1DIndex(final Object obj, final Dataset index) {
+	public StringDatasetBaseImpl setBy1DIndex(final Object obj, final Dataset index) {
 		if (obj instanceof Dataset) {
 			final Dataset ds = (Dataset) obj;
 			if (index.getSize() != ds.getSize()) {
@@ -664,10 +648,10 @@ public class ShortDataset extends AbstractDataset {
 			final IntegerIterator iter = new IntegerIterator(index, size);
 
 			while (iter.hasNext() && oiter.hasNext()) {
-				data[iter.index] = (short) ds.getElementLongAbs(oiter.index); // GET_ELEMENT_WITH_CAST
+				data[iter.index] = ds.getStringAbs(oiter.index); // GET_ELEMENT_WITH_CAST
 			}
 		} else {
-			final short dv = (short) DTypeUtils.toLong(obj); // PRIM_TYPE // FROM_OBJECT
+			final String dv = obj.toString(); // PRIM_TYPE // FROM_OBJECT
 			IntegerIterator iter = new IntegerIterator(index, size);
 
 			while (iter.hasNext()) {
@@ -679,7 +663,7 @@ public class ShortDataset extends AbstractDataset {
 	}
 
 	@Override
-	public ShortDataset setByIndexes(final Object obj, final Object... indexes) {
+	public StringDatasetBaseImpl setByIndexes(final Object obj, final Object... indexes) {
 		final IntegersIterator iter = new IntegersIterator(shape, indexes);
 		final int[] pos = iter.getPos();
 
@@ -693,10 +677,10 @@ public class ShortDataset extends AbstractDataset {
 			final IndexIterator oiter = ds.getIterator();
 
 			while (iter.hasNext() && oiter.hasNext()) {
-				setItem((short) ds.getElementLongAbs(oiter.index), pos); // GET_ELEMENT_WITH_CAST
+				setItem(ds.getStringAbs(oiter.index), pos); // GET_ELEMENT_WITH_CAST
 			}
 		} else {
-			final short dv = (short) DTypeUtils.toLong(obj); // PRIM_TYPE // FROM_OBJECT
+			final String dv = obj.toString(); // PRIM_TYPE // FROM_OBJECT
 
 			while (iter.hasNext()) {
 				setItem(dv, pos);
@@ -707,17 +691,17 @@ public class ShortDataset extends AbstractDataset {
 	}
 
 	@Override
-	ShortDataset setSlicedView(Dataset view, Dataset d) {
+	StringDatasetBaseImpl setSlicedView(Dataset view, Dataset d) {
 		final BroadcastIterator it = BroadcastIterator.createIterator(view, d);
 
 		while (it.hasNext()) {
-			data[it.aIndex] = (short) d.getElementLongAbs(it.bIndex); // GET_ELEMENT_WITH_CAST
+			data[it.aIndex] = d.getStringAbs(it.bIndex); // GET_ELEMENT_WITH_CAST
 		}
 		return this;
 	}
 
 	@Override
-	public ShortDataset setSlice(final Object obj, final IndexIterator siter) {
+	public StringDatasetBaseImpl setSlice(final Object obj, final IndexIterator siter) {
 
 		if (obj instanceof IDataset) {
 			final IDataset ds = (IDataset) obj;
@@ -734,17 +718,17 @@ public class ShortDataset extends AbstractDataset {
 				final IndexIterator oiter = ads.getIterator();
 
 				while (siter.hasNext() && oiter.hasNext())
-					data[siter.index] = (short) ads.getElementLongAbs(oiter.index); // GET_ELEMENT_WITH_CAST
+					data[siter.index] = ads.getStringAbs(oiter.index); // GET_ELEMENT_WITH_CAST
 			} else {
 				final IDatasetIterator oiter = new PositionIterator(oshape);
 				final int[] pos = oiter.getPos();
 
 				while (siter.hasNext() && oiter.hasNext())
-					data[siter.index] = ds.getShort(pos); // PRIM_TYPE
+					data[siter.index] = ds.getString(pos); // PRIM_TYPE
 			}
 		} else {
 			try {
-				short v = (short) DTypeUtils.toLong(obj); // PRIM_TYPE // FROM_OBJECT
+				String v = obj.toString(); // PRIM_TYPE // FROM_OBJECT
 
 				while (siter.hasNext())
 					data[siter.index] = v;
@@ -758,7 +742,7 @@ public class ShortDataset extends AbstractDataset {
 
 	@Override
 	public void copyItemsFromAxes(final int[] pos, final boolean[] axes, final Dataset dest) {
-		short[] ddata = (short[]) dest.getBuffer(); // PRIM_TYPE
+		String[] ddata = (String[]) dest.getBuffer(); // PRIM_TYPE
 
 		SliceIterator siter = getSliceIteratorFromAxes(pos, axes);
 		int[] sshape = DatasetUtils.squeezeShape(siter.getShape(), false);
@@ -775,7 +759,7 @@ public class ShortDataset extends AbstractDataset {
 
 	@Override
 	public void setItemsOnAxes(final int[] pos, final boolean[] axes, final Object src) {
-		short[] sdata = (short[]) src; // PRIM_TYPE
+		String[] sdata = (String[]) src; // PRIM_TYPE
 
 		SliceIterator siter = getSliceIteratorFromAxes(pos, axes);
 
@@ -791,13 +775,11 @@ public class ShortDataset extends AbstractDataset {
 
 	@Override
 	protected Number fromDoubleToNumber(double x) {
-		short r = (short) (long) x; // ADD_CAST // PRIM_TYPE_LONG
-		return Short.valueOf(r); // CLASS_TYPE
 		// return Integer.valueOf((int) (long) x); // BOOLEAN_USE
-		// return null; // OBJECT_USE
+		return null; // OBJECT_USE
 	}
 
-	private List<int[]> findPositions(final short value) { // PRIM_TYPE
+	private List<int[]> findPositions(final String value) { // PRIM_TYPE
 		IndexIterator iter = getIterator(true);
 		List<int[]> posns = new ArrayList<int[]>();
 		int[] pos = iter.getPos();
@@ -823,9 +805,8 @@ public class ShortDataset extends AbstractDataset {
 
 		List<int[]> max = null;
 		if (o == null) {
-			max = findPositions(max(ignoreInvalids).shortValue()); // PRIM_TYPE
 			// max = findPositions(max(false).intValue() != 0); // BOOLEAN_USE
-			// max = findPositions(null); // OBJECT_USE
+			max = findPositions(null); // OBJECT_USE
 			storedValues.put(n, max);
 		} else if (o instanceof List<?>) {
 			max = (List<int[]>) o;
@@ -846,9 +827,8 @@ public class ShortDataset extends AbstractDataset {
 		Object o = storedValues.get(n);
 		List<int[]> min = null;
 		if (o == null) {
-			min = findPositions(min(ignoreInvalids).shortValue()); // PRIM_TYPE
 			// min = findPositions(min(false).intValue() != 0); // BOOLEAN_USE
-			// min = findPositions(null); // OBJECT_USE
+			min = findPositions(null); // OBJECT_USE
 			storedValues.put(n, min);
 		} else if (o instanceof List<?>) {
 			min = (List<int[]>) o;
@@ -875,309 +855,43 @@ public class ShortDataset extends AbstractDataset {
 	}
 
 	@Override
-	public ShortDataset iadd(final Object b) {
-		Dataset bds = b instanceof Dataset ? (Dataset) b : DatasetFactory.createFromObject(b);
-		boolean useLong = bds.getElementClass().equals(Long.class);
-		if (bds.getSize() == 1) {
-			final IndexIterator it = getIterator();
-			if (useLong) {
-				final long lb = bds.getElementLongAbs(0);
-				while (it.hasNext()) {
-					data[it.index] += lb;
-				}
-			} else {
-				final double db = bds.getElementDoubleAbs(0);
-				while (it.hasNext()) {
-					data[it.index] += db;
-				}
-			}
-		} else {
-			final BroadcastIterator it = BroadcastIterator.createIterator(this, bds);
-			it.setOutputDouble(!useLong);
-			if (useLong) {
-				while (it.hasNext()) {
-					data[it.aIndex] += it.bLong;
-				}
-			} else {
-				while (it.hasNext()) {
-					data[it.aIndex] += it.bDouble;
-				}
-			}
-		}
-		setDirty();
+	public StringDatasetBaseImpl iadd(final Object b) {
 		return this;
 	}
 
 	@Override
-	public ShortDataset isubtract(final Object b) {
-		Dataset bds = b instanceof Dataset ? (Dataset) b : DatasetFactory.createFromObject(b);
-		boolean useLong = bds.getElementClass().equals(Long.class);
-		if (bds.getSize() == 1) {
-			final IndexIterator it = getIterator();
-			if (useLong) {
-				final long lb = bds.getElementLongAbs(0);
-				while (it.hasNext()) {
-					data[it.index] -= lb;
-				}
-			} else {
-				final double db = bds.getElementDoubleAbs(0);
-				while (it.hasNext()) {
-					data[it.index] -= db;
-				}
-			}
-		} else {
-			final BroadcastIterator it = BroadcastIterator.createIterator(this, bds);
-			if (useLong) {
-				it.setOutputDouble(false);
-				while (it.hasNext()) {
-					data[it.aIndex] -= it.bLong;
-				}
-			} else {
-				it.setOutputDouble(true);
-				while (it.hasNext()) {
-					data[it.aIndex] -= it.bDouble;
-				}
-			}
-		}
-		setDirty();
+	public StringDatasetBaseImpl isubtract(final Object b) {
 		return this;
 	}
 
 	@Override
-	public ShortDataset imultiply(final Object b) {
-		Dataset bds = b instanceof Dataset ? (Dataset) b : DatasetFactory.createFromObject(b);
-		boolean useLong = bds.getElementClass().equals(Long.class);
-		if (bds.getSize() == 1) {
-			final IndexIterator it = getIterator();
-			if (useLong) {
-				final long lb = bds.getElementLongAbs(0);
-				while (it.hasNext()) {
-					data[it.index] *= lb;
-				}
-			} else {
-				final double db = bds.getElementDoubleAbs(0);
-				while (it.hasNext()) {
-					data[it.index] *= db;
-				}
-			}
-		} else {
-			final BroadcastIterator it = BroadcastIterator.createIterator(this, bds);
-			it.setOutputDouble(!useLong);
-			if (useLong) {
-				while (it.hasNext()) {
-					data[it.aIndex] *= it.bLong;
-				}
-			} else {
-				while (it.hasNext()) {
-					data[it.aIndex] *= it.bDouble;
-				}
-			}
-		}
-		setDirty();
+	public StringDatasetBaseImpl imultiply(final Object b) {
 		return this;
 	}
 
 	@Override
-	public ShortDataset idivide(final Object b) {
-		Dataset bds = b instanceof Dataset ? (Dataset) b : DatasetFactory.createFromObject(b);
-		boolean useLong = bds.getElementClass().equals(Long.class);
-		if (bds.getSize() == 1) {
-			if (useLong) {
-				final long lb = bds.getElementLongAbs(0);
-				if (lb == 0) { // INT_USE
-					fill(0); // INT_USE
-				} else { // INT_USE
-				final IndexIterator it = getIterator();
-				while (it.hasNext()) {
-					data[it.index] /= lb;
-				}
-				} // INT_USE
-			} else {
-				final double db = bds.getElementDoubleAbs(0);
-				if (db == 0) { // INT_USE
-					fill(0); // INT_USE
-				} else { // INT_USE
-				final IndexIterator it = getIterator();
-				while (it.hasNext()) {
-					data[it.index] /= db;
-				}
-				} // INT_USE
-			}
-		} else {
-			final BroadcastIterator it = BroadcastIterator.createIterator(this, bds);
-			it.setOutputDouble(!useLong);
-			if (useLong) {
-				while (it.hasNext()) {
-					if (it.bLong == 0) { // INT_USE
-						data[it.aIndex] = 0; // INT_USE
-					} else { // INT_USE
-					data[it.aIndex] /= it.bLong;
-					} // INT_USE
-				}
-			} else {
-				while (it.hasNext()) {
-					if (it.bDouble == 0) { // INT_USE
-						data[it.aIndex] = 0; // INT_USE
-					} else { // INT_USE
-					data[it.aIndex] /= it.bDouble;
-					} // INT_USE
-				}
-			}
-		}
-		setDirty();
+	public StringDatasetBaseImpl idivide(final Object b) {
 		return this;
 	}
 
 	@Override
-	public ShortDataset ifloor() {
+	public StringDatasetBaseImpl ifloor() {
 		return this;
 	}
 
 	@Override
-	public ShortDataset iremainder(final Object b) {
-		Dataset bds = b instanceof Dataset ? (Dataset) b : DatasetFactory.createFromObject(b);
-		boolean useLong = bds.getElementClass().equals(Long.class);
-		if (bds.getSize() == 1) {
-			if (useLong) {
-				final long lb = bds.getElementLongAbs(0);
-				if (lb == 0) { // INT_USE
-					fill(0); // INT_USE
-				} else { // INT_USE
-				final IndexIterator it = getIterator();
-				while (it.hasNext()) {
-					data[it.index] %= lb;
-				}
-				} // INT_USE
-			} else {
-				final long lb = bds.getElementLongAbs(0);
-				if (lb == 0) { // INT_USE
-					fill(0); // INT_USE
-				} else { // INT_USE
-				final IndexIterator it = getIterator();
-				while (it.hasNext()) {
-					data[it.index] %= lb;
-				}
-				} // INT_USE
-			}
-		} else {
-			final BroadcastIterator it = BroadcastIterator.createIterator(this, bds);
-			it.setOutputDouble(!useLong);
-			if (useLong) {
-				while (it.hasNext()) {
-				try {
-						data[it.aIndex] %= it.bLong; // INT_EXCEPTION
-				} catch (ArithmeticException e) {
-					data[it.aIndex] = 0;
-				}
-				}
-			} else {
-				while (it.hasNext()) {
-				try {
-						data[it.aIndex] %= it.bDouble; // INT_EXCEPTION
-				} catch (ArithmeticException e) {
-					data[it.aIndex] = 0;
-				}
-				}
-			}
-		}
-		setDirty();
+	public StringDatasetBaseImpl iremainder(final Object b) {
 		return this;
 	}
 
 	@Override
-	public ShortDataset ipower(final Object b) {
-		Dataset bds = b instanceof Dataset ? (Dataset) b : DatasetFactory.createFromObject(b);
-		if (bds.getSize() == 1) {
-			final double vr = bds.getElementDoubleAbs(0);
-			final IndexIterator it = getIterator();
-			if (bds.isComplex()) {
-				final double vi = bds.getElementDoubleAbs(1);
-				if (vi == 0) {
-					while (it.hasNext()) {
-						final double v = Math.pow(data[it.index], vr);
-						if (Double.isInfinite(v) || Double.isNaN(v)) { // INT_USE
-							data[it.index] = 0; // INT_USE
-						} else { // INT_USE
-						data[it.index] = (short) (long) v; // PRIM_TYPE_LONG // ADD_CAST
-						} // INT_USE
-					}
-				} else {
-					final Complex zv = new Complex(vr, vi);
-					while (it.hasNext()) {
-						Complex zd = new Complex(data[it.index], 0);
-						final double v = zd.pow(zv).getReal();
-						if (Double.isInfinite(v) || Double.isNaN(v)) { // INT_USE
-							data[it.index] = 0; // INT_USE
-						} else { // INT_USE
-						data[it.index] = (short) (long) v; // PRIM_TYPE_LONG // ADD_CAST
-						} // INT_USE
-					}
-				}
-			} else {// NAN_OMIT
-				while (it.hasNext()) {
-					final double v = Math.pow(data[it.index], vr);
-					if (Double.isInfinite(v) || Double.isNaN(v)) { // INT_USE
-						data[it.index] = 0; // INT_USE
-					} else { // INT_USE
-					data[it.index] = (short) (long) v; // PRIM_TYPE_LONG // ADD_CAST
-					} // INT_USE
-				}
-			}
-		} else {
-			final BroadcastIterator it = BroadcastIterator.createIterator(this, bds);
-			it.setOutputDouble(true);
-			if (bds.isComplex()) {
-				while (it.hasNext()) {
-					final Complex zv = new Complex(it.bDouble, bds.getElementDoubleAbs(it.bIndex + 1));
-					final double v = new Complex(it.aDouble, 0).pow(zv).getReal();
-					if (Double.isInfinite(v) || Double.isNaN(v)) { // INT_USE
-						data[it.aIndex] = 0; // INT_USE
-					} else { // INT_USE
-					data[it.aIndex] = (short) (long) v; // PRIM_TYPE_LONG // ADD_CAST
-					} // INT_USE
-				}
-			} else {// NAN_OMIT
-				while (it.hasNext()) {
-					final double v = Math.pow(it.aDouble, it.bDouble);
-					if (Double.isInfinite(v) || Double.isNaN(v)) { // INT_USE
-						data[it.aIndex] = 0; // INT_USE
-					} else { // INT_USE
-					data[it.aIndex] = (short) (long) v; // PRIM_TYPE_LONG // ADD_CAST
-					} // INT_USE
-				}
-			}
-		}
-		setDirty();
+	public StringDatasetBaseImpl ipower(final Object b) {
 		return this;
 	}
 
 	@Override
 	public double residual(final Object b, final Dataset w, boolean ignoreNaNs) {
-		Dataset bds = b instanceof Dataset ? (Dataset) b : DatasetFactory.createFromObject(b);
-		final BroadcastIterator it = BroadcastIterator.createIterator(this, bds);
-		it.setOutputDouble(true);
 		double sum = 0;
-		double comp = 0;
-		{
-			if (w == null) {
-				while (it.hasNext()) {
-					final double diff = it.aDouble - it.bDouble;
-					final double err = diff * diff - comp;
-					final double temp = sum + err;
-					comp = (temp - sum) - err;
-					sum = temp;
-				}
-			} else {
-				IndexIterator itw = w.getIterator();
-				while (it.hasNext() && itw.hasNext()) {
-					final double diff = it.aDouble - it.bDouble;
-					final double err = diff * diff * w.getElementDoubleAbs(itw.index) - comp;
-					final double temp = sum + err;
-					comp = (temp - sum) - err;
-					sum = temp;
-				}
-			}
-		}
 		return sum;
 	}
 }

@@ -22,8 +22,8 @@ import org.eclipse.dataset.IDataset;
 import org.eclipse.dataset.ILazyDataset;
 import org.eclipse.dataset.IMonitor;
 import org.eclipse.dataset.SliceND;
-import org.eclipse.dataset.internal.dense.DoubleDataset;
-import org.eclipse.dataset.internal.dense.IntegerDataset;
+import org.eclipse.dataset.dense.DoubleDataset;
+import org.eclipse.dataset.dense.IntegerDataset;
 import org.eclipse.dataset.internal.dense.LazyDataset;
 import org.eclipse.dataset.io.ILazyLoader;
 

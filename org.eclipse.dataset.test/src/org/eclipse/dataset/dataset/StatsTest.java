@@ -21,8 +21,9 @@ import org.eclipse.dataset.dense.DatasetUtils;
 import org.eclipse.dataset.dense.Maths;
 import org.eclipse.dataset.dense.Random;
 import org.eclipse.dataset.dense.Stats;
-import org.eclipse.dataset.internal.dense.DoubleDataset;
-import org.eclipse.dataset.internal.dense.IntegerDataset;
+import org.eclipse.dataset.internal.dense.DoubleDatasetImpl;
+import org.eclipse.dataset.dense.DoubleDataset;
+import org.eclipse.dataset.dense.IntegerDataset;
 import org.junit.Test;
 
 /**
@@ -224,42 +225,42 @@ public class StatsTest {
 	
 	@Test
 	public void testCovarianceRanks() {
-		DoubleDataset a = new DoubleDataset(new double[]{-3.5, 6., 8., 14., -2.2, 1.6, 4.0, 7});
+		DoubleDataset a = new DoubleDatasetImpl(new double[]{-3.5, 6., 8., 14., -2.2, 1.6, 4.0, 7});
 		DoubleDataset cova = (DoubleDataset)Stats.covariance(a);
 		assertEquals(32.6283928, cova.getDouble(), 1e-7); 
 		
-		Dataset b = new DoubleDataset(new double[]{0., 1., 2., 2., 1., 0.}, 2, 3);
+		Dataset b = new DoubleDatasetImpl(new double[]{0., 1., 2., 2., 1., 0.}, 2, 3);
 		DoubleDataset covb = (DoubleDataset)Stats.covariance(b);
-		DoubleDataset bexpect = new DoubleDataset(new double[]{1., -1., -1., 1.}, 2, 2);
+		DoubleDataset bexpect = new DoubleDatasetImpl(new double[]{1., -1., -1., 1.}, 2, 2);
 		assertArrayEquals(bexpect.getData(), covb.getData(), 1E-7);
 		
 		Dataset c = b.transpose();
 		DoubleDataset covc = (DoubleDataset)Stats.covariance(c);
-		DoubleDataset cexpect = new DoubleDataset(new double[]{2., 0., -2., 0., 0., 0., -2., 0., 2.}, 3, 3);
+		DoubleDataset cexpect = new DoubleDatasetImpl(new double[]{2., 0., -2., 0., 0., 0., -2., 0., 2.}, 3, 3);
 		assertArrayEquals(cexpect.getData(), covc.getData(), 1E-7);
 		
-		Dataset d = new DoubleDataset(new double[]{0., 2., 4., 8., 16., 32., 64., 128.}, 2, 2, 2);
+		Dataset d = new DoubleDatasetImpl(new double[]{0., 2., 4., 8., 16., 32., 64., 128.}, 2, 2, 2);
 		DoubleDataset covd = (DoubleDataset)Stats.covariance(d);
-		DoubleDataset dexpect = new DoubleDataset(new double[]{-2., -24., -3., -48., 2., 24., 3., 48., -48., -576., -72., -1152., 48., 576., 72., 1152.}, 2, 2, 2, 2);
+		DoubleDataset dexpect = new DoubleDatasetImpl(new double[]{-2., -24., -3., -48., 2., 24., 3., 48., -48., -576., -72., -1152., 48., 576., 72., 1152.}, 2, 2, 2, 2);
 		assertArrayEquals(dexpect.getData(), covd.getData(), 1E-7);
 	}
 	
 	@Test
 	public void testCovarianceArgs() {
 		//Tests adding a second dataset to the first.
-		Dataset a = new DoubleDataset(new double[]{-3.5, 6., 8., 14., -2.2, 1.6, 4.0, 7});
-		Dataset b = new DoubleDataset(new double[]{8.5, 9., 13., -2.3, 1.6, 7.2, 3., -2.9});
+		Dataset a = new DoubleDatasetImpl(new double[]{-3.5, 6., 8., 14., -2.2, 1.6, 4.0, 7});
+		Dataset b = new DoubleDatasetImpl(new double[]{8.5, 9., 13., -2.3, 1.6, 7.2, 3., -2.9});
 		Dataset c = DatasetUtils.concatenate(new Dataset[]{a, b}, 0);
 		c.setShape(2, 8);
 		DoubleDataset covab = (DoubleDataset)Stats.covariance(a, b);
-		DoubleDataset abexpect = new DoubleDataset(new double[]{32.6283928, -9.4426785, -9.4426785, 32.47125}, 2, 2);
+		DoubleDataset abexpect = new DoubleDatasetImpl(new double[]{32.6283928, -9.4426785, -9.4426785, 32.47125}, 2, 2);
 		assertArrayEquals(abexpect.getData(), covab.getData(), 1E-7);
 		
 		//Now try with higher dimensional arrays.
 		a.setShape(4,2);
 		b.setShape(4,2);
 		DoubleDataset covabrs = (DoubleDataset)Stats.covariance(a, b);
-		DoubleDataset abresexpect = new DoubleDataset(new double[]{
+		DoubleDataset abresexpect = new DoubleDatasetImpl(new double[]{
 				45.125, 28.5, 18.05, 14.25, 2.375, -72.675, 26.6, -28.025,
 				28.5, 18., 11.4, 9., 1.5, -45.9, 16.8, -17.7,
 				18.05, 11.4, 7.22, 5.7, 0.95, -29.07, 10.64, -11.21,
@@ -273,7 +274,7 @@ public class StatsTest {
 		
 		//Test effect of setting rowvar false
 		DoubleDataset covcrv = (DoubleDataset)Stats.covariance(c,false, false, null);
-		DoubleDataset crvexpect = new DoubleDataset(new double[]{
+		DoubleDataset crvexpect = new DoubleDatasetImpl(new double[]{
 				72., 18., 30., -97.8, 22.8, 33.6, -6., -59.4,
 				18., 4.5, 7.5, -24.45, 5.7, 8.4, -1.5, -14.85,
 				30., 7.5, 12.5, -40.75, 9.5, 14., -2.5, -24.75,
@@ -287,12 +288,12 @@ public class StatsTest {
 		
 		//Test effect of setting bias true
 		DoubleDataset covcbias = (DoubleDataset)Stats.covariance(c, true, true, null);
-		DoubleDataset cbiasexpect = new DoubleDataset(new double[]{28.54984375, -8.26234375, -8.26234375, 28.41234375}, 2, 2);
+		DoubleDataset cbiasexpect = new DoubleDatasetImpl(new double[]{28.54984375, -8.26234375, -8.26234375, 28.41234375}, 2, 2);
 		assertArrayEquals(cbiasexpect.getData(), covcbias.getData(), 1E-7);
 		
 		//Test effect of setting ddof = 2
 		DoubleDataset covcddof = (DoubleDataset)Stats.covariance(c, true, false, 2);
-		DoubleDataset cddofexpect = new DoubleDataset(new double[]{38.06645833, -11.01645833, -11.01645833, 37.883125}, 2, 2);
+		DoubleDataset cddofexpect = new DoubleDatasetImpl(new double[]{38.06645833, -11.01645833, -11.01645833, 37.883125}, 2, 2);
 		assertArrayEquals(cddofexpect.getData(), covcddof.getData(), 1E-7);
 	}
 }

@@ -13,13 +13,12 @@
 package org.eclipse.dataset.dense;
 
 import org.eclipse.dataset.IDatasetIterator;
-import org.eclipse.dataset.internal.dense.CompoundShortDataset;
-import org.eclipse.dataset.internal.dense.ShortDataset;
+import org.eclipse.dataset.internal.dense.CompoundShortDatasetImpl;
 
 /**
  * Class to hold colour datasets as red, green, blue tuples of short integers
  */
-public class RGBDataset extends CompoundShortDataset implements Cloneable {
+public class RGBDataset extends CompoundShortDatasetImpl implements Cloneable {
 	// pin UID to base class
 	private static final long serialVersionUID = Dataset.serialVersionUID;
 

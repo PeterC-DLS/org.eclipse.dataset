@@ -17,9 +17,12 @@ From compound double dataset generate other classes
 
 $ python fromcpddouble.py ../CompoundDoubleDataset.java
 
+also generate interfaces
+
+$ python fromdouble.py ../../../dense/CompoundDoubleDataset.java
 '''
 
-from markers import transmutate #@UnresolvedImport
+from markers import transmutate, generateclass, removebase #@UnresolvedImport
 
 # default dataset definition
 defds = { "CompoundDoubleDataset":["FLOAT64", "Double", "double", "getElementDoubleAbs", "DTypeUtils.toReal(obj)", "%.8g",
@@ -42,29 +45,24 @@ allds = {
 "MIN_VALUE"]
  }
 
-def generateclass(dclass):
-    handlers  = [ transmutate(__file__, defkey, defds[defkey], d, fds[d], True, isatomic=False) for d in fds ]
-    handlers += [ transmutate(__file__, defkey, defds[defkey], d, allds[d], False, isatomic=False) for d in allds ]
-    files  = [ open(d + ".java", "w") for d in fds ]
-    files += [ open(d + ".java", "w") for d in allds ]
-    ncls = len(files)
+def main(dclass, end, f):
+    handlers  = [ transmutate(__file__, defkey + end, defds[defkey], removebase(d, f) + end, fds[d], True) for d in fds ]
+    handlers += [ transmutate(__file__, defkey + end, defds[defkey], removebase(d, f) + end, allds[d], False) for d in allds ]
+    files  = [ open(removebase(d, f) + end + ".java", "w") for d in fds ]
+    files += [ open(removebase(d, f) + end + ".java", "w") for d in allds ]
 
-    while True:
-        l = dclass.readline()
-        if not l:
-            break
-        for n in range(ncls):
-            nl = handlers[n].processline(l)
-            if nl != None:
-                print >> files[n], nl
+    generateclass(dclass, handlers, files)
 
 if __name__ == '__main__':
     import sys
     if len(sys.argv) > 1:
         fname = sys.argv[1]
     else:
-        fname = "../CompoundDoubleDataset.java"
+        fname = "../CompoundDoubleDatasetImpl.java"
 
     dclass_file = open(fname, 'r')
 
-    generateclass(dclass_file)
+    if fname.endswith("Impl.java"):
+        main(dclass_file, "Impl", False)
+    else: # interface
+        main(dclass_file, "", True)

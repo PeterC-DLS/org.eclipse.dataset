@@ -17,15 +17,16 @@ import java.text.MessageFormat;
 import org.eclipse.dataset.dense.Dataset;
 import org.eclipse.dataset.dense.IndexIterator;
 import org.eclipse.dataset.dense.SliceIterator;
+import org.eclipse.dataset.dense.StringDataset;
 
 /**
  * Extend dataset for objects
  */
-public class ObjectDataset extends ObjectDatasetBase {
+public class StringDatasetImpl extends StringDatasetBaseImpl {
 	// pin UID to base class
 	private static final long serialVersionUID = Dataset.serialVersionUID;
 
-	public ObjectDataset() {
+	public StringDatasetImpl() {
 		super();
 	}
 
@@ -33,16 +34,17 @@ public class ObjectDataset extends ObjectDatasetBase {
 	 * Create a null-filled dataset of given shape
 	 * @param shape
 	 */
-	public ObjectDataset(final int... shape) {
+	public StringDatasetImpl(final int... shape) {
 		super(shape);
 	}
 
 	/**
 	 * Create a dataset using given data
 	 * @param data
-	 * @param shape (can be null to create 1D dataset)
+	 * @param shape
+	 *            (can be null to create 1D dataset)
 	 */
-	public ObjectDataset(final Object[] data, int... shape) {
+	public StringDatasetImpl(final String[] data, int... shape) {
 		super(data, shape);
 	}
 
@@ -50,7 +52,7 @@ public class ObjectDataset extends ObjectDatasetBase {
 	 * Copy a dataset
 	 * @param dataset
 	 */
-	public ObjectDataset(final ObjectDataset dataset) {
+	public StringDatasetImpl(final StringDataset dataset) {
 		super(dataset);
 	}
 
@@ -58,27 +60,27 @@ public class ObjectDataset extends ObjectDatasetBase {
 	 * Cast a dataset to this class type
 	 * @param dataset
 	 */
-	public ObjectDataset(final Dataset dataset) {
+	public StringDatasetImpl(final Dataset dataset) {
 		super(dataset);
 	}
 
 	@Override
-	public ObjectDataset getView() {
-		ObjectDataset view = new ObjectDataset();
+	public StringDatasetImpl getView() {
+		StringDatasetImpl view = new StringDatasetImpl();
 		copyToView(this, view, true, true);
 		view.data = data;
 		return view;
 	}
 
 	@Override
-	public ObjectDataset clone() {
-		return new ObjectDataset(this);
+	public StringDatasetImpl clone() {
+		return new StringDatasetImpl(this);
 	}
 
 	@Override
-	public ObjectDataset getSlice(SliceIterator siter) {
-		ObjectDataset slice = new ObjectDataset();
-		ObjectDatasetBase base = super.getSlice(siter);
+	public StringDatasetImpl getSlice(SliceIterator siter) {
+		StringDatasetImpl slice = new StringDatasetImpl();
+		StringDatasetBaseImpl base = super.getSlice(siter);
 		copyToView(base, slice, false, false);
 		slice.setData();
 		return slice;
@@ -91,9 +93,9 @@ public class ObjectDataset extends ObjectDatasetBase {
 	 * @param obj
 	 * @return dataset with contents given by input
 	 */
-	public static ObjectDataset createFromObject(final Object obj) {
-		ObjectDatasetBase result = ObjectDatasetBase.createFromObject(obj);
-		ObjectDataset ds = new ObjectDataset(result.data, result.shape);
+	public static StringDatasetImpl createFromObject(final Object obj) {
+		StringDatasetBaseImpl result = StringDatasetBaseImpl.createFromObject(obj);
+		StringDatasetImpl ds = new StringDatasetImpl(result.data, result.shape);
 		if (result.shape.length == 0)
 			ds.setShape(result.shape); // special case of single item 
 		return ds;
@@ -103,7 +105,7 @@ public class ObjectDataset extends ObjectDatasetBase {
 	 * @param shape
 	 * @return a dataset filled with ones
 	 */
-	public static ObjectDataset ones(final int... shape) {
+	public static StringDatasetImpl ones(final int... shape) {
 		throw new UnsupportedOperationException("Unsupported method for class");
 	}
 
@@ -114,7 +116,7 @@ public class ObjectDataset extends ObjectDatasetBase {
 		double hash = 0;
 
 		while (iter.hasNext()) {
-			final int val = getObjectAbs(iter.index).hashCode();
+			final int val = getStringAbs(iter.index).hashCode();
 			hash = (hash * 19 + val) % Integer.MAX_VALUE;
 		}
 
@@ -249,10 +251,10 @@ public class ObjectDataset extends ObjectDatasetBase {
 	}
 
 	@Override
-	public ObjectDataset getSlice(final int[] start, final int[] stop, final int[] step) {
-		ObjectDatasetBase result = (ObjectDatasetBase) super.getSlice(start, stop, step);
+	public StringDatasetImpl getSlice(final int[] start, final int[] stop, final int[] step) {
+		StringDatasetBaseImpl result = (StringDatasetBaseImpl) super.getSlice(start, stop, step);
 
-		return new ObjectDataset(result.data, result.shape);
+		return new StringDatasetImpl(result.data, result.shape);
 	}
 
 	@Override
@@ -276,37 +278,37 @@ public class ObjectDataset extends ObjectDatasetBase {
 	}
 
 	@Override
-	public ObjectDataset iadd(Object o) {
+	public StringDatasetImpl iadd(Object o) {
 		throw new UnsupportedOperationException("Unsupported method for class");
 	}
 
 	@Override
-	public ObjectDataset isubtract(Object o) {
+	public StringDatasetImpl isubtract(Object o) {
 		throw new UnsupportedOperationException("Unsupported method for class");
 	}
 
 	@Override
-	public ObjectDataset imultiply(Object o) {
+	public StringDatasetImpl imultiply(Object o) {
 		throw new UnsupportedOperationException("Unsupported method for class");
 	}
 
 	@Override
-	public ObjectDataset idivide(Object o) {
+	public StringDatasetImpl idivide(Object o) {
 		throw new UnsupportedOperationException("Unsupported method for class");
 	}
 
 	@Override
-	public ObjectDataset iremainder(Object o) {
+	public StringDatasetImpl iremainder(Object o) {
 		throw new UnsupportedOperationException("Unsupported method for class");
 	}
 
 	@Override
-	public ObjectDataset ifloor() {
+	public StringDatasetImpl ifloor() {
 		throw new UnsupportedOperationException("Unsupported method for class");
 	}
 
 	@Override
-	public ObjectDataset ipower(Object o) {
+	public StringDatasetImpl ipower(Object o) {
 		throw new UnsupportedOperationException("Unsupported method for class");
 	}
 

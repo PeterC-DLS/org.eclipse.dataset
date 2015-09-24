@@ -17,9 +17,12 @@ From complex double dataset generate other classes
 
 $ python fromcpxdouble.py ../ComplexDoubleDataset.java
 
+also generate interfaces
+
+$ python fromdouble.py ../../../dense/ComplexDoubleDataset.java
 '''
 
-from markers import transmutate #@UnresolvedImport
+from markers import transmutate, generateclass, removebase #@UnresolvedImport
 
 # default dataset definition
 defds = { "ComplexDoubleDataset":["COMPLEX128", "Double", "double", "getElementDoubleAbs", "DTypeUtils.toReal(obj)", "%.8g",
@@ -31,27 +34,22 @@ defkey = defds.keys()[0]
 fds = { "ComplexFloatDataset":["COMPLEX64", "Float", "float", "getElementDoubleAbs", "(float) DTypeUtils.toReal(obj)", "%.8g",
 "NaN"] }
 
-def generateclass(dclass):
-    handlers  = [ transmutate(__file__, defkey, defds[defkey], d, fds[d], True) for d in fds ]
-    files  = [ open(d + ".java", "w") for d in fds ]
-    ncls = len(files)
+def main(dclass, end, f):
+    handlers  = [ transmutate(__file__, defkey + end, defds[defkey], removebase(d, f) + end, fds[d], True) for d in fds ]
+    files  = [ open(removebase(d, f) + end + ".java", "w") for d in fds ]
 
-    while True:
-        l = dclass.readline()
-        if not l:
-            break
-        for n in range(ncls):
-            nl = handlers[n].processline(l)
-            if nl != None:
-                print >> files[n], nl
+    generateclass(dclass, handlers, files)
 
 if __name__ == '__main__':
     import sys
     if len(sys.argv) > 1:
         fname = sys.argv[1]
     else:
-        fname = "../ComplexDoubleDataset.java"
+        fname = "../ComplexDoubleDatasetImpl.java"
 
     dclass_file = open(fname, 'r')
 
-    generateclass(dclass_file)
+    if fname.endswith("Impl.java"):
+        main(dclass_file, "Impl", False)
+    else: # interface
+        main(dclass_file, "", True)

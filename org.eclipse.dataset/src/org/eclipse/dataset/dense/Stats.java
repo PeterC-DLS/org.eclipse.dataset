@@ -23,10 +23,10 @@ import org.apache.commons.math.stat.descriptive.moment.Skewness;
 import org.eclipse.dataset.IDatasetIterator;
 import org.eclipse.dataset.PositionIterator;
 import org.eclipse.dataset.internal.dense.AbstractDataset;
-import org.eclipse.dataset.internal.dense.ComplexDoubleDataset;
-import org.eclipse.dataset.internal.dense.ComplexFloatDataset;
-import org.eclipse.dataset.internal.dense.CompoundDoubleDataset;
-import org.eclipse.dataset.internal.dense.DoubleDataset;
+import org.eclipse.dataset.dense.ComplexDoubleDataset;
+import org.eclipse.dataset.dense.ComplexFloatDataset;
+import org.eclipse.dataset.dense.CompoundDoubleDataset;
+import org.eclipse.dataset.dense.DoubleDataset;
 
 
 /**
@@ -473,8 +473,8 @@ public class Stats {
 				ku.set(k.getResult(), spos);
 			}
 		} else {
-			sk = new CompoundDoubleDataset(is, nshape);
-			ku = new CompoundDoubleDataset(is, nshape);
+			sk = DatasetFactory.zeros(is, nshape, Dataset.FLOAT64);
+			ku = DatasetFactory.zeros(is, nshape, Dataset.FLOAT64);
 			final IDatasetIterator qiter = sk.getIterator(true);
 			final int[] qpos = qiter.getPos();
 			final int[] spos = oshape;

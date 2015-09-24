@@ -15,11 +15,14 @@
 '''
 From double dataset generate other classes
 
-$ python fromdouble.py ../DoubleDataset.java
+$ python fromdouble.py ../DoubleDatasetImpl.java
 
+also generate interfaces
+
+$ python fromdouble.py ../../../dense/DoubleDataset.java
 '''
 
-from markers import transmutate #@UnresolvedImport
+from markers import transmutate, generateclass, removebase #@UnresolvedImport
 
 # default dataset definition
 defds = { "DoubleDataset":["FLOAT64", "Double", "double", "getElementDoubleAbs", "DTypeUtils.toReal(obj)", "%.8g",
@@ -51,33 +54,28 @@ ods = {
 "ObjectDatasetBase":["OBJECT", "Object", "Object", "getObjectAbs", "obj", "%s", "FALSE"]
  }
 
-def generateclass(dclass):
-    handlers  = [ transmutate(__file__, defkey, defds[defkey], d, fds[d], True) for d in fds ]
-    handlers += [ transmutate(__file__, defkey, defds[defkey], d, allds[d], False) for d in allds ]
-    handlers += [ transmutate(__file__, defkey, defds[defkey], d, bds[d], False, True) for d in bds ]
-    handlers += [ transmutate(__file__, defkey, defds[defkey], d, ods[d], False, False, True) for d in ods ]
-    files  = [ open(d + ".java", "w") for d in fds ]
-    files += [ open(d + ".java", "w") for d in allds ]
-    files += [ open(d + ".java", "w") for d in bds ]
-    files += [ open(d + ".java", "w") for d in ods ]
-    ncls = len(files)
+def main(dclass, end, f):
+    handlers  = [ transmutate(__file__, defkey + end, defds[defkey], removebase(d, f) + end, fds[d], True) for d in fds ]
+    handlers += [ transmutate(__file__, defkey + end, defds[defkey], removebase(d, f) + end, allds[d], False) for d in allds ]
+    handlers += [ transmutate(__file__, defkey + end, defds[defkey], removebase(d, f) + end, bds[d], False, True) for d in bds ]
+    handlers += [ transmutate(__file__, defkey + end, defds[defkey], removebase(d, f) + end, ods[d], False, False, True) for d in ods ]
+    files  = [ open(removebase(d, f) + end + ".java", "w") for d in fds ]
+    files += [ open(removebase(d, f) + end + ".java", "w") for d in allds ]
+    files += [ open(removebase(d, f) + end + ".java", "w") for d in bds ]
+    files += [ open(removebase(d, f) + end + ".java", "w") for d in ods ]
 
-    while True:
-        l = dclass.readline()
-        if not l:
-            break
-        for n in range(ncls):
-            nl = handlers[n].processline(l)
-            if nl != None:
-                print >> files[n], nl
+    generateclass(dclass, handlers, files)
 
 if __name__ == '__main__':
     import sys
     if len(sys.argv) > 1:
         fname = sys.argv[1]
     else:
-        fname = "../DoubleDataset.java"
+        fname = "../DoubleDatasetImpl.java"
 
     dclass_file = open(fname, 'r')
 
-    generateclass(dclass_file)
+    if fname.endswith("Impl.java"):
+        main(dclass_file, "Impl", False)
+    else: # interface
+        main(dclass_file, "", True)

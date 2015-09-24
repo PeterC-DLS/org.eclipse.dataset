@@ -15,7 +15,8 @@ import org.eclipse.dataset.Slice;
 import org.eclipse.dataset.dense.Dataset;
 import org.eclipse.dataset.dense.DatasetFactory;
 import org.eclipse.dataset.dense.IndexIterator;
-import org.eclipse.dataset.internal.dense.LongDataset;
+import org.eclipse.dataset.dense.LongDataset;
+import org.eclipse.dataset.internal.dense.LongDatasetImpl;
 import org.junit.Test;
 
 public class LongDatasetTest {
@@ -23,14 +24,14 @@ public class LongDatasetTest {
 	@Test
 	public void testConstructor() {
 		long[] da = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
-		LongDataset a = new LongDataset(da);
+		LongDataset a = new LongDatasetImpl(da);
 
 		IndexIterator it = a.getIterator();
 		for (int i = 0; it.hasNext(); i++) {
 			assertEquals(i, a.getElementLongAbs(it.index));
 		}
 
-		LongDataset b = new LongDataset(da, 3, 4);
+		LongDataset b = new LongDatasetImpl(da, 3, 4);
 
 		it = b.getIterator();
 		for (int i = 0; it.hasNext(); i++) {
@@ -45,7 +46,7 @@ public class LongDatasetTest {
 	@Test
 	public void testGetter() {
 		long[] da = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
-		LongDataset a = new LongDataset(da);
+		LongDataset a = new LongDatasetImpl(da);
 		int l = da.length;
 		for (int i = 0; i < l; i++) {
 			assertEquals(i, a.getLong(i));

@@ -17,8 +17,10 @@ import org.eclipse.dataset.TestUtils;
 import org.eclipse.dataset.dense.Dataset;
 import org.eclipse.dataset.dense.DatasetFactory;
 import org.eclipse.dataset.dense.IntegersIterator;
-import org.eclipse.dataset.internal.dense.DoubleDataset;
-import org.eclipse.dataset.internal.dense.IntegerDataset;
+import org.eclipse.dataset.dense.DoubleDataset;
+import org.eclipse.dataset.dense.IntegerDataset;
+import org.eclipse.dataset.internal.dense.DoubleDatasetImpl;
+import org.eclipse.dataset.internal.dense.IntegerDatasetImpl;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -28,15 +30,15 @@ public class IntegersIteratorTest {
 
 	@Before
 	public void setUpClass() {
-		a = new DoubleDataset(new double[] { 0, 1, 3, 5, -7, -9 });
-		b = new DoubleDataset(new double[] { 0.01, 1.2, 2.9, 5, -7.1, -9 });
+		a = new DoubleDatasetImpl(new double[] { 0, 1, 3, 5, -7, -9 });
+		b = new DoubleDatasetImpl(new double[] { 0.01, 1.2, 2.9, 5, -7.1, -9 });
 	}
 
 	@Test
 	public void testShapes() {
-		IntegerDataset s = new IntegerDataset(2, 3, 4);
-		IntegerDataset t = new IntegerDataset(2, 3, 4);
-		IntegerDataset u = new IntegerDataset(2, 3, 4);
+		IntegerDataset s = new IntegerDatasetImpl(2, 3, 4);
+		IntegerDataset t = new IntegerDatasetImpl(2, 3, 4);
+		IntegerDataset u = new IntegerDatasetImpl(2, 3, 4);
 
 		IntegersIterator iter;
 		int[] shape;
@@ -94,8 +96,8 @@ public class IntegersIteratorTest {
 
 		// now 1D
 		shape = new int[] {10, 20, 30};
-		s = new IntegerDataset(new int[] {2, 5, 9}, null);
-		t = new IntegerDataset(new int[] {0, 5, 10, 15, 18, 19}, null);
+		s = new IntegerDatasetImpl(new int[] {2, 5, 9}, null);
+		t = new IntegerDatasetImpl(new int[] {0, 5, 10, 15, 18, 19}, null);
 		iter = new IntegersIterator(true, shape, s, t, new Slice(1,7,2));
 		Assert.assertArrayEquals("Shape", new int[] {3, 6, 3}, iter.getShape());
 	}
@@ -103,8 +105,8 @@ public class IntegersIteratorTest {
 	@Test
 	public void testEqualTo() {
 		Dataset c = a.clone().reshape(2, 3);
-		IntegerDataset s = new IntegerDataset(new int[] {0, 1, 0}, null);
-		IntegerDataset t = new IntegerDataset(new int[] {0, 2, 1}, null);
+		IntegerDataset s = new IntegerDatasetImpl(new int[] {0, 1, 0}, null);
+		IntegerDataset t = new IntegerDatasetImpl(new int[] {0, 2, 1}, null);
 
 		List<Double> inds = new ArrayList<Double>();
 		IntegersIterator iter;
@@ -121,7 +123,7 @@ public class IntegersIteratorTest {
 		pos = iter.getPos();
 		while (iter.hasNext())
 			inds.add(c.getDouble(pos));
-		checkDatasets(new DoubleDataset(new double[] {0, -9, 1}),
+		checkDatasets(new DoubleDatasetImpl(new double[] {0, -9, 1}),
 				(DoubleDataset) DatasetFactory.createFromList(inds));
 		inds.clear();
 
@@ -129,7 +131,7 @@ public class IntegersIteratorTest {
 		pos = iter.getPos();
 		while (iter.hasNext())
 			inds.add(c.getDouble(pos));
-		checkDatasets(new DoubleDataset(new double[] {0, 1, 3, 5, -7, -9, 0, 1, 3}),
+		checkDatasets(new DoubleDatasetImpl(new double[] {0, 1, 3, 5, -7, -9, 0, 1, 3}),
 				(DoubleDataset) DatasetFactory.createFromList(inds));
 		inds.clear();
 
@@ -137,7 +139,7 @@ public class IntegersIteratorTest {
 		pos = iter.getPos();
 		while (iter.hasNext())
 			inds.add(c.getDouble(pos));
-		checkDatasets(new DoubleDataset(new double[] {0, 3, 1, 5, -9, -7}),
+		checkDatasets(new DoubleDatasetImpl(new double[] {0, 3, 1, 5, -9, -7}),
 				(DoubleDataset) DatasetFactory.createFromList(inds));
 		inds.clear();
 
@@ -145,7 +147,7 @@ public class IntegersIteratorTest {
 		pos = iter.getPos();
 		while (iter.hasNext())
 			inds.add(c.getDouble(pos));
-		checkDatasets(new DoubleDataset(new double[] {0, 1, 3, 5, -7, -9, 0, 1, 3}),
+		checkDatasets(new DoubleDatasetImpl(new double[] {0, 1, 3, 5, -7, -9, 0, 1, 3}),
 				(DoubleDataset) DatasetFactory.createFromList(inds));
 		inds.clear();
 
@@ -153,7 +155,7 @@ public class IntegersIteratorTest {
 		pos = iter.getPos();
 		while (iter.hasNext())
 			inds.add(c.getDouble(pos));
-		checkDatasets(new DoubleDataset(new double[] {0, 3, 1, 5, -9, -7}),
+		checkDatasets(new DoubleDatasetImpl(new double[] {0, 3, 1, 5, -9, -7}),
 				(DoubleDataset) DatasetFactory.createFromList(inds));
 		inds.clear();
 
@@ -161,7 +163,7 @@ public class IntegersIteratorTest {
 		pos = iter.getPos();
 		while (iter.hasNext())
 			inds.add(c.getDouble(pos));
-		checkDatasets(new DoubleDataset(new double[] {0, 5, 0}),
+		checkDatasets(new DoubleDatasetImpl(new double[] {0, 5, 0}),
 				(DoubleDataset) DatasetFactory.createFromList(inds));
 		inds.clear();
 
@@ -169,27 +171,27 @@ public class IntegersIteratorTest {
 		pos = iter.getPos();
 		while (iter.hasNext())
 			inds.add(c.getDouble(pos));
-		checkDatasets(new DoubleDataset(new double[] {0, 3, 1}),
+		checkDatasets(new DoubleDatasetImpl(new double[] {0, 3, 1}),
 				(DoubleDataset) DatasetFactory.createFromList(inds));
 		inds.clear();
 
-		t = new IntegerDataset(new int[] {0, 2}, null);
+		t = new IntegerDatasetImpl(new int[] {0, 2}, null);
 		iter = new IntegersIterator(true, c.getShapeRef(), s, t);
 		pos = iter.getPos();
 		while (iter.hasNext())
 			inds.add(c.getDouble(pos));
-		checkDatasets(new DoubleDataset(new double[] {0, 3, 5, -9, 0, 3}),
+		checkDatasets(new DoubleDatasetImpl(new double[] {0, 3, 5, -9, 0, 3}),
 				(DoubleDataset) DatasetFactory.createFromList(inds));
 		inds.clear();
 
-		s = new IntegerDataset(new int[] {0, 1, 0, 0, 1, 0, 1, 1, 1, 0, 0, 0}, 2, 3, 2);
-		t = new IntegerDataset(new int[] {2, 1, 1, 0, 1, 2, 1, 0, 0, 0, 1, 0}, 2, 3, 2);
+		s = new IntegerDatasetImpl(new int[] {0, 1, 0, 0, 1, 0, 1, 1, 1, 0, 0, 0}, 2, 3, 2);
+		t = new IntegerDatasetImpl(new int[] {2, 1, 1, 0, 1, 2, 1, 0, 0, 0, 1, 0}, 2, 3, 2);
 
 		iter = new IntegersIterator(c.getShapeRef(), s, t);
 		pos = iter.getPos();
 		while (iter.hasNext())
 			inds.add(c.getDouble(pos));
-		checkDatasets(new DoubleDataset(new double[] {3, -7, 1, 0, -7, 3, -7, 5, 5, 0, 1, 0}),
+		checkDatasets(new DoubleDatasetImpl(new double[] {3, -7, 1, 0, -7, 3, -7, 5, 5, 0, 1, 0}),
 				(DoubleDataset) DatasetFactory.createFromList(inds));
 		inds.clear();
 
@@ -197,7 +199,7 @@ public class IntegersIteratorTest {
 		pos = iter.getPos();
 		while (iter.hasNext())
 			inds.add(c.getDouble(pos));
-		checkDatasets(new DoubleDataset(new double[] {0, 1, 3, 5, -7, -9, 0, 1, 3, 0, 1, 3, 5,
+		checkDatasets(new DoubleDatasetImpl(new double[] {0, 1, 3, 5, -7, -9, 0, 1, 3, 0, 1, 3, 5,
 				-7, -9, 0, 1, 3, 5, -7, -9, 5, -7, -9, 5, -7, -9, 0, 1, 3, 0, 1, 3, 0, 1, 3}),
 				(DoubleDataset) DatasetFactory.createFromList(inds));
 		inds.clear();
@@ -206,7 +208,7 @@ public class IntegersIteratorTest {
 		pos = iter.getPos();
 		while (iter.hasNext())
 			inds.add(c.getDouble(pos));
-		checkDatasets(new DoubleDataset(new double[] {3, 1, 1, 0, 1, 3, 1, 0, 0, 0, 1, 0, -9,
+		checkDatasets(new DoubleDatasetImpl(new double[] {3, 1, 1, 0, 1, 3, 1, 0, 0, 0, 1, 0, -9,
 				-7, -7, 5, -7, -9, -7, 5, 5, 5, -7, 5}),
 				(DoubleDataset) DatasetFactory.createFromList(inds));
 		inds.clear();
@@ -215,7 +217,7 @@ public class IntegersIteratorTest {
 		pos = iter.getPos();
 		while (iter.hasNext())
 			inds.add(c.getDouble(pos));
-		checkDatasets(new DoubleDataset(new double[] {0, 1, 3, 5, -7, -9, 0, 1, 3, 0, 1, 3, 5,
+		checkDatasets(new DoubleDatasetImpl(new double[] {0, 1, 3, 5, -7, -9, 0, 1, 3, 0, 1, 3, 5,
 				-7, -9, 0, 1, 3, 5, -7, -9, 5, -7, -9, 5, -7, -9, 0, 1, 3, 0, 1, 3, 0, 1, 3}),
 				(DoubleDataset) DatasetFactory.createFromList(inds));
 		inds.clear();
@@ -224,7 +226,7 @@ public class IntegersIteratorTest {
 		pos = iter.getPos();
 		while (iter.hasNext())
 			inds.add(c.getDouble(pos));
-		checkDatasets(new DoubleDataset(new double[] {3, 1, 1, 0, 1, 3, 1, 0, 0, 0, 1, 0, -9,
+		checkDatasets(new DoubleDatasetImpl(new double[] {3, 1, 1, 0, 1, 3, 1, 0, 0, 0, 1, 0, -9,
 				-7, -7, 5, -7, -9, -7, 5, 5, 5, -7, 5}),
 				(DoubleDataset) DatasetFactory.createFromList(inds));
 		inds.clear();
@@ -233,7 +235,7 @@ public class IntegersIteratorTest {
 		pos = iter.getPos();
 		while (iter.hasNext())
 			inds.add(c.getDouble(pos));
-		checkDatasets(new DoubleDataset(new double[] {0, 5, 0, 0, 5, 0, 5, 5, 5, 0, 0, 0}),
+		checkDatasets(new DoubleDatasetImpl(new double[] {0, 5, 0, 0, 5, 0, 5, 5, 5, 0, 0, 0}),
 				(DoubleDataset) DatasetFactory.createFromList(inds));
 		inds.clear();
 
@@ -241,7 +243,7 @@ public class IntegersIteratorTest {
 		pos = iter.getPos();
 		while (iter.hasNext())
 			inds.add(c.getDouble(pos));
-		checkDatasets(new DoubleDataset(new double[] {3, 1, 1, 0, 1, 3, 1, 0, 0, 0, 1, 0}),
+		checkDatasets(new DoubleDatasetImpl(new double[] {3, 1, 1, 0, 1, 3, 1, 0, 0, 0, 1, 0}),
 				(DoubleDataset) DatasetFactory.createFromList(inds));
 		inds.clear();
 
@@ -249,7 +251,7 @@ public class IntegersIteratorTest {
 		pos = iter.getPos();
 		while (iter.hasNext())
 			inds.add(c.getDouble(pos));
-		checkDatasets(new DoubleDataset(new double[] {1, 0, -7, 5, 1, 0, 1, 0, -7, 5, 1, 0, -7,
+		checkDatasets(new DoubleDatasetImpl(new double[] {1, 0, -7, 5, 1, 0, 1, 0, -7, 5, 1, 0, -7,
 				5, -7, 5, -7, 5, 1, 0, 1, 0, 1, 0}),
 				(DoubleDataset) DatasetFactory.createFromList(inds));
 		inds.clear();
@@ -258,7 +260,7 @@ public class IntegersIteratorTest {
 		pos = iter.getPos();
 		while (iter.hasNext())
 			inds.add(c.getDouble(pos));
-		checkDatasets(new DoubleDataset(new double[] {-9, -7, -7, 5, -7, -9, -7, 5, 5, 5, -7,
+		checkDatasets(new DoubleDatasetImpl(new double[] {-9, -7, -7, 5, -7, -9, -7, 5, 5, 5, -7,
 				5, 3, 1, 1, 0, 1, 3, 1, 0, 0, 0, 1, 0}),
 				(DoubleDataset) DatasetFactory.createFromList(inds));
 		inds.clear();
@@ -267,7 +269,7 @@ public class IntegersIteratorTest {
 		pos = iter.getPos();
 		while (iter.hasNext())
 			inds.add(c.getDouble(pos));
-		checkDatasets(new DoubleDataset(new double[] {5, -7, -9, 0, 1, 3}),
+		checkDatasets(new DoubleDatasetImpl(new double[] {5, -7, -9, 0, 1, 3}),
 				(DoubleDataset) DatasetFactory.createFromList(inds));
 		inds.clear();
 
@@ -275,7 +277,7 @@ public class IntegersIteratorTest {
 		pos = iter.getPos();
 		while (iter.hasNext())
 			inds.add(c.getDouble(pos));
-		checkDatasets(new DoubleDataset(new double[] {1, 0, -7, 5}),
+		checkDatasets(new DoubleDatasetImpl(new double[] {1, 0, -7, 5}),
 				(DoubleDataset) DatasetFactory.createFromList(inds));
 		inds.clear();
 	}

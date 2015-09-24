@@ -11,7 +11,7 @@ package org.eclipse.dataset.dense;
 
 import org.eclipse.dataset.IDataset;
 import org.eclipse.dataset.ILazyDataset;
-import org.eclipse.dataset.internal.dense.DoubleDataset;
+import org.eclipse.dataset.dense.DoubleDataset;
 
 /**
  * A running mean class

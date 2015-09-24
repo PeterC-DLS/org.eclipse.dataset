@@ -14,7 +14,8 @@ import static org.junit.Assert.assertEquals;
 import org.eclipse.dataset.Slice;
 import org.eclipse.dataset.dense.Dataset;
 import org.eclipse.dataset.dense.IndexIterator;
-import org.eclipse.dataset.internal.dense.BooleanDataset;
+import org.eclipse.dataset.dense.BooleanDataset;
+import org.eclipse.dataset.internal.dense.BooleanDatasetImpl;
 import org.junit.Test;
 
 public class BooleanDatasetTest {
@@ -22,14 +23,14 @@ public class BooleanDatasetTest {
 	@Test
 	public void testConstructor() {
 		boolean[] da = { false, true, false, true, false, true, false, true, false, true, false, true};
-		BooleanDataset a = new BooleanDataset(da);
+		BooleanDataset a = new BooleanDatasetImpl(da);
 
 		IndexIterator it = a.getIterator();
 		for (int i = 0; it.hasNext(); i++) {
 			assertEquals(i % 2 != 0, a.getElementBooleanAbs(it.index));
 		}
 
-		BooleanDataset b = new BooleanDataset(da, 3, 4);
+		BooleanDataset b = new BooleanDatasetImpl(da, 3, 4);
 
 		it = b.getIterator();
 		for (int i = 0; it.hasNext(); i++) {
@@ -44,7 +45,7 @@ public class BooleanDatasetTest {
 	@Test
 	public void testGetter() {
 		boolean[] da = { false, true, false, true, false, true, false, true, false, true, false, true};
-		BooleanDataset a = new BooleanDataset(da);
+		BooleanDataset a = new BooleanDatasetImpl(da);
 		int l = da.length;
 		for (int i = 0; i < l; i++) {
 			assertEquals(da[i], a.getBoolean(i));

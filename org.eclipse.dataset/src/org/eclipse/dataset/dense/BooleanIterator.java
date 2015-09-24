@@ -12,7 +12,7 @@
 
 package org.eclipse.dataset.dense;
 
-import org.eclipse.dataset.internal.dense.BooleanDataset;
+import org.eclipse.dataset.dense.BooleanDataset;
 
 /**
  * Class to run over an iterator and visits positions where items in selection dataset are true 

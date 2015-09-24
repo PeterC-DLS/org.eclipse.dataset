@@ -96,7 +96,8 @@ class transmutate(object):
             self.scdtype = "ARRAY" + self.sdtype
             self.dcdtype = "ARRAY" + self.ddtype
 
-        processors = [("// DATA_TYPE", self.data),
+        processors = [(srcclass, self.jclass),
+            ("// DATA_TYPE", self.data),
             ("// CLASS_TYPE", self.jpclass),
             ("// PRIM_TYPE", self.primitive),
             ("// ADD_CAST", self.addcast),
@@ -121,8 +122,7 @@ class transmutate(object):
             ("// OMIT_CAST_INT", self.omitcastint),
             ("// OMIT_UPCAST", self.omitupcast),
             ("// DEFAULT_VAL", self.defval),
-            ("@SuppressWarnings(\"cast\")", self.omit),
-            (srcclass, self.jclass)]
+            ("@SuppressWarnings(\"cast\")", self.omit)]
 
         self.icasts = [ "(byte) ", "(short) ", "(int) ", "(long) "]
         self.rcasts = [ "(float) ", "(double) "]
@@ -352,3 +352,22 @@ class transmutate(object):
             if l.find("// GEN_COMMENT") >= 0:
                 return self.commentline
         return l
+
+def generateclass(dclass, handlers, files):
+    '''Generate class and interface files
+    '''
+    while True:
+        l = dclass.readline()
+        if not l:
+            break
+        for h, f in zip(handlers, files):
+            nl = h.processline(l)
+            if nl != None:
+                print >> f, nl
+
+def removebase(d, f):
+    '''Remove Base from string if True
+    '''
+    if f and "Base" in d:
+        d = d[:d.rfind("Base")]
+    return d

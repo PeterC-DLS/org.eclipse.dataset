@@ -10,7 +10,7 @@
  *    Peter Chang - initial API and implementation and/or initial documentation
  *******************************************************************************/
 
-// This is generated from ComplexDoubleDataset.java by fromcpxdouble.py
+// GEN_COMMENT
 
 package org.eclipse.dataset.internal.dense;
 
@@ -21,6 +21,8 @@ import org.apache.commons.math.complex.Complex;
 import org.apache.commons.math.stat.descriptive.SummaryStatistics;
 import org.eclipse.dataset.IDataset;
 import org.eclipse.dataset.dense.BroadcastIterator;
+import org.eclipse.dataset.dense.ComplexDoubleDataset;
+import org.eclipse.dataset.dense.ComplexFloatDataset;
 import org.eclipse.dataset.dense.Dataset;
 import org.eclipse.dataset.dense.DatasetFactory;
 import org.eclipse.dataset.dense.DatasetUtils;
@@ -31,9 +33,9 @@ import org.eclipse.dataset.internal.utils.MissingFromMath2;
 
 
 /**
- * Extend compound dataset to hold complex float values // PRIM_TYPE
+ * Extend compound dataset to hold complex double values // PRIM_TYPE
  */
-public class ComplexFloatDataset extends CompoundFloatDataset { // CLASS_TYPE
+public class ComplexDoubleDatasetImpl extends CompoundDoubleDatasetImpl implements ComplexDoubleDataset { // CLASS_TYPE
 	// pin UID to base class
 	private static final long serialVersionUID = Dataset.serialVersionUID;
 
@@ -41,10 +43,10 @@ public class ComplexFloatDataset extends CompoundFloatDataset { // CLASS_TYPE
 
 	@Override
 	public int getDType() {
-		return Dataset.COMPLEX64; // DATA_TYPE
+		return Dataset.COMPLEX128; // DATA_TYPE
 	}
 
-	public ComplexFloatDataset() {
+	public ComplexDoubleDatasetImpl() {
 		super(ISIZE);
 	}
 
@@ -52,7 +54,7 @@ public class ComplexFloatDataset extends CompoundFloatDataset { // CLASS_TYPE
 	 * Create a zero-filled dataset of given shape
 	 * @param shape
 	 */
-	public ComplexFloatDataset(final int... shape) {
+	public ComplexDoubleDatasetImpl(final int... shape) {
 		super(ISIZE, shape);
 	}
 
@@ -61,7 +63,7 @@ public class ComplexFloatDataset extends CompoundFloatDataset { // CLASS_TYPE
 	 * @param data
 	 * @param shape (can be null to create 1D dataset)
 	 */
-	public ComplexFloatDataset(final float[] data, final int... shape) { // PRIM_TYPE
+	public ComplexDoubleDatasetImpl(final double[] data, final int... shape) { // PRIM_TYPE
 		super(ISIZE, data, shape);
 	}
 
@@ -69,7 +71,7 @@ public class ComplexFloatDataset extends CompoundFloatDataset { // CLASS_TYPE
 	 * Copy a dataset
 	 * @param dataset
 	 */
-	public ComplexFloatDataset(final ComplexFloatDataset dataset) {
+	public ComplexDoubleDatasetImpl(final ComplexDoubleDatasetImpl dataset) {
 		super(dataset);
 	}
 
@@ -79,7 +81,7 @@ public class ComplexFloatDataset extends CompoundFloatDataset { // CLASS_TYPE
 	 * @param imagData
 	 * @param shape (can be null to create 1D dataset)
 	 */
-	public ComplexFloatDataset(final float[] realData, final float[] imagData, int... shape) { // PRIM_TYPE
+	public ComplexDoubleDatasetImpl(final double[] realData, final double[] imagData, int... shape) { // PRIM_TYPE
 		if (realData == null || imagData == null) {
 			throw new IllegalArgumentException("Data must not be null");
 		}
@@ -108,7 +110,7 @@ public class ComplexFloatDataset extends CompoundFloatDataset { // CLASS_TYPE
 	 * @param real
 	 * @param imag
 	 */
-	public ComplexFloatDataset(final Dataset real, final Dataset imag) {
+	public ComplexDoubleDatasetImpl(final Dataset real, final Dataset imag) {
 		super(ISIZE, real.getShapeRef());
 		real.checkCompatibility(imag);
 
@@ -116,8 +118,8 @@ public class ComplexFloatDataset extends CompoundFloatDataset { // CLASS_TYPE
 		IndexIterator iiter = imag.getIterator();
 
 		for (int i = 0; riter.hasNext() && iiter.hasNext();) {
-			data[i++] = (float) real.getElementDoubleAbs(riter.index); // ADD_CAST
-			data[i++] = (float) imag.getElementDoubleAbs(iiter.index); // ADD_CAST
+			data[i++] = real.getElementDoubleAbs(riter.index); // ADD_CAST
+			data[i++] = imag.getElementDoubleAbs(iiter.index); // ADD_CAST
 		}
 	}
 
@@ -125,7 +127,7 @@ public class ComplexFloatDataset extends CompoundFloatDataset { // CLASS_TYPE
 	 * Cast a dataset to this complex type
 	 * @param dataset
 	 */
-	public ComplexFloatDataset(final Dataset dataset) {
+	public ComplexDoubleDatasetImpl(final Dataset dataset) {
 		super(ISIZE, dataset.getShapeRef());
 		copyToView(dataset, this, true, false);
 		offset = 0;
@@ -136,30 +138,30 @@ public class ComplexFloatDataset extends CompoundFloatDataset { // CLASS_TYPE
 		int disize = dataset.getElementsPerItem();
 		if (disize == 1) {
 			for (int i = 0; iter.hasNext(); i += isize) {
-				data[i] = (float) dataset.getElementDoubleAbs(iter.index); // ADD_CAST
+				data[i] = dataset.getElementDoubleAbs(iter.index); // ADD_CAST
 			}
 		} else {
 			for (int i = 0; iter.hasNext(); i += isize) {
-				data[i] = (float) dataset.getElementDoubleAbs(iter.index); // ADD_CAST
-				data[i+1] = (float) dataset.getElementDoubleAbs(iter.index+1); // ADD_CAST
+				data[i] = dataset.getElementDoubleAbs(iter.index); // ADD_CAST
+				data[i+1] = dataset.getElementDoubleAbs(iter.index+1); // ADD_CAST
 			}
 		}
 	}
 
 	@Override
-	public ComplexFloatDataset clone() {
-		return new ComplexFloatDataset(this);
+	public ComplexDoubleDatasetImpl clone() {
+		return new ComplexDoubleDatasetImpl(this);
 	}
 
 	/**
 	 * Create a dataset from an object which could be a Java list, array (of arrays...)
 	 * or Number. Ragged sequences or arrays are padded with zeros.
-	 *
+	 * 
 	 * @param obj
 	 * @return dataset with contents given by input
 	 */
-	public static ComplexFloatDataset createFromObject(final Object obj) {
-		ComplexFloatDataset result = new ComplexFloatDataset();
+	public static ComplexDoubleDatasetImpl createFromObject(final Object obj) {
+		ComplexDoubleDatasetImpl result = new ComplexDoubleDatasetImpl();
 
 		result.shape = DatasetUtils.getShapeFromObject(obj);
 		result.size = DatasetUtils.calculateSize(result.shape);
@@ -175,7 +177,7 @@ public class ComplexFloatDataset extends CompoundFloatDataset { // CLASS_TYPE
 	 * @param stop
 	 * @return a new 1D dataset, filled with values determined by parameters
 	 */
-	public static ComplexFloatDataset createRange(final double stop) {
+	public static ComplexDoubleDatasetImpl createRange(final double stop) {
 		return createRange(0, stop, 1);
 	}
 
@@ -185,11 +187,11 @@ public class ComplexFloatDataset extends CompoundFloatDataset { // CLASS_TYPE
 	 * @param step
 	 * @return a new 1D dataset, filled with values determined by parameters
 	 */
-	public static ComplexFloatDataset createRange(final double start, final double stop, final double step) {
+	public static ComplexDoubleDatasetImpl createRange(final double start, final double stop, final double step) {
 		int size = calcSteps(start, stop, step);
-		ComplexFloatDataset result = new ComplexFloatDataset(size);
+		ComplexDoubleDatasetImpl result = new ComplexDoubleDatasetImpl(size);
 		for (int i = 0; i < size; i ++) {
-			result.data[i*ISIZE] = (float) (start + i*step); // ADD_CAST
+			result.data[i*ISIZE] = (start + i*step); // ADD_CAST
 		}
 		return result;
 	}
@@ -198,14 +200,14 @@ public class ComplexFloatDataset extends CompoundFloatDataset { // CLASS_TYPE
 	 * @param shape
 	 * @return a dataset filled with ones
 	 */
-	public static ComplexFloatDataset ones(final int... shape) {
-		return new ComplexFloatDataset(shape).fill(1);
+	public static ComplexDoubleDatasetImpl ones(final int... shape) {
+		return new ComplexDoubleDatasetImpl(shape).fill(1);
 	}
 
 	@Override
-	public ComplexFloatDataset fill(final Object obj) {
-		float vr = (float) DTypeUtils.toReal(obj); // PRIM_TYPE // ADD_CAST
-		float vi = (float) DTypeUtils.toImag(obj); // PRIM_TYPE // ADD_CAST
+	public ComplexDoubleDatasetImpl fill(final Object obj) {
+		double vr = DTypeUtils.toReal(obj); // PRIM_TYPE // ADD_CAST
+		double vi = DTypeUtils.toImag(obj); // PRIM_TYPE // ADD_CAST
 		IndexIterator iter = getIterator();
 
 		while (iter.hasNext()) {
@@ -218,8 +220,8 @@ public class ComplexFloatDataset extends CompoundFloatDataset { // CLASS_TYPE
 	}
 
 	@Override
-	public ComplexFloatDataset getView() {
-		ComplexFloatDataset view = new ComplexFloatDataset();
+	public ComplexDoubleDatasetImpl getView() {
+		ComplexDoubleDatasetImpl view = new ComplexDoubleDatasetImpl();
 		copyToView(this, view, true, true);
 		view.data = data;
 		return view;
@@ -227,12 +229,13 @@ public class ComplexFloatDataset extends CompoundFloatDataset { // CLASS_TYPE
 
 	/**
 	 * Get complex value at absolute index in the internal array.
-	 *
+	 * 
 	 * This is an internal method with no checks so can be dangerous. Use with care or ideally with an iterator.
 	 *
 	 * @param index absolute index
 	 * @return value
 	 */
+	@Override
 	public Complex getComplexAbs(final int index) {
 		return new Complex(data[index], data[index+1]);
 	}
@@ -244,7 +247,7 @@ public class ComplexFloatDataset extends CompoundFloatDataset { // CLASS_TYPE
 
 	@Override
 	public String getStringAbs(final int index) {
-		float di = data[index + 1]; // PRIM_TYPE
+		double di = data[index + 1]; // PRIM_TYPE
 		if (stringFormat == null) {
 			return di >= 0 ? String.format("%.8g + %.8gj", data[index], di) : // FORMAT_STRING
 				String.format("%.8g - %.8gj", data[index], -di); // FORMAT_STRING
@@ -264,27 +267,31 @@ public class ComplexFloatDataset extends CompoundFloatDataset { // CLASS_TYPE
 
 	/**
 	 * Set values at absolute index in the internal array.
-	 *
+	 * 
 	 * This is an internal method with no checks so can be dangerous. Use with care or ideally with an iterator.
 	 * @param index absolute index
 	 * @param val new values
 	 */
+	@Override
+	@SuppressWarnings("cast")
 	public void setAbs(final int index, final Complex val) {
-		setAbs(index, (float) val.getReal(), (float) val.getImaginary()); // PRIM_TYPE
+		setAbs(index, (double) val.getReal(), (double) val.getImaginary()); // PRIM_TYPE
 	}
 
+	@SuppressWarnings("cast")
 	@Override
 	public void setObjectAbs(final int index, final Object obj) {
-		setAbs(index, (float) DTypeUtils.toReal(obj), (float) DTypeUtils.toImag(obj)); // PRIM_TYPE
+		setAbs(index, (double) DTypeUtils.toReal(obj), (double) DTypeUtils.toImag(obj)); // PRIM_TYPE
 	}
 
 	/**
-	 * Set item at index to complex value given by real and imaginary parts
+	 * Set item at index to complex value given by real and imaginary parts 
 	 * @param index absolute index
 	 * @param real
 	 * @param imag
 	 */
-	public void setAbs(final int index, final float real, final float imag) { // PRIM_TYPE
+	@Override
+	public void setAbs(final int index, final double real, final double imag) { // PRIM_TYPE
 		data[index] = real;
 		data[index+1] = imag;
 		setDirty();
@@ -294,6 +301,7 @@ public class ComplexFloatDataset extends CompoundFloatDataset { // CLASS_TYPE
 	 * @param i
 	 * @return item in given position
 	 */
+	@Override
 	public Complex get(final int i) {
 		int n = get1DIndex(i);
 		Complex z = new Complex(data[n], data[n+1]);
@@ -305,6 +313,7 @@ public class ComplexFloatDataset extends CompoundFloatDataset { // CLASS_TYPE
 	 * @param j
 	 * @return item in given position
 	 */
+	@Override
 	public Complex get(final int i, final int j) {
 		int n = get1DIndex(i, j);
 		Complex z = new Complex(data[n], data[n+1]);
@@ -315,6 +324,7 @@ public class ComplexFloatDataset extends CompoundFloatDataset { // CLASS_TYPE
 	 * @param pos
 	 * @return item in given position
 	 */
+	@Override
 	public Complex get(final int... pos) {
 		int n = get1DIndex(pos);
 		Complex z = new Complex(data[n], data[n+1]);
@@ -340,8 +350,10 @@ public class ComplexFloatDataset extends CompoundFloatDataset { // CLASS_TYPE
 	 * @param i
 	 * @return item in given position
 	 */
-	public float getReal(final int i) { // PRIM_TYPE
-		return (float) getFirstValue(i); // PRIM_TYPE
+	@Override
+	@SuppressWarnings("cast")
+	public double getReal(final int i) { // PRIM_TYPE
+		return (double) getFirstValue(i); // PRIM_TYPE
 	}
 
 	/**
@@ -349,23 +361,28 @@ public class ComplexFloatDataset extends CompoundFloatDataset { // CLASS_TYPE
 	 * @param j
 	 * @return item in given position
 	 */
-	public float getReal(final int i, final int j) { // PRIM_TYPE
-		return (float) getFirstValue(i, j); // PRIM_TYPE
+	@Override
+	@SuppressWarnings("cast")
+	public double getReal(final int i, final int j) { // PRIM_TYPE
+		return (double) getFirstValue(i, j); // PRIM_TYPE
 	}
 
 	/**
 	 * @param pos
 	 * @return item in given position
 	 */
-	public float getReal(final int... pos) { // PRIM_TYPE
-		return (float) getFirstValue(pos); // PRIM_TYPE
+	@Override
+	@SuppressWarnings("cast")
+	public double getReal(final int... pos) { // PRIM_TYPE
+		return (double) getFirstValue(pos); // PRIM_TYPE
 	}
 
 	/**
 	 * @param i
 	 * @return item in given position
 	 */
-	public float getImag(final int i) { // PRIM_TYPE
+	@Override
+	public double getImag(final int i) { // PRIM_TYPE
 		return data[get1DIndex(i) + 1];
 	}
 
@@ -374,7 +391,8 @@ public class ComplexFloatDataset extends CompoundFloatDataset { // CLASS_TYPE
 	 * @param j
 	 * @return item in given position
 	 */
-	public float getImag(final int i, final int j) { // PRIM_TYPE
+	@Override
+	public double getImag(final int i, final int j) { // PRIM_TYPE
 		return data[get1DIndex(i, j) + 1];
 	}
 
@@ -382,7 +400,8 @@ public class ComplexFloatDataset extends CompoundFloatDataset { // CLASS_TYPE
 	 * @param pos
 	 * @return item in given position
 	 */
-	public float getImag(final int... pos) { // PRIM_TYPE
+	@Override
+	public double getImag(final int... pos) { // PRIM_TYPE
 		return data[get1DIndex(pos) + 1];
 	}
 
@@ -390,6 +409,7 @@ public class ComplexFloatDataset extends CompoundFloatDataset { // CLASS_TYPE
 	 * @param i
 	 * @return item in given position
 	 */
+	@Override
 	public Complex getComplex(final int i) {
 		return get(i);
 	}
@@ -399,6 +419,7 @@ public class ComplexFloatDataset extends CompoundFloatDataset { // CLASS_TYPE
 	 * @param j
 	 * @return item in given position
 	 */
+	@Override
 	public Complex getComplex(final int i, final int j) {
 		return get(i, j);
 	}
@@ -407,27 +428,31 @@ public class ComplexFloatDataset extends CompoundFloatDataset { // CLASS_TYPE
 	 * @param pos
 	 * @return item in given position
 	 */
+	@Override
 	public Complex getComplex(final int... pos) {
 		return get(pos);
 	}
 
+	@SuppressWarnings("cast")
 	@Override
 	public void set(final Object obj, final int i) {
-		setItem(new float[] {(float) DTypeUtils.toReal(obj), (float) DTypeUtils.toImag(obj)}, i); // PRIM_TYPE
+		setItem(new double[] {(double) DTypeUtils.toReal(obj), (double) DTypeUtils.toImag(obj)}, i); // PRIM_TYPE
 	}
 
+	@SuppressWarnings("cast")
 	@Override
 	public void set(final Object obj, final int i, final int j) {
-		setItem(new float[] {(float) DTypeUtils.toReal(obj), (float) DTypeUtils.toImag(obj)}, i, j); // PRIM_TYPE
+		setItem(new double[] {(double) DTypeUtils.toReal(obj), (double) DTypeUtils.toImag(obj)}, i, j); // PRIM_TYPE
 	}
 
+	@SuppressWarnings("cast")
 	@Override
 	public void set(final Object obj, int... pos) {
 		if (pos == null || (pos.length == 0 && shape.length > 0)) {
 			pos = new int[shape.length];
 		}
 
-		setItem(new float[] {(float) DTypeUtils.toReal(obj), (float) DTypeUtils.toImag(obj)}, pos); // PRIM_TYPE
+		setItem(new double[] {(double) DTypeUtils.toReal(obj), (double) DTypeUtils.toImag(obj)}, pos); // PRIM_TYPE
 	}
 
 	/**
@@ -436,8 +461,9 @@ public class ComplexFloatDataset extends CompoundFloatDataset { // CLASS_TYPE
 	 * @param di
 	 * @param i
 	 */
-	public void set(final float dr, final float di, final int i) { // PRIM_TYPE
-		setItem(new float[] {dr, di}, i); // PRIM_TYPE
+	@Override
+	public void set(final double dr, final double di, final int i) { // PRIM_TYPE
+		setItem(new double[] {dr, di}, i); // PRIM_TYPE
 	}
 
 	/**
@@ -447,8 +473,9 @@ public class ComplexFloatDataset extends CompoundFloatDataset { // CLASS_TYPE
 	 * @param i
 	 * @param j
 	 */
-	public void set(final float dr, final float di, final int i, final int j) { // PRIM_TYPE
-		setItem(new float[] {dr, di}, i, j); // PRIM_TYPE
+	@Override
+	public void set(final double dr, final double di, final int i, final int j) { // PRIM_TYPE
+		setItem(new double[] {dr, di}, i, j); // PRIM_TYPE
 	}
 
 	/**
@@ -457,19 +484,21 @@ public class ComplexFloatDataset extends CompoundFloatDataset { // CLASS_TYPE
 	 * @param di
 	 * @param pos
 	 */
-	public void set(final float dr, final float di, final int... pos) { // PRIM_TYPE
-		setItem(new float[] {dr, di}, pos); // PRIM_TYPE
+	@Override
+	public void set(final double dr, final double di, final int... pos) { // PRIM_TYPE
+		setItem(new double[] {dr, di}, pos); // PRIM_TYPE
 	}
 
 	/**
 	 * @return imaginary part of dataset as new dataset
 	 */
-	public FloatDataset imaginary() { // CLASS_TYPE
-		FloatDataset rdataset = new FloatDataset(shape); // CLASS_TYPE
+	@Override
+	public DoubleDatasetImpl imaginary() { // CLASS_TYPE
+		DoubleDatasetImpl rdataset = new DoubleDatasetImpl(shape); // CLASS_TYPE
 		IndexIterator iter = getIterator();
 		IndexIterator riter = rdataset.getIterator();
 
-		float[] rdata = rdataset.data; // PRIM_TYPE
+		double[] rdata = rdataset.data; // PRIM_TYPE
 		while (iter.hasNext() && riter.hasNext())
 			rdata[riter.index] = data[iter.index + 1];
 
@@ -479,7 +508,8 @@ public class ComplexFloatDataset extends CompoundFloatDataset { // CLASS_TYPE
 	/**
 	 * @return view of imaginary values
 	 */
-	public FloatDataset imaginaryView() { // CLASS_TYPE
+	@Override
+	public DoubleDatasetImpl imaginaryView() { // CLASS_TYPE
 		return getElementsView(1);
 	}
 
@@ -528,9 +558,9 @@ public class ComplexFloatDataset extends CompoundFloatDataset { // CLASS_TYPE
 	}
 
 	@Override
-	public ComplexFloatDataset getSlice(final SliceIterator siter) {
-		ComplexFloatDataset result = new ComplexFloatDataset(siter.getShape());
-		float[] rdata = result.data; // PRIM_TYPE
+	public ComplexDoubleDatasetImpl getSlice(final SliceIterator siter) {
+		ComplexDoubleDatasetImpl result = new ComplexDoubleDatasetImpl(siter.getShape());
+		double[] rdata = result.data; // PRIM_TYPE
 		IndexIterator riter = result.getIterator();
 
 		while (siter.hasNext() && riter.hasNext()) {
@@ -543,17 +573,17 @@ public class ComplexFloatDataset extends CompoundFloatDataset { // CLASS_TYPE
 	}
 
 	@Override
-	ComplexFloatDataset setSlicedView(Dataset view, Dataset d) {
+	ComplexDoubleDatasetImpl setSlicedView(Dataset view, Dataset d) {
 		final BroadcastIterator it = BroadcastIterator.createIterator(view, d);
 
-		if (d instanceof ComplexFloatDataset || d instanceof ComplexFloatDataset) {
+		if (d.isComplex()) {
 			while (it.hasNext()) {
-				data[it.aIndex] = (float) it.bDouble; // ADD_CAST
-				data[it.aIndex + 1] = (float) d.getElementDoubleAbs(it.bIndex + 1); // GET_ELEMENT_WITH_CAST
+				data[it.aIndex] = it.bDouble; // ADD_CAST
+				data[it.aIndex + 1] = d.getElementDoubleAbs(it.bIndex + 1); // GET_ELEMENT_WITH_CAST
 			}
 		} else {
 			while (it.hasNext()) {
-				data[it.aIndex] = (float) it.bDouble; // ADD_CAST
+				data[it.aIndex] = it.bDouble; // ADD_CAST
 				data[it.aIndex + 1] = 0;
 			}
 		}
@@ -561,18 +591,18 @@ public class ComplexFloatDataset extends CompoundFloatDataset { // CLASS_TYPE
 	}
 
 	@Override
-	public ComplexFloatDataset setSlice(final Object o, final IndexIterator siter) {
+	public ComplexDoubleDatasetImpl setSlice(final Object o, final IndexIterator siter) {
 		if (o instanceof ComplexFloatDataset) {
 			ComplexFloatDataset zds = (ComplexFloatDataset) o;
 
-			if (!DatasetUtils.areShapesCompatible(siter.getShape(), zds.shape)) {
+			if (!DatasetUtils.areShapesCompatible(siter.getShape(), zds.getShapeRef())) {
 				throw new IllegalArgumentException(String.format(
-						"Input dataset is not compatible with slice: %s cf %s", Arrays.toString(zds.shape),
+						"Input dataset is not compatible with slice: %s cf %s", Arrays.toString(zds.getShapeRef()),
 						Arrays.toString(siter.getShape())));
 			}
 
 			IndexIterator oiter = zds.getIterator();
-			float[] odata = zds.data;
+			float[] odata = zds.getData();
 
 			while (siter.hasNext() && oiter.hasNext()) {
 				data[siter.index] = odata[oiter.index];
@@ -581,25 +611,25 @@ public class ComplexFloatDataset extends CompoundFloatDataset { // CLASS_TYPE
 		} else if (o instanceof ComplexDoubleDataset) { // IGNORE_CLASS
 			ComplexDoubleDataset zds = (ComplexDoubleDataset) o; // IGNORE_CLASS
 
-			if (!DatasetUtils.areShapesCompatible(siter.getShape(), zds.shape)) {
+			if (!DatasetUtils.areShapesCompatible(siter.getShape(), zds.getShapeRef())) {
 				throw new IllegalArgumentException(String.format(
-						"Input dataset is not compatible with slice: %s cf %s", Arrays.toString(zds.shape),
+						"Input dataset is not compatible with slice: %s cf %s", Arrays.toString(zds.getShapeRef()),
 						Arrays.toString(siter.getShape())));
 			}
 
 			IndexIterator oiter = zds.getIterator();
-			double[] odata = zds.data;
+			double[] odata = zds.getData();
 
 			while (siter.hasNext() && oiter.hasNext()) {
-				data[siter.index] = (float) odata[oiter.index]; // PRIM_TYPE // ADD_CAST
-				data[siter.index+1] = (float) odata[oiter.index+1]; // PRIM_TYPE // ADD_CAST
+				data[siter.index] = odata[oiter.index]; // PRIM_TYPE // ADD_CAST
+				data[siter.index+1] = odata[oiter.index+1]; // PRIM_TYPE // ADD_CAST
 			}
 		} else if (o instanceof IDataset) {
 			super.setSlice(o, siter);
 		} else {
 			try {
-				float vr = (float) DTypeUtils.toReal(o); // PRIM_TYPE // ADD_CAST
-				float vi = (float) DTypeUtils.toImag(o); // PRIM_TYPE // ADD_CAST
+				double vr = DTypeUtils.toReal(o); // PRIM_TYPE // ADD_CAST
+				double vi = DTypeUtils.toImag(o); // PRIM_TYPE // ADD_CAST
 
 				while (siter.hasNext()) {
 					data[siter.index]     = vr;
@@ -614,7 +644,7 @@ public class ComplexFloatDataset extends CompoundFloatDataset { // CLASS_TYPE
 	}
 
 	@Override
-	public ComplexFloatDataset iadd(final Object b) {
+	public ComplexDoubleDatasetImpl iadd(final Object b) {
 		Dataset bds = b instanceof Dataset ? (Dataset) b : DatasetFactory.createFromObject(b);
 		boolean useLong = bds.getElementClass().equals(Long.class);
 		if (bds.getSize() == 1) {
@@ -663,7 +693,7 @@ public class ComplexFloatDataset extends CompoundFloatDataset { // CLASS_TYPE
 	}
 
 	@Override
-	public ComplexFloatDataset isubtract(final Object b) {
+	public ComplexDoubleDatasetImpl isubtract(final Object b) {
 		Dataset bds = b instanceof Dataset ? (Dataset) b : DatasetFactory.createFromObject(b);
 		boolean useLong = bds.getElementClass().equals(Long.class);
 		if (bds.getSize() == 1) {
@@ -712,7 +742,7 @@ public class ComplexFloatDataset extends CompoundFloatDataset { // CLASS_TYPE
 	}
 
 	@Override
-	public ComplexFloatDataset imultiply(final Object b) {
+	public ComplexDoubleDatasetImpl imultiply(final Object b) {
 		Dataset bds = b instanceof Dataset ? (Dataset) b : DatasetFactory.createFromObject(b);
 		boolean useLong = bds.getElementClass().equals(Long.class);
 		if (bds.getSize() == 1) {
@@ -735,8 +765,8 @@ public class ComplexFloatDataset extends CompoundFloatDataset { // CLASS_TYPE
 					while (it.hasNext()) {
 						double r1 = data[it.index];
 						double i1 = data[it.index + 1];
-						data[it.index]     = (float) (r1*r2 - i1*i2); // ADD_CAST
-						data[it.index + 1] = (float) (r1*i2 + i1*r2); // ADD_CAST
+						data[it.index]     = (r1*r2 - i1*i2); // ADD_CAST
+						data[it.index + 1] = (r1*i2 + i1*r2); // ADD_CAST
 					}
 				}
 			}
@@ -755,8 +785,8 @@ public class ComplexFloatDataset extends CompoundFloatDataset { // CLASS_TYPE
 						double r2 = it.bDouble;
 						double i1 = data[it.aIndex + 1];
 						double i2 = bds.getElementDoubleAbs(it.bIndex + 1);
-						data[it.aIndex]     = (float) (r1*r2 - i1*i2); // ADD_CAST
-						data[it.aIndex + 1] = (float) (r1*i2 + i1*r2); // ADD_CAST
+						data[it.aIndex]     = (r1*r2 - i1*i2); // ADD_CAST
+						data[it.aIndex + 1] = (r1*i2 + i1*r2); // ADD_CAST
 					}
 				} else {
 					while (it.hasNext()) {
@@ -771,7 +801,7 @@ public class ComplexFloatDataset extends CompoundFloatDataset { // CLASS_TYPE
 	}
 
 	@Override
-	public ComplexFloatDataset idivide(final Object b) {
+	public ComplexDoubleDatasetImpl idivide(final Object b) {
 		Dataset bds = b instanceof Dataset ? (Dataset) b : DatasetFactory.createFromObject(b);
 		boolean useLong = bds.getElementClass().equals(Long.class);
 		if (bds.getSize() == 1) {
@@ -797,23 +827,23 @@ public class ComplexFloatDataset extends CompoundFloatDataset { // CLASS_TYPE
 						while (it.hasNext()) {
 							double r1 = data[it.index];
 							double i1 = data[it.index + 1];
-							data[it.index]     = (float) ((r1*q + i1) / den); // ADD_CAST
-							data[it.index + 1] = (float) ((i1*q - r1) / den); // ADD_CAST
+							data[it.index]     = ((r1*q + i1) / den); // ADD_CAST
+							data[it.index + 1] = ((i1*q - r1) / den); // ADD_CAST
 						}
 					} else {
 						double q = i2/r2;
 						double den = i2*q + r2;
 						if (den == 0) {
 							while (it.hasNext()) {
-								data[it.index]     = Float.NaN; // CLASS_TYPE
-								data[it.index + 1] = Float.NaN; // CLASS_TYPE
+								data[it.index]     = Double.NaN; // CLASS_TYPE
+								data[it.index + 1] = Double.NaN; // CLASS_TYPE
 							}
 						} else {
 							while (it.hasNext()) {
 								double r1 = data[it.index];
 								double i1 = data[it.index + 1];
-								data[it.index]     = (float) ((i1 * q + r1) / den); // ADD_CAST
-								data[it.index + 1] = (float) ((i1 - r1 * q) / den); // ADD_CAST
+								data[it.index]     = ((i1 * q + r1) / den); // ADD_CAST
+								data[it.index + 1] = ((i1 - r1 * q) / den); // ADD_CAST
 							}
 						}
 					}
@@ -837,17 +867,17 @@ public class ComplexFloatDataset extends CompoundFloatDataset { // CLASS_TYPE
 						if (Math.abs(r2) < Math.abs(i2)) {
 							double q = r2/i2;
 							double den = r2*q + i2;
-							data[it.aIndex]     = (float) ((r1*q + i1) / den); // ADD_CAST
-							data[it.aIndex + 1] = (float) ((i1*q - r1) / den); // ADD_CAST
+							data[it.aIndex]     = ((r1*q + i1) / den); // ADD_CAST
+							data[it.aIndex + 1] = ((i1*q - r1) / den); // ADD_CAST
 						} else {
 							double q = i2/r2;
 							double den = i2*q + r2;
 							if (den == 0) {
-								data[it.aIndex]     = Float.NaN; // CLASS_TYPE
-								data[it.aIndex + 1] = Float.NaN; // CLASS_TYPE
+								data[it.aIndex]     = Double.NaN; // CLASS_TYPE
+								data[it.aIndex + 1] = Double.NaN; // CLASS_TYPE
 							} else {
-								data[it.aIndex]     = (float) ((i1 * q + r1) / den); // ADD_CAST
-								data[it.aIndex + 1] = (float) ((i1 - r1 * q) / den); // ADD_CAST
+								data[it.aIndex]     = ((i1 * q + r1) / den); // ADD_CAST
+								data[it.aIndex + 1] = ((i1 - r1 * q) / den); // ADD_CAST
 							}
 						}
 					}
@@ -864,12 +894,12 @@ public class ComplexFloatDataset extends CompoundFloatDataset { // CLASS_TYPE
 	}
 
 	@Override
-	public ComplexFloatDataset iremainder(final Object b) {
+	public ComplexDoubleDatasetImpl iremainder(final Object b) {
 		throw new UnsupportedOperationException("Unsupported method for class");
 	}
 
 	@Override
-	public ComplexFloatDataset ipower(final Object b) {
+	public ComplexDoubleDatasetImpl ipower(final Object b) {
 		Dataset bds = b instanceof Dataset ? (Dataset) b : DatasetFactory.createFromObject(b);
 		if (bds.getSize() == 1) {
 			final IndexIterator it = getIterator();
@@ -877,15 +907,15 @@ public class ComplexFloatDataset extends CompoundFloatDataset { // CLASS_TYPE
 			if (!bds.isComplex() || bds.getElementDoubleAbs(1) == 0) {
 				while (it.hasNext()) {
 					final Complex zd = MissingFromMath2.pow(new Complex(data[it.index], data[it.index + 1]), r2);
-					data[it.index]     = (float) zd.getReal(); // ADD_CAST
-					data[it.index + 1] = (float) zd.getImaginary(); // ADD_CAST
+					data[it.index]     = zd.getReal(); // ADD_CAST
+					data[it.index + 1] = zd.getImaginary(); // ADD_CAST
 				}
 			} else {
 				final Complex zv = new Complex(r2, bds.getElementDoubleAbs(1));
 				while (it.hasNext()) {
 					final Complex zd = new Complex(data[it.index], data[it.index + 1]).pow(zv);
-					data[it.index]     = (float) zd.getReal(); // ADD_CAST
-					data[it.index + 1] = (float) zd.getImaginary(); // ADD_CAST
+					data[it.index]     = zd.getReal(); // ADD_CAST
+					data[it.index + 1] = zd.getImaginary(); // ADD_CAST
 				}
 			}
 		} else {
@@ -895,14 +925,14 @@ public class ComplexFloatDataset extends CompoundFloatDataset { // CLASS_TYPE
 				while (it.hasNext()) {
 					final Complex zv = new Complex(it.bDouble, bds.getElementDoubleAbs(it.bIndex + 1));
 					final Complex zd = new Complex(it.aDouble, data[it.aIndex + 1]).pow(zv);
-					data[it.aIndex]     = (float) zd.getReal(); // ADD_CAST
-					data[it.aIndex + 1] = (float) zd.getImaginary(); // ADD_CAST
+					data[it.aIndex]     = zd.getReal(); // ADD_CAST
+					data[it.aIndex + 1] = zd.getImaginary(); // ADD_CAST
 				}
 			} else {
 				while (it.hasNext()) {
 					final Complex zd = MissingFromMath2.pow(new Complex(it.aDouble, data[it.aIndex + 1]), it.bDouble);
-					data[it.aIndex]     = (float) zd.getReal(); // ADD_CAST
-					data[it.aIndex + 1] = (float) zd.getImaginary(); // ADD_CAST
+					data[it.aIndex]     = zd.getReal(); // ADD_CAST
+					data[it.aIndex + 1] = zd.getImaginary(); // ADD_CAST
 				}
 			}
 		}

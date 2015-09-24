@@ -14,7 +14,8 @@ import static org.junit.Assert.assertEquals;
 import org.eclipse.dataset.dense.Dataset;
 import org.eclipse.dataset.dense.DatasetFactory;
 import org.eclipse.dataset.dense.IndexIterator;
-import org.eclipse.dataset.internal.dense.FloatDataset;
+import org.eclipse.dataset.internal.dense.FloatDatasetImpl;
+import org.eclipse.dataset.dense.FloatDataset;
 import org.junit.Test;
 
 public class FloatDatasetTest {
@@ -22,14 +23,14 @@ public class FloatDatasetTest {
 	@Test
 	public void testConstructor() {
 		float[] da = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
-		FloatDataset a = new FloatDataset(da);
+		FloatDataset a = new FloatDatasetImpl(da);
 
 		IndexIterator it = a.getIterator();
 		for (int i = 0; it.hasNext(); i++) {
 			assertEquals(i, a.getElementDoubleAbs(it.index), 1e-5*i);
 		}
 
-		FloatDataset b = new FloatDataset(da, 3, 4);
+		FloatDataset b = new FloatDatasetImpl(da, 3, 4);
 
 		it = b.getIterator();
 		for (int i = 0; it.hasNext(); i++) {

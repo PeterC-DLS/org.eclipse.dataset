@@ -20,11 +20,14 @@ import org.eclipse.dataset.IMonitor;
 import org.eclipse.dataset.Slice;
 import org.eclipse.dataset.SliceND;
 import org.eclipse.dataset.dense.CompoundDataset;
+import org.eclipse.dataset.dense.CompoundDoubleDataset;
 import org.eclipse.dataset.dense.ContiguousIterator;
 import org.eclipse.dataset.dense.Dataset;
 import org.eclipse.dataset.dense.DatasetUtils;
+import org.eclipse.dataset.dense.DoubleDataset;
 import org.eclipse.dataset.dense.DTypeUtils;
 import org.eclipse.dataset.dense.IndexIterator;
+import org.eclipse.dataset.dense.IntegerDataset;
 import org.eclipse.dataset.dense.SliceIterator;
 import org.eclipse.dataset.dense.StrideIterator;
 
@@ -543,10 +546,10 @@ public abstract class AbstractCompoundDataset extends AbstractDataset implements
 
 		int[] nshape = DatasetUtils.squeezeShape(oshape, false);
 
-		IntegerDataset count = new IntegerDataset(nshape);
-		CompoundDoubleDataset sum = new CompoundDoubleDataset(isize, nshape);
-		CompoundDoubleDataset mean = new CompoundDoubleDataset(isize, nshape);
-		CompoundDoubleDataset var = new CompoundDoubleDataset(isize, nshape);
+		IntegerDatasetImpl count = new IntegerDatasetImpl(nshape);
+		CompoundDoubleDatasetImpl sum = new CompoundDoubleDatasetImpl(isize, nshape);
+		CompoundDoubleDatasetImpl mean = new CompoundDoubleDatasetImpl(isize, nshape);
+		CompoundDoubleDatasetImpl var = new CompoundDoubleDatasetImpl(isize, nshape);
 
 		IndexIterator qiter = count.getIterator(true);
 		int[] qpos = qiter.getPos();
@@ -786,7 +789,7 @@ public abstract class AbstractCompoundDataset extends AbstractDataset implements
 			return null;
 
 		if (ed.getSize() != size || ed.getElementsPerItem() != isize) {
-			CompoundDataset errors = new CompoundDoubleDataset(isize, shape);
+			CompoundDataset errors = new CompoundDoubleDatasetImpl(isize, shape);
 			errors.setSlice(ed);
 			return errors;
 		}

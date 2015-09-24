@@ -29,6 +29,7 @@ import org.eclipse.dataset.MetadataException;
 import org.eclipse.dataset.PositionIterator;
 import org.eclipse.dataset.Slice;
 import org.eclipse.dataset.SliceND;
+import org.eclipse.dataset.dense.BooleanDataset;
 import org.eclipse.dataset.dense.BooleanIterator;
 import org.eclipse.dataset.dense.BroadcastIterator;
 import org.eclipse.dataset.dense.Comparisons;
@@ -39,6 +40,7 @@ import org.eclipse.dataset.dense.DatasetFactory;
 import org.eclipse.dataset.dense.DatasetUtils;
 import org.eclipse.dataset.dense.DTypeUtils;
 import org.eclipse.dataset.dense.IndexIterator;
+import org.eclipse.dataset.dense.IntegerDataset;
 import org.eclipse.dataset.dense.IntegerIterator;
 import org.eclipse.dataset.dense.IntegersIterator;
 import org.eclipse.dataset.dense.Maths;
@@ -1756,14 +1758,14 @@ public abstract class AbstractDataset extends LazyDatasetBase implements Dataset
 		}
 
 		final int dtype = getDType();
-		IntegerDataset count = new IntegerDataset(nshape);
+		IntegerDatasetImpl count = new IntegerDatasetImpl(nshape);
 		Dataset max = DatasetFactory.zeros(nshape, dtype);
 		Dataset min = DatasetFactory.zeros(nshape, dtype);
-		IntegerDataset maxIndex = new IntegerDataset(nshape);
-		IntegerDataset minIndex = new IntegerDataset(nshape);
+		IntegerDatasetImpl maxIndex = new IntegerDatasetImpl(nshape);
+		IntegerDatasetImpl minIndex = new IntegerDatasetImpl(nshape);
 		Dataset sum = DatasetFactory.zeros(nshape, DTypeUtils.getLargestDType(dtype));
-		DoubleDataset mean = new DoubleDataset(nshape);
-		DoubleDataset var = new DoubleDataset(nshape);
+		DoubleDatasetImpl mean = new DoubleDatasetImpl(nshape);
+		DoubleDatasetImpl var = new DoubleDatasetImpl(nshape);
 
 		IndexIterator qiter = max.getIterator(true);
 		int[] qpos = qiter.getPos();
@@ -2054,13 +2056,13 @@ public abstract class AbstractDataset extends LazyDatasetBase implements Dataset
 	}
 
 	@Override
-	public IntegerDataset argMax(int axis) {
+	public IntegerDatasetImpl argMax(int axis) {
 		return argMax(false, axis);
 	}
 
 	@Override
-	public IntegerDataset argMax(boolean ignoreNaNs, int axis) {
-		return (IntegerDataset) getStatistics(ignoreNaNs, axis, STORE_MAX + STORE_INDEX + "-" + axis);
+	public IntegerDatasetImpl argMax(boolean ignoreNaNs, int axis) {
+		return (IntegerDatasetImpl) getStatistics(ignoreNaNs, axis, STORE_MAX + STORE_INDEX + "-" + axis);
 	}
 
 	@Override
@@ -2074,13 +2076,13 @@ public abstract class AbstractDataset extends LazyDatasetBase implements Dataset
 	}
 
 	@Override
-	public IntegerDataset argMin(int axis) {
+	public IntegerDatasetImpl argMin(int axis) {
 		return argMin(false, axis);
 	}
 
 	@Override
-	public IntegerDataset argMin(boolean ignoreNaNs, int axis) {
-		return (IntegerDataset) getStatistics(ignoreNaNs, axis, STORE_MIN + STORE_INDEX + "-" + axis);
+	public IntegerDatasetImpl argMin(boolean ignoreNaNs, int axis) {
+		return (IntegerDatasetImpl) getStatistics(ignoreNaNs, axis, STORE_MIN + STORE_INDEX + "-" + axis);
 	}
 
 	@Override
@@ -2331,7 +2333,7 @@ public abstract class AbstractDataset extends LazyDatasetBase implements Dataset
 			return null;
 
 		if (ed.getSize() != getSize()) {
-			DoubleDataset errors = new DoubleDataset(shape);
+			DoubleDatasetImpl errors = new DoubleDatasetImpl(shape);
 			errors.setSlice(ed);
 			return errors;
 		}

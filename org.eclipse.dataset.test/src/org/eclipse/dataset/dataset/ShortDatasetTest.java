@@ -14,7 +14,8 @@ import static org.junit.Assert.assertEquals;
 import org.eclipse.dataset.dense.Dataset;
 import org.eclipse.dataset.dense.DatasetFactory;
 import org.eclipse.dataset.dense.IndexIterator;
-import org.eclipse.dataset.internal.dense.ShortDataset;
+import org.eclipse.dataset.dense.ShortDataset;
+import org.eclipse.dataset.internal.dense.ShortDatasetImpl;
 import org.junit.Test;
 
 public class ShortDatasetTest {
@@ -22,14 +23,14 @@ public class ShortDatasetTest {
 	@Test
 	public void testConstructor() {
 		short[] da = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
-		ShortDataset a = new ShortDataset(da);
+		ShortDataset a = new ShortDatasetImpl(da);
 
 		IndexIterator it = a.getIterator();
 		for (int i = 0; it.hasNext(); i++) {
 			assertEquals(i, a.getElementLongAbs(it.index));
 		}
 
-		ShortDataset b = new ShortDataset(da, 3, 4);
+		ShortDataset b = new ShortDatasetImpl(da, 3, 4);
 
 		it = b.getIterator();
 		for (int i = 0; it.hasNext(); i++) {

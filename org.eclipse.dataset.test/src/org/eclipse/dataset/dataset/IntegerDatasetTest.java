@@ -14,8 +14,10 @@ import static org.junit.Assert.assertEquals;
 import org.eclipse.dataset.dense.Dataset;
 import org.eclipse.dataset.dense.DatasetFactory;
 import org.eclipse.dataset.dense.IndexIterator;
-import org.eclipse.dataset.internal.dense.DoubleDataset;
-import org.eclipse.dataset.internal.dense.IntegerDataset;
+import org.eclipse.dataset.dense.DoubleDataset;
+import org.eclipse.dataset.dense.IntegerDataset;
+import org.eclipse.dataset.internal.dense.DoubleDatasetImpl;
+import org.eclipse.dataset.internal.dense.IntegerDatasetImpl;
 import org.junit.Test;
 
 public class IntegerDatasetTest {
@@ -23,14 +25,14 @@ public class IntegerDatasetTest {
 	@Test
 	public void testConstructor() {
 		int[] da = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
-		IntegerDataset a = new IntegerDataset(da, null);
+		IntegerDataset a = new IntegerDatasetImpl(da, null);
 
 		IndexIterator it = a.getIterator();
 		for (int i = 0; it.hasNext(); i++) {
 			assertEquals(i, a.getElementLongAbs(it.index));
 		}
 
-		IntegerDataset b = new IntegerDataset(da, 3, 4);
+		IntegerDataset b = new IntegerDatasetImpl(da, 3, 4);
 
 		it = b.getIterator();
 		for (int i = 0; it.hasNext(); i++) {
@@ -55,7 +57,7 @@ public class IntegerDatasetTest {
 	@Test
 	public void testPosition() {
 		double[] da = { 0, 1, 2, 3, 4, 5, 6, 5, 4, 3, 2, 1 };
-		DoubleDataset a = new DoubleDataset(da);
+		DoubleDataset a = new DoubleDatasetImpl(da);
 		
 		assertEquals(6,a.maxPos()[0]);
 		assertEquals(0,a.minPos()[0]);

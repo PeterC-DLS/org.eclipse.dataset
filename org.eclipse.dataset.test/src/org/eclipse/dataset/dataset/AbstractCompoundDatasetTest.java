@@ -26,8 +26,10 @@ import org.eclipse.dataset.dense.IndexIterator;
 import org.eclipse.dataset.dense.Maths;
 import org.eclipse.dataset.dense.RGBDataset;
 import org.eclipse.dataset.dense.Random;
-import org.eclipse.dataset.internal.dense.CompoundDoubleDataset;
-import org.eclipse.dataset.internal.dense.CompoundIntegerDataset;
+import org.eclipse.dataset.internal.dense.CompoundDoubleDatasetImpl;
+import org.eclipse.dataset.internal.dense.CompoundIntegerDatasetImpl;
+import org.eclipse.dataset.dense.CompoundDoubleDataset;
+import org.eclipse.dataset.dense.CompoundIntegerDataset;
 import org.junit.Test;
 
 public class AbstractCompoundDatasetTest {
@@ -57,46 +59,46 @@ public class AbstractCompoundDatasetTest {
 		// 1D
 		CompoundDataset ta;
 		ta = DatasetFactory.createRange(isize, 0, size, 1, type);
-		testSlicedDataset(ta);
+		testSlicedDatasetImpl(ta);
 
 		// 2D
 		ta = DatasetFactory.createRange(isize, 0, size, 1, type).reshape(16, size / 16);
 		System.out.println(" Shape: " + Arrays.toString(ta.getShape()));
-		testSlicedDataset(ta);
+		testSlicedDatasetImpl(ta);
 
 		ta = DatasetFactory.createRange(isize, 0, size, 1, type).reshape(size / 32, 32);
 		System.out.println(" Shape: " + Arrays.toString(ta.getShape()));
-		testSlicedDataset(ta);
+		testSlicedDatasetImpl(ta);
 
 		// 3D
 		ta = DatasetFactory.createRange(isize, 0, size, 1, type).reshape(16, 8, size / (16 * 8));
 		System.out.println(" Shape: " + Arrays.toString(ta.getShape()));
-		testSlicedDataset(ta);
+		testSlicedDatasetImpl(ta);
 
 		ta = DatasetFactory.createRange(isize, 0, size, 1, type).reshape(size / (16 * 8), 16, 8);
 		System.out.println(" Shape: " + Arrays.toString(ta.getShape()));
-		testSlicedDataset(ta);
+		testSlicedDatasetImpl(ta);
 	}
 
 	private void testSliceND(int size, int type) {
 		// 1D
 		CompoundDataset ta;
 		ta = DatasetUtils.createCompoundDatasetFromLastAxis(DatasetFactory.createRange(size, type).reshape(size/16, 16), true);
-		testSlicedDataset(ta);
+		testSlicedDatasetImpl(ta);
 		testElementViews(ta);
 
 		// 2D
 		ta = DatasetUtils.createCompoundDatasetFromLastAxis(DatasetFactory.createRange(size, type).reshape(size/(16*8), 16, 8), true);
-		testSlicedDataset(ta);
+		testSlicedDatasetImpl(ta);
 		testElementViews(ta);
 
 		// 3D
 		ta = DatasetUtils.createCompoundDatasetFromLastAxis(DatasetFactory.createRange(size, type).reshape(size/(16*8), 8, 8, 2), true);
-		testSlicedDataset(ta);
+		testSlicedDatasetImpl(ta);
 		testElementViews(ta);
 	}
 
-	private void testSlicedDataset(CompoundDataset ta) {
+	private void testSlicedDatasetImpl(CompoundDataset ta) {
 		int[] stop = ta.getShape();
 		stop[stop.length - 1] -= 1;
 		CompoundDataset sa = ta.getSliceView(null, stop, null);
@@ -342,14 +344,14 @@ public class AbstractCompoundDatasetTest {
 	@Test
 	public void testCompoundCreators() {
 		double dz = 0.5;
-		CompoundDoubleDataset z = CompoundDoubleDataset.createFromObject(dz);
+		CompoundDoubleDataset z = CompoundDoubleDatasetImpl.createFromObject(dz);
 		assertEquals(0, z.getRank());
 		assertEquals(1, z.getSize());
 		assertEquals(1, z.getElementsPerItem());
 		assertEquals(dz, z.getElementDoubleAbs(0), 1e-14);
 
 		double[] da = { 0, 1, 2, 3, 4, 5 };
-		CompoundDoubleDataset a = CompoundDoubleDataset.createFromObject(da);
+		CompoundDoubleDataset a = CompoundDoubleDatasetImpl.createFromObject(da);
 		int is = a.getElementsPerItem();
 		assertEquals(6, is);
 		assertEquals(1, a.getRank());
@@ -362,7 +364,7 @@ public class AbstractCompoundDatasetTest {
 		}
 
 		double[][] db = { {0, 1, 2}, {3, 4, 5} };
-		CompoundDoubleDataset b = CompoundDoubleDataset.createFromObject(db);
+		CompoundDoubleDataset b = CompoundDoubleDatasetImpl.createFromObject(db);
 		is = b.getElementsPerItem();
 		assertEquals(3, is);
 		assertEquals(1, b.getRank());
@@ -380,7 +382,7 @@ public class AbstractCompoundDatasetTest {
 			assertEquals(rb[j], mb[j], 1e-15);
 
 		double[][] dc = { {0, 1, 2, 3}, {4, 5, 6} };
-		CompoundDoubleDataset c = CompoundDoubleDataset.createFromObject(dc);
+		CompoundDoubleDataset c = CompoundDoubleDatasetImpl.createFromObject(dc);
 		is = c.getElementsPerItem();
 		assertEquals(4, is);
 		assertEquals(1, c.getRank());
@@ -397,7 +399,7 @@ public class AbstractCompoundDatasetTest {
 		}
 
 		double[][] dd = { {0, 1, 2}, {4, 5, 6, 7} };
-		CompoundDoubleDataset d = CompoundDoubleDataset.createFromObject(dd);
+		CompoundDoubleDataset d = CompoundDoubleDatasetImpl.createFromObject(dd);
 		is = d.getElementsPerItem();
 		assertEquals(4, is);
 		assertEquals(1, d.getRank());
@@ -471,7 +473,7 @@ public class AbstractCompoundDatasetTest {
 		for (int i = 0 ; i < 5; i++) {
 			aa[i] = DatasetFactory.createRange(100, Dataset.INT32);
 		}
-		CompoundDataset a = new CompoundIntegerDataset(aa);
+		CompoundDataset a = new CompoundIntegerDatasetImpl(aa);
 		
 		a.setError(5);
 		assertTrue(a.hasErrors());
@@ -597,7 +599,7 @@ public class AbstractCompoundDatasetTest {
 		for (int i = 0 ; i < 5; i++) {
 			aa[i] = DatasetFactory.createRange(100, Dataset.INT32);
 		}
-		CompoundDataset a = new CompoundIntegerDataset(aa);
+		CompoundDataset a = new CompoundIntegerDatasetImpl(aa);
 		
 		a.setError(new Double[] { 1.0, 2.0, 3.0, 4.0, 5.0});
 		

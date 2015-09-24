@@ -23,22 +23,22 @@ import org.eclipse.dataset.IDatasetIterator;
 import org.eclipse.dataset.ILazyDataset;
 import org.eclipse.dataset.PositionIterator;
 import org.eclipse.dataset.internal.dense.AbstractDataset;
-import org.eclipse.dataset.internal.dense.BooleanDataset;
-import org.eclipse.dataset.internal.dense.ByteDataset;
-import org.eclipse.dataset.internal.dense.ComplexDoubleDataset;
-import org.eclipse.dataset.internal.dense.ComplexFloatDataset;
-import org.eclipse.dataset.internal.dense.CompoundByteDataset;
-import org.eclipse.dataset.internal.dense.CompoundDoubleDataset;
-import org.eclipse.dataset.internal.dense.CompoundFloatDataset;
-import org.eclipse.dataset.internal.dense.CompoundIntegerDataset;
-import org.eclipse.dataset.internal.dense.CompoundLongDataset;
-import org.eclipse.dataset.internal.dense.CompoundShortDataset;
-import org.eclipse.dataset.internal.dense.DoubleDataset;
-import org.eclipse.dataset.internal.dense.FloatDataset;
-import org.eclipse.dataset.internal.dense.IntegerDataset;
-import org.eclipse.dataset.internal.dense.LongDataset;
-import org.eclipse.dataset.internal.dense.ShortDataset;
-import org.eclipse.dataset.internal.dense.StringDataset;
+import org.eclipse.dataset.internal.dense.BooleanDatasetImpl;
+import org.eclipse.dataset.internal.dense.ByteDatasetImpl;
+import org.eclipse.dataset.internal.dense.ComplexDoubleDatasetImpl;
+import org.eclipse.dataset.internal.dense.ComplexFloatDatasetImpl;
+import org.eclipse.dataset.internal.dense.CompoundByteDatasetImpl;
+import org.eclipse.dataset.internal.dense.CompoundDoubleDatasetImpl;
+import org.eclipse.dataset.internal.dense.CompoundFloatDatasetImpl;
+import org.eclipse.dataset.internal.dense.CompoundIntegerDatasetImpl;
+import org.eclipse.dataset.internal.dense.CompoundLongDatasetImpl;
+import org.eclipse.dataset.internal.dense.CompoundShortDatasetImpl;
+import org.eclipse.dataset.internal.dense.DoubleDatasetImpl;
+import org.eclipse.dataset.internal.dense.FloatDatasetImpl;
+import org.eclipse.dataset.internal.dense.IntegerDatasetImpl;
+import org.eclipse.dataset.internal.dense.LongDatasetImpl;
+import org.eclipse.dataset.internal.dense.ShortDatasetImpl;
+import org.eclipse.dataset.internal.dense.StringDatasetImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -624,82 +624,82 @@ public class DatasetUtils {
 			// copy across the data
 			switch (dtype) {
 			case Dataset.STRING:
-				c = new StringDataset(a);
+				c = new StringDatasetImpl(a);
 				break;
 			case Dataset.BOOL:
-				c = new BooleanDataset(a);
+				c = new BooleanDatasetImpl(a);
 				break;
 			case Dataset.INT8:
 				if (a instanceof CompoundDataset)
-					c = new CompoundByteDataset(a);
+					c = new CompoundByteDatasetImpl(a);
 				else
-					c = new ByteDataset(a);
+					c = new ByteDatasetImpl(a);
 				break;
 			case Dataset.INT16:
 				if (a instanceof CompoundDataset)
-					c = new CompoundShortDataset(a);
+					c = new CompoundShortDatasetImpl(a);
 				else
-					c = new ShortDataset(a);
+					c = new ShortDatasetImpl(a);
 				break;
 			case Dataset.INT32:
 				if (a instanceof CompoundDataset)
-					c = new CompoundIntegerDataset(a);
+					c = new CompoundIntegerDatasetImpl(a);
 				else
-					c = new IntegerDataset(a);
+					c = new IntegerDatasetImpl(a);
 				break;
 			case Dataset.INT64:
 				if (a instanceof CompoundDataset)
-					c = new CompoundLongDataset(a);
+					c = new CompoundLongDatasetImpl(a);
 				else
-					c = new LongDataset(a);
+					c = new LongDatasetImpl(a);
 				break;
 			case Dataset.ARRAYINT8:
 				if (a instanceof CompoundDataset)
-					c = new CompoundByteDataset((CompoundDataset) a);
+					c = new CompoundByteDatasetImpl((CompoundDataset) a);
 				else
-					c = new CompoundByteDataset(a);
+					c = new CompoundByteDatasetImpl(a);
 				break;
 			case Dataset.ARRAYINT16:
 				if (a instanceof CompoundDataset)
-					c = new CompoundShortDataset((CompoundDataset) a);
+					c = new CompoundShortDatasetImpl((CompoundDataset) a);
 				else
-					c = new CompoundShortDataset(a);
+					c = new CompoundShortDatasetImpl(a);
 				break;
 			case Dataset.ARRAYINT32:
 				if (a instanceof CompoundDataset)
-					c = new CompoundIntegerDataset((CompoundDataset) a);
+					c = new CompoundIntegerDatasetImpl((CompoundDataset) a);
 				else
-					c = new CompoundIntegerDataset(a);
+					c = new CompoundIntegerDatasetImpl(a);
 				break;
 			case Dataset.ARRAYINT64:
 				if (a instanceof AbstractDataset)
-					c = new CompoundLongDataset((CompoundDataset) a);
+					c = new CompoundLongDatasetImpl((CompoundDataset) a);
 				else
-					c = new CompoundLongDataset(a);
+					c = new CompoundLongDatasetImpl(a);
 				break;
 			case Dataset.FLOAT32:
-				c = new FloatDataset(a);
+				c = new FloatDatasetImpl(a);
 				break;
 			case Dataset.FLOAT64:
-				c = new DoubleDataset(a);
+				c = new DoubleDatasetImpl(a);
 				break;
 			case Dataset.ARRAYFLOAT32:
 				if (a instanceof CompoundDataset)
-					c = new CompoundFloatDataset((CompoundDataset) a);
+					c = new CompoundFloatDatasetImpl((CompoundDataset) a);
 				else
-					c = new CompoundFloatDataset(a);
+					c = new CompoundFloatDatasetImpl(a);
 				break;
 			case Dataset.ARRAYFLOAT64:
 				if (a instanceof CompoundDataset)
-					c = new CompoundDoubleDataset((CompoundDataset) a);
+					c = new CompoundDoubleDatasetImpl((CompoundDataset) a);
 				else
-					c = new CompoundDoubleDataset(a);
+					c = new CompoundDoubleDatasetImpl(a);
 				break;
 			case Dataset.COMPLEX64:
-				c = new ComplexFloatDataset(a);
+				c = new ComplexFloatDatasetImpl(a);
 				break;
 			case Dataset.COMPLEX128:
-				c = new ComplexDoubleDataset(a);
+				c = new ComplexDoubleDatasetImpl(a);
 				break;
 			default:
 				utilsLogger.error("Dataset of unknown type!");
@@ -741,49 +741,49 @@ public class DatasetUtils {
 			// copy across the data
 			switch (dtype) {
 			case Dataset.BOOL:
-				c = new BooleanDataset(a);
+				c = new BooleanDatasetImpl(a);
 				break;
 			case Dataset.INT8:
-				c = new ByteDataset(a);
+				c = new ByteDatasetImpl(a);
 				break;
 			case Dataset.INT16:
-				c = new ShortDataset(a);
+				c = new ShortDatasetImpl(a);
 				break;
 			case Dataset.INT32:
-				c = new IntegerDataset(a);
+				c = new IntegerDatasetImpl(a);
 				break;
 			case Dataset.INT64:
-				c = new LongDataset(a);
+				c = new LongDatasetImpl(a);
 				break;
 			case Dataset.ARRAYINT8:
-				c = new CompoundByteDataset(isize, repeat, a);
+				c = new CompoundByteDatasetImpl(isize, repeat, a);
 				break;
 			case Dataset.ARRAYINT16:
-				c = new CompoundShortDataset(isize, repeat, a);
+				c = new CompoundShortDatasetImpl(isize, repeat, a);
 				break;
 			case Dataset.ARRAYINT32:
-				c = new CompoundIntegerDataset(isize, repeat, a);
+				c = new CompoundIntegerDatasetImpl(isize, repeat, a);
 				break;
 			case Dataset.ARRAYINT64:
-				c = new CompoundLongDataset(isize, repeat, a);
+				c = new CompoundLongDatasetImpl(isize, repeat, a);
 				break;
 			case Dataset.FLOAT32:
-				c = new FloatDataset(a);
+				c = new FloatDatasetImpl(a);
 				break;
 			case Dataset.FLOAT64:
-				c = new DoubleDataset(a);
+				c = new DoubleDatasetImpl(a);
 				break;
 			case Dataset.ARRAYFLOAT32:
-				c = new CompoundFloatDataset(isize, repeat, a);
+				c = new CompoundFloatDatasetImpl(isize, repeat, a);
 				break;
 			case Dataset.ARRAYFLOAT64:
-				c = new CompoundDoubleDataset(isize, repeat, a);
+				c = new CompoundDoubleDatasetImpl(isize, repeat, a);
 				break;
 			case Dataset.COMPLEX64:
-				c = new ComplexFloatDataset(a);
+				c = new ComplexFloatDatasetImpl(a);
 				break;
 			case Dataset.COMPLEX128:
-				c = new ComplexDoubleDataset(a);
+				c = new ComplexDoubleDatasetImpl(a);
 				break;
 			default:
 				utilsLogger.error("Dataset of unknown type!");
@@ -809,39 +809,39 @@ public class DatasetUtils {
 		switch (dtype) {
 		case Dataset.INT8:
 		case Dataset.ARRAYINT8:
-			c = new CompoundByteDataset(a);
+			c = new CompoundByteDatasetImpl(a);
 			break;
 		case Dataset.INT16:
 		case Dataset.ARRAYINT16:
-			c = new CompoundShortDataset(a);
+			c = new CompoundShortDatasetImpl(a);
 			break;
 		case Dataset.INT32:
 		case Dataset.ARRAYINT32:
-			c = new CompoundIntegerDataset(a);
+			c = new CompoundIntegerDatasetImpl(a);
 			break;
 		case Dataset.INT64:
 		case Dataset.ARRAYINT64:
-			c = new CompoundLongDataset(a);
+			c = new CompoundLongDatasetImpl(a);
 			break;
 		case Dataset.FLOAT32:
 		case Dataset.ARRAYFLOAT32:
-			c = new CompoundFloatDataset(a);
+			c = new CompoundFloatDatasetImpl(a);
 			break;
 		case Dataset.FLOAT64:
 		case Dataset.ARRAYFLOAT64:
-			c = new CompoundDoubleDataset(a);
+			c = new CompoundDoubleDatasetImpl(a);
 			break;
 		case Dataset.COMPLEX64:
 			if (a.length != 2) {
 				throw new IllegalArgumentException("Need two datasets for complex dataset type");
 			}
-			c = new ComplexFloatDataset(a[0], a[1]);
+			c = new ComplexFloatDatasetImpl(a[0], a[1]);
 			break;
 		case Dataset.COMPLEX128:
 			if (a.length != 2) {
 				throw new IllegalArgumentException("Need two datasets for complex dataset type");
 			}
-			c = new ComplexDoubleDataset(a[0], a[1]);
+			c = new ComplexDoubleDatasetImpl(a[0], a[1]);
 			break;
 		default:
 			utilsLogger.error("Dataset of unsupported type!");
@@ -862,27 +862,27 @@ public class DatasetUtils {
 		int dtype = d.getDType();
 		switch (dtype) {
 		case Dataset.INT32:
-			d = new LongDataset(d);
+			d = new LongDatasetImpl(d);
 			unwrapUnsigned(d, 32);
 			break;
 		case Dataset.INT16:
-			d = new IntegerDataset(d);
+			d = new IntegerDatasetImpl(d);
 			unwrapUnsigned(d, 16);
 			break;
 		case Dataset.INT8:
-			d = new ShortDataset(d);
+			d = new ShortDatasetImpl(d);
 			unwrapUnsigned(d, 8);
 			break;
 		case Dataset.ARRAYINT32:
-			d = new CompoundLongDataset(d);
+			d = new CompoundLongDatasetImpl(d);
 			unwrapUnsigned(d, 32);
 			break;
 		case Dataset.ARRAYINT16:
-			d = new CompoundIntegerDataset(d);
+			d = new CompoundIntegerDatasetImpl(d);
 			unwrapUnsigned(d, 16);
 			break;
 		case Dataset.ARRAYINT8:
-			d = new CompoundShortDataset(d);
+			d = new CompoundShortDatasetImpl(d);
 			unwrapUnsigned(d, 8);
 			break;
 		}
@@ -1237,17 +1237,17 @@ public class DatasetUtils {
 
 		switch (datasets[0].getDType()) {
 		case Dataset.INT8:
-			return new CompoundByteDataset(datasets);
+			return new CompoundByteDatasetImpl(datasets);
 		case Dataset.INT16:
-			return new CompoundShortDataset(datasets);
+			return new CompoundShortDatasetImpl(datasets);
 		case Dataset.INT32:
-			return new CompoundIntegerDataset(datasets);
+			return new CompoundIntegerDatasetImpl(datasets);
 		case Dataset.INT64:
-			return new CompoundLongDataset(datasets);
+			return new CompoundLongDatasetImpl(datasets);
 		case Dataset.FLOAT32:
-			return new CompoundFloatDataset(datasets);
+			return new CompoundFloatDatasetImpl(datasets);
 		case Dataset.FLOAT64:
-			return new CompoundDoubleDataset(datasets);
+			return new CompoundDoubleDatasetImpl(datasets);
 		default:
 			utilsLogger.error("Dataset type not supported for this operation");
 			throw new UnsupportedOperationException("Dataset type not supported");
@@ -1263,17 +1263,17 @@ public class DatasetUtils {
 	public static CompoundDataset createCompoundDatasetFromLastAxis(final Dataset a, final boolean shareData) {
 		switch (a.getDType()) {
 		case Dataset.INT8:
-			return CompoundByteDataset.createCompoundDatasetWithLastDimension(a, shareData);
+			return CompoundByteDatasetImpl.createCompoundDatasetWithLastDimension(a, shareData);
 		case Dataset.INT16:
-			return CompoundShortDataset.createCompoundDatasetWithLastDimension(a, shareData);
+			return CompoundShortDatasetImpl.createCompoundDatasetWithLastDimension(a, shareData);
 		case Dataset.INT32:
-			return CompoundIntegerDataset.createCompoundDatasetWithLastDimension(a, shareData);
+			return CompoundIntegerDatasetImpl.createCompoundDatasetWithLastDimension(a, shareData);
 		case Dataset.INT64:
-			return CompoundLongDataset.createCompoundDatasetWithLastDimension(a, shareData);
+			return CompoundLongDatasetImpl.createCompoundDatasetWithLastDimension(a, shareData);
 		case Dataset.FLOAT32:
-			return CompoundFloatDataset.createCompoundDatasetWithLastDimension(a, shareData);
+			return CompoundFloatDatasetImpl.createCompoundDatasetWithLastDimension(a, shareData);
 		case Dataset.FLOAT64:
-			return CompoundDoubleDataset.createCompoundDatasetWithLastDimension(a, shareData);
+			return CompoundDoubleDatasetImpl.createCompoundDatasetWithLastDimension(a, shareData);
 		default:
 			utilsLogger.error("Dataset type not supported for this operation");
 			throw new UnsupportedOperationException("Dataset type not supported");
@@ -2172,7 +2172,7 @@ public class DatasetUtils {
 		}
 
 		Dataset r = DatasetFactory.zeros(ds, conditions[0].getShapeRef(), dt);
-		for (AbstractDataset a : conditions) {
+		for (Dataset a : conditions) {
 			r.checkCompatibility(a);
 		}
 		for (Object a : choices) {
