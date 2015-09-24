@@ -174,11 +174,6 @@ public class IntegerDatasetImpl extends AbstractDataset implements IntegerDatase
 		return super.hashCode();
 	}
 
-	@Override
-	public IntegerDatasetImpl clone() {
-		return new IntegerDatasetImpl(this);
-	}
-
 	/**
 	 * Create a dataset from an object which could be a Java list, array (of arrays...) or Number. Ragged
 	 * sequences or arrays are padded with zeros.
@@ -232,18 +227,6 @@ public class IntegerDatasetImpl extends AbstractDataset implements IntegerDatase
 		return new IntegerDatasetImpl(shape).fill(1);
 	}
 
-	@Override
-	public IntegerDatasetImpl fill(final Object obj) {
-		int dv = (int) DTypeUtils.toLong(obj); // PRIM_TYPE // FROM_OBJECT
-		IndexIterator iter = getIterator();
-		while (iter.hasNext()) {
-			data[iter.index] = dv;
-		}
-
-		setDirty();
-		return this;
-	}
-
 	/**
 	 * This is a typed version of {@link #getBuffer()}
 	 * @return data buffer as linear array
@@ -261,11 +244,74 @@ public class IntegerDatasetImpl extends AbstractDataset implements IntegerDatase
 	}
 
 	@Override
+	public synchronized IntegerDatasetImpl synchronizedCopy() {
+		return (IntegerDatasetImpl) super.synchronizedCopy();
+	}
+
+	@Override
 	public IntegerDatasetImpl getView() {
 		IntegerDatasetImpl view = new IntegerDatasetImpl();
 		copyToView(this, view, true, true);
 		view.setData();
 		return view;
+	}
+
+	@Override
+	public IntegerDatasetImpl squeezeEnds() {
+		return (IntegerDatasetImpl) super.squeezeEnds();
+	}
+
+	@Override
+	public IntegerDatasetImpl squeeze() {
+		return (IntegerDatasetImpl) super.squeeze();
+	}
+
+	@Override
+	public IntegerDatasetImpl squeeze(boolean onlyFromEnds) {
+		return (IntegerDatasetImpl) super.squeeze(onlyFromEnds);
+	}
+
+	@Override
+	public IntegerDatasetImpl clone() {
+		return new IntegerDatasetImpl(this);
+	}
+
+	@Override
+	public IntegerDatasetImpl reshape(int... shape) {
+		return (IntegerDatasetImpl) super.reshape(shape);
+	}
+
+
+	@Override
+	public IntegerDatasetImpl getTransposedView(int... axes) {
+		return (IntegerDatasetImpl) super.getTransposedView(axes);
+	}
+
+	@Override
+	public IntegerDatasetImpl transpose(int... axes) {
+		return (IntegerDatasetImpl) super.transpose(axes);
+	}
+
+	@Override
+	public IntegerDatasetImpl swapAxes(int axis1, int axis2) {
+		return (IntegerDatasetImpl) super.swapAxes(axis1, axis2);
+	}
+
+	@Override
+	public IntegerDatasetImpl flatten() {
+		return (IntegerDatasetImpl) super.flatten();
+	}
+
+	@Override
+	public IntegerDatasetImpl fill(final Object obj) {
+		int dv = (int) DTypeUtils.toLong(obj); // PRIM_TYPE // FROM_OBJECT
+		IndexIterator iter = getIterator();
+		while (iter.hasNext()) {
+			data[iter.index] = dv;
+		}
+
+		setDirty();
+		return this;
 	}
 
 	/**

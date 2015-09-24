@@ -174,11 +174,6 @@ public class ShortDatasetImpl extends AbstractDataset implements ShortDataset { 
 		return super.hashCode();
 	}
 
-	@Override
-	public ShortDatasetImpl clone() {
-		return new ShortDatasetImpl(this);
-	}
-
 	/**
 	 * Create a dataset from an object which could be a Java list, array (of arrays...) or Number. Ragged
 	 * sequences or arrays are padded with zeros.
@@ -232,18 +227,6 @@ public class ShortDatasetImpl extends AbstractDataset implements ShortDataset { 
 		return new ShortDatasetImpl(shape).fill(1);
 	}
 
-	@Override
-	public ShortDatasetImpl fill(final Object obj) {
-		short dv = (short) DTypeUtils.toLong(obj); // PRIM_TYPE // FROM_OBJECT
-		IndexIterator iter = getIterator();
-		while (iter.hasNext()) {
-			data[iter.index] = dv;
-		}
-
-		setDirty();
-		return this;
-	}
-
 	/**
 	 * This is a typed version of {@link #getBuffer()}
 	 * @return data buffer as linear array
@@ -261,11 +244,74 @@ public class ShortDatasetImpl extends AbstractDataset implements ShortDataset { 
 	}
 
 	@Override
+	public synchronized ShortDatasetImpl synchronizedCopy() {
+		return (ShortDatasetImpl) super.synchronizedCopy();
+	}
+
+	@Override
 	public ShortDatasetImpl getView() {
 		ShortDatasetImpl view = new ShortDatasetImpl();
 		copyToView(this, view, true, true);
 		view.setData();
 		return view;
+	}
+
+	@Override
+	public ShortDatasetImpl squeezeEnds() {
+		return (ShortDatasetImpl) super.squeezeEnds();
+	}
+
+	@Override
+	public ShortDatasetImpl squeeze() {
+		return (ShortDatasetImpl) super.squeeze();
+	}
+
+	@Override
+	public ShortDatasetImpl squeeze(boolean onlyFromEnds) {
+		return (ShortDatasetImpl) super.squeeze(onlyFromEnds);
+	}
+
+	@Override
+	public ShortDatasetImpl clone() {
+		return new ShortDatasetImpl(this);
+	}
+
+	@Override
+	public ShortDatasetImpl reshape(int... shape) {
+		return (ShortDatasetImpl) super.reshape(shape);
+	}
+
+
+	@Override
+	public ShortDatasetImpl getTransposedView(int... axes) {
+		return (ShortDatasetImpl) super.getTransposedView(axes);
+	}
+
+	@Override
+	public ShortDatasetImpl transpose(int... axes) {
+		return (ShortDatasetImpl) super.transpose(axes);
+	}
+
+	@Override
+	public ShortDatasetImpl swapAxes(int axis1, int axis2) {
+		return (ShortDatasetImpl) super.swapAxes(axis1, axis2);
+	}
+
+	@Override
+	public ShortDatasetImpl flatten() {
+		return (ShortDatasetImpl) super.flatten();
+	}
+
+	@Override
+	public ShortDatasetImpl fill(final Object obj) {
+		short dv = (short) DTypeUtils.toLong(obj); // PRIM_TYPE // FROM_OBJECT
+		IndexIterator iter = getIterator();
+		while (iter.hasNext()) {
+			data[iter.index] = dv;
+		}
+
+		setDirty();
+		return this;
 	}
 
 	/**

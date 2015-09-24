@@ -86,5 +86,62 @@ public interface BooleanDataset extends Dataset { // CLASS_TYPE
 	void setItem(boolean value, int... pos); // PRIM_TYPE
 
 	@Override
-	public BooleanDataset getView();
+	BooleanDataset synchronizedCopy();
+
+	@Override
+	BooleanDataset getView();
+
+	@Override
+	BooleanDataset squeezeEnds();
+
+	@Override
+	BooleanDataset squeeze();
+
+	@Override
+	BooleanDataset squeeze(boolean onlyFromEnds);
+
+	@Override
+	BooleanDataset clone();
+
+	@Override
+	BooleanDataset reshape(int... shape);
+
+	@Override
+	BooleanDataset getTransposedView(int... axes);
+
+	@Override
+	BooleanDataset transpose(int... axes);
+
+	@Override
+	BooleanDataset swapAxes(int axis1, int axis2);
+
+	@Override
+	BooleanDataset flatten();
+
+	@Override
+	BooleanDataset fill(Object obj);
+
+	@Override
+	BooleanDataset sort(Integer axis);
+
+	@Override
+	BooleanDataset iadd(Object b);
+
+	@Override
+	BooleanDataset isubtract(Object b);
+
+	@Override
+	BooleanDataset imultiply(Object b);
+
+	@Override
+	BooleanDataset idivide(Object b);
+
+	@Override
+	BooleanDataset ifloor();
+
+	@Override
+	BooleanDataset iremainder(Object b);
+
+	@Override
+	BooleanDataset ipower(Object b);
 }

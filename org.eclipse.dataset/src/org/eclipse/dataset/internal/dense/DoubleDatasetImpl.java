@@ -174,11 +174,6 @@ public class DoubleDatasetImpl extends AbstractDataset implements DoubleDataset 
 		return super.hashCode();
 	}
 
-	@Override
-	public DoubleDatasetImpl clone() {
-		return new DoubleDatasetImpl(this);
-	}
-
 	/**
 	 * Create a dataset from an object which could be a Java list, array (of arrays...) or Number. Ragged
 	 * sequences or arrays are padded with zeros.
@@ -232,18 +227,6 @@ public class DoubleDatasetImpl extends AbstractDataset implements DoubleDataset 
 		return new DoubleDatasetImpl(shape).fill(1);
 	}
 
-	@Override
-	public DoubleDatasetImpl fill(final Object obj) {
-		double dv = DTypeUtils.toReal(obj); // PRIM_TYPE // FROM_OBJECT
-		IndexIterator iter = getIterator();
-		while (iter.hasNext()) {
-			data[iter.index] = dv;
-		}
-
-		setDirty();
-		return this;
-	}
-
 	/**
 	 * This is a typed version of {@link #getBuffer()}
 	 * @return data buffer as linear array
@@ -261,11 +244,74 @@ public class DoubleDatasetImpl extends AbstractDataset implements DoubleDataset 
 	}
 
 	@Override
+	public synchronized DoubleDatasetImpl synchronizedCopy() {
+		return (DoubleDatasetImpl) super.synchronizedCopy();
+	}
+
+	@Override
 	public DoubleDatasetImpl getView() {
 		DoubleDatasetImpl view = new DoubleDatasetImpl();
 		copyToView(this, view, true, true);
 		view.setData();
 		return view;
+	}
+
+	@Override
+	public DoubleDatasetImpl squeezeEnds() {
+		return (DoubleDatasetImpl) super.squeezeEnds();
+	}
+
+	@Override
+	public DoubleDatasetImpl squeeze() {
+		return (DoubleDatasetImpl) super.squeeze();
+	}
+
+	@Override
+	public DoubleDatasetImpl squeeze(boolean onlyFromEnds) {
+		return (DoubleDatasetImpl) super.squeeze(onlyFromEnds);
+	}
+
+	@Override
+	public DoubleDatasetImpl clone() {
+		return new DoubleDatasetImpl(this);
+	}
+
+	@Override
+	public DoubleDatasetImpl reshape(int... shape) {
+		return (DoubleDatasetImpl) super.reshape(shape);
+	}
+
+
+	@Override
+	public DoubleDatasetImpl getTransposedView(int... axes) {
+		return (DoubleDatasetImpl) super.getTransposedView(axes);
+	}
+
+	@Override
+	public DoubleDatasetImpl transpose(int... axes) {
+		return (DoubleDatasetImpl) super.transpose(axes);
+	}
+
+	@Override
+	public DoubleDatasetImpl swapAxes(int axis1, int axis2) {
+		return (DoubleDatasetImpl) super.swapAxes(axis1, axis2);
+	}
+
+	@Override
+	public DoubleDatasetImpl flatten() {
+		return (DoubleDatasetImpl) super.flatten();
+	}
+
+	@Override
+	public DoubleDatasetImpl fill(final Object obj) {
+		double dv = DTypeUtils.toReal(obj); // PRIM_TYPE // FROM_OBJECT
+		IndexIterator iter = getIterator();
+		while (iter.hasNext()) {
+			data[iter.index] = dv;
+		}
+
+		setDirty();
+		return this;
 	}
 
 	/**

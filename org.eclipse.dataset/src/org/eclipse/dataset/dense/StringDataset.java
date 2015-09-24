@@ -84,4 +84,64 @@ public interface StringDataset extends Dataset { // CLASS_TYPE
 	 * @param pos
 	 */
 	void setItem(String value, int... pos); // PRIM_TYPE
+
+	@Override
+	StringDataset synchronizedCopy();
+
+	@Override
+	StringDataset getView();
+
+	@Override
+	StringDataset squeezeEnds();
+
+	@Override
+	StringDataset squeeze();
+
+	@Override
+	StringDataset squeeze(boolean onlyFromEnds);
+
+	@Override
+	StringDataset clone();
+
+	@Override
+	StringDataset reshape(int... shape);
+
+	@Override
+	StringDataset getTransposedView(int... axes);
+
+	@Override
+	StringDataset transpose(int... axes);
+
+	@Override
+	StringDataset swapAxes(int axis1, int axis2);
+
+	@Override
+	StringDataset flatten();
+
+	@Override
+	StringDataset fill(Object obj);
+
+	@Override
+	StringDataset sort(Integer axis);
+
+	@Override
+	StringDataset iadd(Object b);
+
+	@Override
+	StringDataset isubtract(Object b);
+
+	@Override
+	StringDataset imultiply(Object b);
+
+	@Override
+	StringDataset idivide(Object b);
+
+	@Override
+	StringDataset ifloor();
+
+	@Override
+	StringDataset iremainder(Object b);
+
+	@Override
+	StringDataset ipower(Object b);
 }

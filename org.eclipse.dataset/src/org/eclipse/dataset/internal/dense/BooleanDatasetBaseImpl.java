@@ -173,11 +173,6 @@ public class BooleanDatasetBaseImpl extends AbstractDataset implements BooleanDa
 		return super.hashCode();
 	}
 
-	@Override
-	public BooleanDatasetBaseImpl clone() {
-		return new BooleanDatasetBaseImpl(this);
-	}
-
 	/**
 	 * Create a dataset from an object which could be a Java list, array (of arrays...) or Number. Ragged
 	 * sequences or arrays are padded with zeros.
@@ -206,18 +201,6 @@ public class BooleanDatasetBaseImpl extends AbstractDataset implements BooleanDa
 		return new BooleanDatasetBaseImpl(shape).fill(1);
 	}
 
-	@Override
-	public BooleanDatasetBaseImpl fill(final Object obj) {
-		boolean dv = DTypeUtils.toBoolean(obj); // PRIM_TYPE // FROM_OBJECT
-		IndexIterator iter = getIterator();
-		while (iter.hasNext()) {
-			data[iter.index] = dv;
-		}
-
-		setDirty();
-		return this;
-	}
-
 	/**
 	 * This is a typed version of {@link #getBuffer()}
 	 * @return data buffer as linear array
@@ -235,11 +218,74 @@ public class BooleanDatasetBaseImpl extends AbstractDataset implements BooleanDa
 	}
 
 	@Override
+	public synchronized BooleanDatasetBaseImpl synchronizedCopy() {
+		return (BooleanDatasetBaseImpl) super.synchronizedCopy();
+	}
+
+	@Override
 	public BooleanDatasetBaseImpl getView() {
 		BooleanDatasetBaseImpl view = new BooleanDatasetBaseImpl();
 		copyToView(this, view, true, true);
 		view.setData();
 		return view;
+	}
+
+	@Override
+	public BooleanDatasetBaseImpl squeezeEnds() {
+		return (BooleanDatasetBaseImpl) super.squeezeEnds();
+	}
+
+	@Override
+	public BooleanDatasetBaseImpl squeeze() {
+		return (BooleanDatasetBaseImpl) super.squeeze();
+	}
+
+	@Override
+	public BooleanDatasetBaseImpl squeeze(boolean onlyFromEnds) {
+		return (BooleanDatasetBaseImpl) super.squeeze(onlyFromEnds);
+	}
+
+	@Override
+	public BooleanDatasetBaseImpl clone() {
+		return new BooleanDatasetBaseImpl(this);
+	}
+
+	@Override
+	public BooleanDatasetBaseImpl reshape(int... shape) {
+		return (BooleanDatasetBaseImpl) super.reshape(shape);
+	}
+
+
+	@Override
+	public BooleanDatasetBaseImpl getTransposedView(int... axes) {
+		return (BooleanDatasetBaseImpl) super.getTransposedView(axes);
+	}
+
+	@Override
+	public BooleanDatasetBaseImpl transpose(int... axes) {
+		return (BooleanDatasetBaseImpl) super.transpose(axes);
+	}
+
+	@Override
+	public BooleanDatasetBaseImpl swapAxes(int axis1, int axis2) {
+		return (BooleanDatasetBaseImpl) super.swapAxes(axis1, axis2);
+	}
+
+	@Override
+	public BooleanDatasetBaseImpl flatten() {
+		return (BooleanDatasetBaseImpl) super.flatten();
+	}
+
+	@Override
+	public BooleanDatasetBaseImpl fill(final Object obj) {
+		boolean dv = DTypeUtils.toBoolean(obj); // PRIM_TYPE // FROM_OBJECT
+		IndexIterator iter = getIterator();
+		while (iter.hasNext()) {
+			data[iter.index] = dv;
+		}
+
+		setDirty();
+		return this;
 	}
 
 	/**

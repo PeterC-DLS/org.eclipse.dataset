@@ -84,4 +84,64 @@ public interface IntegerDataset extends Dataset { // CLASS_TYPE
 	 * @param pos
 	 */
 	void setItem(int value, int... pos); // PRIM_TYPE
+
+	@Override
+	IntegerDataset synchronizedCopy();
+
+	@Override
+	IntegerDataset getView();
+
+	@Override
+	IntegerDataset squeezeEnds();
+
+	@Override
+	IntegerDataset squeeze();
+
+	@Override
+	IntegerDataset squeeze(boolean onlyFromEnds);
+
+	@Override
+	IntegerDataset clone();
+
+	@Override
+	IntegerDataset reshape(int... shape);
+
+	@Override
+	IntegerDataset getTransposedView(int... axes);
+
+	@Override
+	IntegerDataset transpose(int... axes);
+
+	@Override
+	IntegerDataset swapAxes(int axis1, int axis2);
+
+	@Override
+	IntegerDataset flatten();
+
+	@Override
+	IntegerDataset fill(Object obj);
+
+	@Override
+	IntegerDataset sort(Integer axis);
+
+	@Override
+	IntegerDataset iadd(Object b);
+
+	@Override
+	IntegerDataset isubtract(Object b);
+
+	@Override
+	IntegerDataset imultiply(Object b);
+
+	@Override
+	IntegerDataset idivide(Object b);
+
+	@Override
+	IntegerDataset ifloor();
+
+	@Override
+	IntegerDataset iremainder(Object b);
+
+	@Override
+	IntegerDataset ipower(Object b);
 }

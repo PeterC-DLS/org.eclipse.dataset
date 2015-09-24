@@ -174,11 +174,6 @@ public class FloatDatasetImpl extends AbstractDataset implements FloatDataset { 
 		return super.hashCode();
 	}
 
-	@Override
-	public FloatDatasetImpl clone() {
-		return new FloatDatasetImpl(this);
-	}
-
 	/**
 	 * Create a dataset from an object which could be a Java list, array (of arrays...) or Number. Ragged
 	 * sequences or arrays are padded with zeros.
@@ -232,18 +227,6 @@ public class FloatDatasetImpl extends AbstractDataset implements FloatDataset { 
 		return new FloatDatasetImpl(shape).fill(1);
 	}
 
-	@Override
-	public FloatDatasetImpl fill(final Object obj) {
-		float dv = (float) DTypeUtils.toReal(obj); // PRIM_TYPE // FROM_OBJECT
-		IndexIterator iter = getIterator();
-		while (iter.hasNext()) {
-			data[iter.index] = dv;
-		}
-
-		setDirty();
-		return this;
-	}
-
 	/**
 	 * This is a typed version of {@link #getBuffer()}
 	 * @return data buffer as linear array
@@ -261,11 +244,74 @@ public class FloatDatasetImpl extends AbstractDataset implements FloatDataset { 
 	}
 
 	@Override
+	public synchronized FloatDatasetImpl synchronizedCopy() {
+		return (FloatDatasetImpl) super.synchronizedCopy();
+	}
+
+	@Override
 	public FloatDatasetImpl getView() {
 		FloatDatasetImpl view = new FloatDatasetImpl();
 		copyToView(this, view, true, true);
 		view.setData();
 		return view;
+	}
+
+	@Override
+	public FloatDatasetImpl squeezeEnds() {
+		return (FloatDatasetImpl) super.squeezeEnds();
+	}
+
+	@Override
+	public FloatDatasetImpl squeeze() {
+		return (FloatDatasetImpl) super.squeeze();
+	}
+
+	@Override
+	public FloatDatasetImpl squeeze(boolean onlyFromEnds) {
+		return (FloatDatasetImpl) super.squeeze(onlyFromEnds);
+	}
+
+	@Override
+	public FloatDatasetImpl clone() {
+		return new FloatDatasetImpl(this);
+	}
+
+	@Override
+	public FloatDatasetImpl reshape(int... shape) {
+		return (FloatDatasetImpl) super.reshape(shape);
+	}
+
+
+	@Override
+	public FloatDatasetImpl getTransposedView(int... axes) {
+		return (FloatDatasetImpl) super.getTransposedView(axes);
+	}
+
+	@Override
+	public FloatDatasetImpl transpose(int... axes) {
+		return (FloatDatasetImpl) super.transpose(axes);
+	}
+
+	@Override
+	public FloatDatasetImpl swapAxes(int axis1, int axis2) {
+		return (FloatDatasetImpl) super.swapAxes(axis1, axis2);
+	}
+
+	@Override
+	public FloatDatasetImpl flatten() {
+		return (FloatDatasetImpl) super.flatten();
+	}
+
+	@Override
+	public FloatDatasetImpl fill(final Object obj) {
+		float dv = (float) DTypeUtils.toReal(obj); // PRIM_TYPE // FROM_OBJECT
+		IndexIterator iter = getIterator();
+		while (iter.hasNext()) {
+			data[iter.index] = dv;
+		}
+
+		setDirty();
+		return this;
 	}
 
 	/**

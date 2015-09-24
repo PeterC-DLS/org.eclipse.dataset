@@ -174,11 +174,6 @@ public class ByteDatasetImpl extends AbstractDataset implements ByteDataset { //
 		return super.hashCode();
 	}
 
-	@Override
-	public ByteDatasetImpl clone() {
-		return new ByteDatasetImpl(this);
-	}
-
 	/**
 	 * Create a dataset from an object which could be a Java list, array (of arrays...) or Number. Ragged
 	 * sequences or arrays are padded with zeros.
@@ -232,18 +227,6 @@ public class ByteDatasetImpl extends AbstractDataset implements ByteDataset { //
 		return new ByteDatasetImpl(shape).fill(1);
 	}
 
-	@Override
-	public ByteDatasetImpl fill(final Object obj) {
-		byte dv = (byte) DTypeUtils.toLong(obj); // PRIM_TYPE // FROM_OBJECT
-		IndexIterator iter = getIterator();
-		while (iter.hasNext()) {
-			data[iter.index] = dv;
-		}
-
-		setDirty();
-		return this;
-	}
-
 	/**
 	 * This is a typed version of {@link #getBuffer()}
 	 * @return data buffer as linear array
@@ -261,11 +244,74 @@ public class ByteDatasetImpl extends AbstractDataset implements ByteDataset { //
 	}
 
 	@Override
+	public synchronized ByteDatasetImpl synchronizedCopy() {
+		return (ByteDatasetImpl) super.synchronizedCopy();
+	}
+
+	@Override
 	public ByteDatasetImpl getView() {
 		ByteDatasetImpl view = new ByteDatasetImpl();
 		copyToView(this, view, true, true);
 		view.setData();
 		return view;
+	}
+
+	@Override
+	public ByteDatasetImpl squeezeEnds() {
+		return (ByteDatasetImpl) super.squeezeEnds();
+	}
+
+	@Override
+	public ByteDatasetImpl squeeze() {
+		return (ByteDatasetImpl) super.squeeze();
+	}
+
+	@Override
+	public ByteDatasetImpl squeeze(boolean onlyFromEnds) {
+		return (ByteDatasetImpl) super.squeeze(onlyFromEnds);
+	}
+
+	@Override
+	public ByteDatasetImpl clone() {
+		return new ByteDatasetImpl(this);
+	}
+
+	@Override
+	public ByteDatasetImpl reshape(int... shape) {
+		return (ByteDatasetImpl) super.reshape(shape);
+	}
+
+
+	@Override
+	public ByteDatasetImpl getTransposedView(int... axes) {
+		return (ByteDatasetImpl) super.getTransposedView(axes);
+	}
+
+	@Override
+	public ByteDatasetImpl transpose(int... axes) {
+		return (ByteDatasetImpl) super.transpose(axes);
+	}
+
+	@Override
+	public ByteDatasetImpl swapAxes(int axis1, int axis2) {
+		return (ByteDatasetImpl) super.swapAxes(axis1, axis2);
+	}
+
+	@Override
+	public ByteDatasetImpl flatten() {
+		return (ByteDatasetImpl) super.flatten();
+	}
+
+	@Override
+	public ByteDatasetImpl fill(final Object obj) {
+		byte dv = (byte) DTypeUtils.toLong(obj); // PRIM_TYPE // FROM_OBJECT
+		IndexIterator iter = getIterator();
+		while (iter.hasNext()) {
+			data[iter.index] = dv;
+		}
+
+		setDirty();
+		return this;
 	}
 
 	/**

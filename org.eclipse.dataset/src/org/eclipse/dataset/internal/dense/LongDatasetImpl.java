@@ -174,11 +174,6 @@ public class LongDatasetImpl extends AbstractDataset implements LongDataset { //
 		return super.hashCode();
 	}
 
-	@Override
-	public LongDatasetImpl clone() {
-		return new LongDatasetImpl(this);
-	}
-
 	/**
 	 * Create a dataset from an object which could be a Java list, array (of arrays...) or Number. Ragged
 	 * sequences or arrays are padded with zeros.
@@ -232,18 +227,6 @@ public class LongDatasetImpl extends AbstractDataset implements LongDataset { //
 		return new LongDatasetImpl(shape).fill(1);
 	}
 
-	@Override
-	public LongDatasetImpl fill(final Object obj) {
-		long dv = DTypeUtils.toLong(obj); // PRIM_TYPE // FROM_OBJECT
-		IndexIterator iter = getIterator();
-		while (iter.hasNext()) {
-			data[iter.index] = dv;
-		}
-
-		setDirty();
-		return this;
-	}
-
 	/**
 	 * This is a typed version of {@link #getBuffer()}
 	 * @return data buffer as linear array
@@ -261,11 +244,74 @@ public class LongDatasetImpl extends AbstractDataset implements LongDataset { //
 	}
 
 	@Override
+	public synchronized LongDatasetImpl synchronizedCopy() {
+		return (LongDatasetImpl) super.synchronizedCopy();
+	}
+
+	@Override
 	public LongDatasetImpl getView() {
 		LongDatasetImpl view = new LongDatasetImpl();
 		copyToView(this, view, true, true);
 		view.setData();
 		return view;
+	}
+
+	@Override
+	public LongDatasetImpl squeezeEnds() {
+		return (LongDatasetImpl) super.squeezeEnds();
+	}
+
+	@Override
+	public LongDatasetImpl squeeze() {
+		return (LongDatasetImpl) super.squeeze();
+	}
+
+	@Override
+	public LongDatasetImpl squeeze(boolean onlyFromEnds) {
+		return (LongDatasetImpl) super.squeeze(onlyFromEnds);
+	}
+
+	@Override
+	public LongDatasetImpl clone() {
+		return new LongDatasetImpl(this);
+	}
+
+	@Override
+	public LongDatasetImpl reshape(int... shape) {
+		return (LongDatasetImpl) super.reshape(shape);
+	}
+
+
+	@Override
+	public LongDatasetImpl getTransposedView(int... axes) {
+		return (LongDatasetImpl) super.getTransposedView(axes);
+	}
+
+	@Override
+	public LongDatasetImpl transpose(int... axes) {
+		return (LongDatasetImpl) super.transpose(axes);
+	}
+
+	@Override
+	public LongDatasetImpl swapAxes(int axis1, int axis2) {
+		return (LongDatasetImpl) super.swapAxes(axis1, axis2);
+	}
+
+	@Override
+	public LongDatasetImpl flatten() {
+		return (LongDatasetImpl) super.flatten();
+	}
+
+	@Override
+	public LongDatasetImpl fill(final Object obj) {
+		long dv = DTypeUtils.toLong(obj); // PRIM_TYPE // FROM_OBJECT
+		IndexIterator iter = getIterator();
+		while (iter.hasNext()) {
+			data[iter.index] = dv;
+		}
+
+		setDirty();
+		return this;
 	}
 
 	/**
