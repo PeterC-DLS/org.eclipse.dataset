@@ -38,6 +38,7 @@ import org.eclipse.dataset.dense.ContiguousIteratorWithPosition;
 import org.eclipse.dataset.dense.Dataset;
 import org.eclipse.dataset.dense.DatasetFactory;
 import org.eclipse.dataset.dense.DatasetUtils;
+import org.eclipse.dataset.dense.DoubleDataset;
 import org.eclipse.dataset.dense.DTypeUtils;
 import org.eclipse.dataset.dense.IndexIterator;
 import org.eclipse.dataset.dense.IntegerDataset;
@@ -1475,7 +1476,7 @@ public abstract class AbstractDataset extends LazyDatasetBase implements Dataset
 		if (obj instanceof Dataset) {
 			ds = (Dataset) obj;
 		} else if (!(obj instanceof IDataset)) {
-			ds = DatasetFactory.createFromObject(obj, isComplex() || getElementsPerItem() == 1 ? FLOAT64 : ARRAYFLOAT64);
+			ds = DatasetFactory.createFromObject(isComplex() || getElementsPerItem() == 1 ? FLOAT64 : ARRAYFLOAT64, obj);
 		} else {
 			ds = DatasetUtils.convertToDataset((IDataset) obj);
 		}
@@ -1764,8 +1765,8 @@ public abstract class AbstractDataset extends LazyDatasetBase implements Dataset
 		IntegerDatasetImpl maxIndex = new IntegerDatasetImpl(nshape);
 		IntegerDatasetImpl minIndex = new IntegerDatasetImpl(nshape);
 		Dataset sum = DatasetFactory.zeros(nshape, DTypeUtils.getLargestDType(dtype));
-		DoubleDatasetImpl mean = new DoubleDatasetImpl(nshape);
-		DoubleDatasetImpl var = new DoubleDatasetImpl(nshape);
+		DoubleDataset mean = new DoubleDatasetImpl(nshape);
+		DoubleDataset var = new DoubleDatasetImpl(nshape);
 
 		IndexIterator qiter = max.getIterator(true);
 		int[] qpos = qiter.getPos();
@@ -2333,7 +2334,7 @@ public abstract class AbstractDataset extends LazyDatasetBase implements Dataset
 			return null;
 
 		if (ed.getSize() != getSize()) {
-			DoubleDatasetImpl errors = new DoubleDatasetImpl(shape);
+			DoubleDataset errors = new DoubleDatasetImpl(shape);
 			errors.setSlice(ed);
 			return errors;
 		}

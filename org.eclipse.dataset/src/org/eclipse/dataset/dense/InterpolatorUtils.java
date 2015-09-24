@@ -278,7 +278,7 @@ public class InterpolatorUtils {
 
 	private static InterpolatedPoint makePoint(Dataset x, Dataset y, int i, int j) {
 		Dataset realPoint = DatasetFactory.createFromObject(new double[] {x.getDouble(i, j), y.getDouble(i, j)});
-		Dataset coordPoint = DatasetFactory.createFromObject(new double[] { i, j }, Dataset.FLOAT64);
+		Dataset coordPoint = DatasetFactory.createFromObject(Dataset.FLOAT64, new double[] { i, j });
 		return new InterpolatedPoint(realPoint, coordPoint);
 	}
 

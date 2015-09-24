@@ -1026,7 +1026,7 @@ public class DatasetUtils {
 			utilsLogger.error("Length is less than one");
 			throw new IllegalArgumentException("Length is less than one");
 		} else if (length == 1) {
-			return DatasetFactory.createFromObject(start, dtype);
+			return DatasetFactory.createFromObject(dtype, start);
 		} else {
 			Dataset ds = DatasetFactory.zeros(new int[] {length}, dtype);
 			double num = stop - start;
@@ -1059,7 +1059,7 @@ public class DatasetUtils {
 			utilsLogger.error("Length is less than one");
 			throw new IllegalArgumentException("Length is less than one");
 		} else if (length == 1) {
-			return DatasetFactory.createFromObject(Math.pow(base, start), dtype);
+			return DatasetFactory.createFromObject(dtype, Math.pow(base, start));
 		} else {
 			Dataset ds = DatasetFactory.zeros(new int[] {length}, dtype);
 			double step = (stop - start) / (length - 1);
@@ -1248,6 +1248,54 @@ public class DatasetUtils {
 			return new CompoundFloatDatasetImpl(datasets);
 		case Dataset.FLOAT64:
 			return new CompoundDoubleDatasetImpl(datasets);
+		default:
+			utilsLogger.error("Dataset type not supported for this operation");
+			throw new UnsupportedOperationException("Dataset type not supported");
+		}
+	}
+
+	/**
+	 * Create a compound dataset from given dataset
+	 * @param dataset
+	 * @param itemSize
+	 * @return compound dataset
+	 */
+	public static CompoundDataset createCompoundDataset(final Dataset dataset, final int itemSize) {
+		int[] shape = dataset.getShape(); 
+		int[] nshape = shape;
+		if (itemSize > 1) {
+			int size = DatasetUtils.calculateSize(shape);
+			if (size % itemSize != 0) {
+				throw new IllegalArgumentException("Input dataset has number of items that is not a multiple of itemSize");
+			}
+			int d = shape.length;
+			int l = 1;
+			while (--d >= 0) {
+				l *= shape[d];
+				if (l % itemSize == 0) {
+					break;
+				}
+			}
+			assert d >= 0;
+			nshape = new int[d + 1];
+			for (int i = 0; i < d; i++) {
+				nshape[i] = shape[i];
+			}
+			nshape[d] = l / itemSize;
+		}
+		switch (dataset.getDType()) {
+		case Dataset.INT8:
+			return new CompoundByteDatasetImpl(itemSize, (byte[]) dataset.getBuffer(), nshape);
+		case Dataset.INT16:
+			return new CompoundShortDatasetImpl(itemSize, (short[]) dataset.getBuffer(), nshape);
+		case Dataset.INT32:
+			return new CompoundIntegerDatasetImpl(itemSize, (int[]) dataset.getBuffer(), nshape);
+		case Dataset.INT64:
+			return new CompoundLongDatasetImpl(itemSize, (long[]) dataset.getBuffer(), nshape);
+		case Dataset.FLOAT32:
+			return new CompoundFloatDatasetImpl(itemSize, (float[]) dataset.getBuffer(), nshape);
+		case Dataset.FLOAT64:
+			return new CompoundDoubleDatasetImpl(itemSize, (double[]) dataset.getBuffer(), nshape);
 		default:
 			utilsLogger.error("Dataset type not supported for this operation");
 			throw new UnsupportedOperationException("Dataset type not supported");

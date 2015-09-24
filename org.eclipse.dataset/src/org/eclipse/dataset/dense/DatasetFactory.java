@@ -13,9 +13,7 @@
 package org.eclipse.dataset.dense;
 
 import java.math.BigInteger;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.eclipse.dataset.IDataset;
 import org.eclipse.dataset.internal.dense.BooleanDatasetImpl;
@@ -155,26 +153,43 @@ public class DatasetFactory {
 	 * @return dataset
 	 */
 	public static Dataset createFromObject(Object obj) {
-		if (obj instanceof IDataset)
-			return DatasetUtils.convertToDataset((IDataset) obj);
-		if (obj instanceof BigInteger) {
-			obj = ((BigInteger) obj).longValue();
-		}
-
-		final int dtype = DTypeUtils.getDTypeFromObject(obj);
-		return createFromObject(obj, dtype);
+		return createFromObject(obj, null);
 	}
 
 	/**
 	 * Create a dataset from object (automatically detect dataset type)
 	 * 
 	 * @param obj
-	 *            can be a Java list, array or Number
-	 * @param isUnsigned
-	 *            if true, interpret integer values as unsigned by increasing element bit width
+	 *            can be Java list, array or Number
+	 * @param shape can be null
 	 * @return dataset
 	 */
-	public static Dataset createFromObject(final Object obj, boolean isUnsigned) {
+	public static Dataset createFromObject(Object obj, int... shape) {
+		if (obj instanceof IDataset) {
+			Dataset d = DatasetUtils.convertToDataset((IDataset) obj);
+			if (shape != null) {
+				d.setShape(shape);
+			}
+			return d;
+		}
+		if (obj instanceof BigInteger) {
+			obj = ((BigInteger) obj).longValue();
+		}
+
+		final int dtype = DTypeUtils.getDTypeFromObject(obj);
+		return createFromObject(dtype, obj, shape);
+	}
+
+	/**
+	 * Create a dataset from object (automatically detect dataset type)
+	 * @param isUnsigned
+	 *            if true, interpret integer values as unsigned by increasing element bit width
+	 * @param obj
+	 *            can be a Java list, array or Number
+	 * 
+	 * @return dataset
+	 */
+	public static Dataset createFromObject(boolean isUnsigned, final Object obj) {
 		Dataset a = createFromObject(obj);
 		if (isUnsigned) {
 			a = DatasetUtils.makeUnsigned(a);
@@ -184,14 +199,28 @@ public class DatasetFactory {
 
 	/**
 	 * Create a dataset from object
-	 * 
+	 * @param dtype
 	 * @param obj
 	 *            can be a Java list, array or Number
-	 * @param dtype
+	 * 
 	 * @return dataset
 	 * @throws IllegalArgumentException if dataset type is not known
 	 */
-	public static Dataset createFromObject(final Object obj, final int dtype) {
+	public static Dataset createFromObject(final int dtype, final Object obj) {
+		return createFromObject(dtype, obj, null);
+	}
+
+	/**
+	 * Create a dataset from object
+	 * @param dtype
+	 * @param obj
+	 *            can be a Java list, array or Number
+	 * 
+	 * @param shape can be null
+	 * @return dataset
+	 * @throws IllegalArgumentException if dataset type is not known
+	 */
+	public static Dataset createFromObject(final int dtype, final Object obj, final int... shape) {
 		if (obj instanceof IDataset)
 			return DatasetUtils.cast((IDataset) obj, dtype);
 
@@ -200,44 +229,67 @@ public class DatasetFactory {
 			return DatasetUtils.cast(createFromPrimitiveArray(obj, DTypeUtils.getDTypeFromClass(ca)), dtype);
 		}
 
+		Dataset d = null;
 		switch (dtype) {
 		case Dataset.BOOL:
-			return BooleanDatasetImpl.createFromObject(obj);
+			d = BooleanDatasetImpl.createFromObject(obj);
+			break;
 		case Dataset.INT8:
-			return ByteDatasetImpl.createFromObject(obj);
+			d = ByteDatasetImpl.createFromObject(obj);
+			break;
 		case Dataset.INT16:
-			return ShortDatasetImpl.createFromObject(obj);
+			d = ShortDatasetImpl.createFromObject(obj);
+			break;
 		case Dataset.INT32:
-			return IntegerDatasetImpl.createFromObject(obj);
+			d = IntegerDatasetImpl.createFromObject(obj);
+			break;
 		case Dataset.INT64:
-			return LongDatasetImpl.createFromObject(obj);
+			d = LongDatasetImpl.createFromObject(obj);
+			break;
 		case Dataset.ARRAYINT8:
-			return CompoundByteDatasetImpl.createFromObject(obj);
+			d = CompoundByteDatasetImpl.createFromObject(obj);
+			break;
 		case Dataset.ARRAYINT16:
-			return CompoundShortDatasetImpl.createFromObject(obj);
+			d = CompoundShortDatasetImpl.createFromObject(obj);
+			break;
 		case Dataset.ARRAYINT32:
-			return CompoundIntegerDatasetImpl.createFromObject(obj);
+			d = CompoundIntegerDatasetImpl.createFromObject(obj);
+			break;
 		case Dataset.ARRAYINT64:
-			return CompoundLongDatasetImpl.createFromObject(obj);
+			d = CompoundLongDatasetImpl.createFromObject(obj);
+			break;
 		case Dataset.FLOAT32:
-			return FloatDatasetImpl.createFromObject(obj);
+			d = FloatDatasetImpl.createFromObject(obj);
+			break;
 		case Dataset.FLOAT64:
-			return DoubleDatasetImpl.createFromObject(obj);
+			d = DoubleDatasetImpl.createFromObject(obj);
+			break;
 		case Dataset.ARRAYFLOAT32:
-			return CompoundFloatDatasetImpl.createFromObject(obj);
+			d = CompoundFloatDatasetImpl.createFromObject(obj);
+			break;
 		case Dataset.ARRAYFLOAT64:
-			return CompoundDoubleDatasetImpl.createFromObject(obj);
+			d = CompoundDoubleDatasetImpl.createFromObject(obj);
+			break;
 		case Dataset.COMPLEX64:
-			return ComplexFloatDatasetImpl.createFromObject(obj);
+			d = ComplexFloatDatasetImpl.createFromObject(obj);
+			break;
 		case Dataset.COMPLEX128:
-			return ComplexDoubleDatasetImpl.createFromObject(obj);
+			d = ComplexDoubleDatasetImpl.createFromObject(obj);
+			break;
 		case Dataset.STRING:
-			return StringDatasetImpl.createFromObject(obj);
+			d = StringDatasetImpl.createFromObject(obj);
+			break;
 		case Dataset.OBJECT:
-			return ObjectDatasetImpl.createFromObject(obj);
+			d = ObjectDatasetImpl.createFromObject(obj);
+			break;
 		default:
 			throw new IllegalArgumentException("Dataset type is not known");
 		}
+
+		if (shape != null) {
+			d.setShape(shape);
+		}
+		return d;
 	}
 
 	private static Dataset createFromPrimitiveArray(final Object array, final int dtype) {
@@ -522,5 +574,38 @@ public class DatasetFactory {
 			return ComplexDoubleDatasetImpl.ones(shape);
 		}
 		throw new IllegalArgumentException("dtype not a known compound type");
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <T extends Dataset> T createFromObject(Class<T> clazz, Object obj) {
+		int dtype = DTypeUtils.getDType(clazz);
+		if (DTypeUtils.isDTypeComplex(dtype)) {
+			return createFromObject(clazz, 2, obj);
+		}
+		return (T) createFromObject(dtype, obj);
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <T extends Dataset> T createFromObject(Class<T> clazz, int itemSize, Object obj) {
+		int dtype = DTypeUtils.getDType(clazz);
+		Dataset d = createFromObject(dtype, obj);
+		return (T) DatasetUtils.createCompoundDataset(d, itemSize);
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <T extends Dataset> T createFromObject(Class<T> clazz, Object obj, int... shape) {
+		T d = (T) createFromObject(DTypeUtils.getDType(clazz), obj);
+		d.setShape(shape);
+		return d;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public static <T extends Dataset> T zeros(Class<T> clazz, int... shape) {
+		return (T) zeros(shape, DTypeUtils.getDType(clazz));
+	}
+
+	@SuppressWarnings("unchecked")
+	public static <T extends Dataset> T zeros(Class<T> clazz, int itemSize, int[] shape) {
+		return (T) zeros(itemSize, shape, DTypeUtils.getDType(clazz));
 	}
 }

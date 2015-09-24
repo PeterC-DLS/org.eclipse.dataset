@@ -1497,21 +1497,21 @@ public class AbstractDatasetTest {
 		Dataset a, c;
 		c = DatasetUtils.cast(d, Dataset.INT32);
 		Assert.assertTrue(c.max().doubleValue() < d.max().doubleValue()); // check stored values
-		a = DatasetFactory.createFromObject(c, true);
+		a = DatasetFactory.createFromObject(true, c);
 		assertEquals("", 0, a.getLong(13));
 		for (int i = 0; i < 13; i++)
 			assertEquals("", udata[i], a.getLong(i));
 
 		c = DatasetUtils.cast(d, Dataset.INT16);
 		Assert.assertTrue(c.max().doubleValue() < d.max().doubleValue());
-		a = DatasetFactory.createFromObject(c, true);
+		a = DatasetFactory.createFromObject(true, c);
 		assertEquals("", 0, a.getLong(9));
 		for (int i = 0; i < 9; i++)
 			assertEquals("", udata[i], a.getLong(i));
 
 		c = DatasetUtils.cast(d, Dataset.INT8);
 		Assert.assertTrue(c.max().doubleValue() < d.max().doubleValue());
-		a = DatasetFactory.createFromObject(c, true);
+		a = DatasetFactory.createFromObject(true, c);
 		assertEquals("", 0, a.getLong(5));
 		for (int i = 0; i < 5; i++)
 			assertEquals("", udata[i], a.getLong(i));
