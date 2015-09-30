@@ -16,8 +16,11 @@ import java.io.FileNotFoundException;
 import java.net.URL;
 import java.util.Arrays;
 
+import org.eclipse.dataset.dense.DTypeUtils;
 import org.eclipse.dataset.dense.Dataset;
 import org.eclipse.dataset.dense.IndexIterator;
+import org.eclipse.dataset.dense.ObjectDataset;
+import org.eclipse.dataset.dense.StringDataset;
 import org.junit.Assert;
 
 public class TestUtils {
@@ -185,57 +188,6 @@ public class TestUtils {
 	}	
 	
 	/**
-	 * 
-	 * @return String pointing to the top of the hierarchy of large test files used in GDA tests
-	 * Set using vmarg e.g. -DGDALargeTestFilesLocation=/scratch/largetestfiles/
-	 * Note that it contains the final File.separatorChar so simply concat the result with the filename required
-	 * to get the full path.
-	 */
-	public static String getGDALargeTestFilesLocation(){
-		return System.getProperty("GDALargeTestFilesLocation");
-	}
-
-	/**
-	 * Assert equality of datasets where each element is true if abs(a - b) <= absTol + relTol*abs(b)
-	 * @param expected
-	 * @param calc
-	 * @param relTolerance
-	 * @param absTolerance
-	 */
-	public static void assertDatasetEquals(Dataset expected, Dataset calc, double relTolerance, double absTolerance) {
-		assertDatasetEquals(expected, calc, false, relTolerance, absTolerance);
-	}
-
-	/**
-	 * Assert equality of datasets where each element is true if abs(a - b) <= absTol + relTol*abs(b)
-	 * @param expected
-	 * @param calc
-	 * @param testDtype
-	 * @param relTolerance
-	 * @param absTolerance
-	 */
-	public static void assertDatasetEquals(Dataset expected, Dataset calc, boolean testDtype, double relTolerance, double absTolerance) {
-		Assert.assertEquals("Rank", expected.getRank(), calc.getRank());
-		Assert.assertEquals("Size", expected.getSize(), calc.getSize());
-		Assert.assertArrayEquals("Shape", expected.getShape(), calc.getShape());
-		Assert.assertEquals("Itemsize", expected.getElementsPerItem(), calc.getElementsPerItem());
-		if (testDtype) {
-			Assert.assertEquals("Dataset type", expected.getDType(), calc.getDType());
-		}
-		IndexIterator at = calc.getIterator(true);
-		IndexIterator bt = expected.getIterator();
-		final int is = calc.getElementsPerItem();
-
-		while (at.hasNext() && bt.hasNext()) {
-			for (int j = 0; j < is; j++) {
-				assertEquals("Value does not match at " + Arrays.toString(at.getPos()) + "; " + j +
-						": ", expected.getElementDoubleAbs(bt.index + j), calc.getElementDoubleAbs(at.index + j),
-						relTolerance, absTolerance);
-			}
-		}
-	}
-
-	/**
 	 * Assert equality if abs(e - a) <= max(1e-20, 1e-14*max(abs(e), abs(a)))
 	 * @param s message for assert exception
 	 * @param e expected value
@@ -244,7 +196,6 @@ public class TestUtils {
 	public static void assertEquals(String s, double e, double a) {
 		assertEquals(s, e, a, 1e-14, 1e-20);
 	}
-
 	/**
 	 * Assert equality if abs(e - a) <= max(absTol, relTol*max(abs(e), abs(a)))
 	 * @param s message for assert exception
@@ -256,5 +207,104 @@ public class TestUtils {
 	public static void assertEquals(String s, double e, double a, double relTol, double absTol) {
 		double t = Math.max(absTol, relTol*Math.max(Math.abs(e), Math.abs(a)));
 		Assert.assertEquals(s, e, a, t);
+	}
+
+	/**
+	 * Assert equality of datasets where each element is true if abs(e - a) <= max(absTol, relTol*max(abs(e), abs(a)))
+	 * @param expected
+	 * @param calc
+	 * @param testDType
+	 * @param relTolerance
+	 * @param absTolerance
+	 */
+	public static void assertDatasetEquals(Dataset expected, Dataset calc, boolean testDType, double relTol, double absTol) {
+		int dtype = expected.getDType();
+		if (testDType) {
+			Assert.assertEquals("Type", dtype, calc.getDType());
+			Assert.assertEquals("Items", expected.getElementsPerItem(), calc.getElementsPerItem());
+		}
+		Assert.assertEquals("Size", expected.getSize(), calc.getSize());
+		try {
+			Assert.assertArrayEquals("Shape", expected.getShape(), calc.getShape());
+		} catch (AssertionError e) {
+			if (calc.getSize() == 1) {
+				Assert.assertArrayEquals("Shape", new int[0], calc.getShape());
+			} else {
+				throw e;
+			}
+		}
+		IndexIterator at = expected.getIterator(true);
+		IndexIterator bt = calc.getIterator();
+		final int eis = expected.getElementsPerItem();
+		final int cis = calc.getElementsPerItem();
+		final int is = Math.max(eis, cis);
+	
+		if (dtype == Dataset.BOOL) {
+			while (at.hasNext() && bt.hasNext()) {
+				for (int j = 0; j < is; j++) {
+					boolean e = j >= eis ? false : expected.getElementBooleanAbs(at.index + j);
+					boolean c = j >= cis ? false : calc.getElementBooleanAbs(bt.index + j);
+					Assert.assertEquals("Value does not match at " + Arrays.toString(at.getPos()) + "; " + j +
+							": ", e, c);
+				}
+			}
+		} else if (DTypeUtils.isDTypeFloating(dtype)) {
+			while (at.hasNext() && bt.hasNext()) {
+				for (int j = 0; j < is; j++) {
+					double e = j >= eis ? 0 : expected.getElementDoubleAbs(at.index + j);
+					double c = j >= cis ? 0 : calc.getElementDoubleAbs(bt.index + j);
+					double t = Math.max(absTol, relTol*Math.max(Math.abs(e), Math.abs(c)));
+					Assert.assertEquals("Value does not match at " + Arrays.toString(at.getPos()) + "; " + j +
+							": ", e, c, t);
+				}
+			}
+		} else if (dtype == Dataset.STRING) {
+			StringDataset es = (StringDataset) expected;
+			StringDataset cs = (StringDataset) calc;
+	
+			while (at.hasNext() && bt.hasNext()) {
+				Assert.assertEquals("Value does not match at " + Arrays.toString(at.getPos()) + ": ",
+						es.getAbs(at.index), cs.getAbs(bt.index));
+			}
+		} else if (dtype == Dataset.OBJECT) {
+			ObjectDataset eo = (ObjectDataset) expected;
+			ObjectDataset co = (ObjectDataset) calc;
+	
+			while (at.hasNext() && bt.hasNext()) {
+				Assert.assertEquals("Value does not match at " + Arrays.toString(at.getPos()) + ": ",
+						eo.getAbs(at.index), co.getAbs(bt.index));
+			}
+		} else {
+			while (at.hasNext() && bt.hasNext()) {
+				for (int j = 0; j < is; j++) {
+					long e = j >= eis ? 0 : expected.getElementLongAbs(at.index + j);
+					long c = j >= cis ? 0 : calc.getElementLongAbs(bt.index + j);
+					Assert.assertEquals("Value does not match at " + Arrays.toString(at.getPos()) + "; " + j +
+							": ", e, c);
+				}
+			}
+		}
+	}
+
+	/**
+	 * Assert equality of datasets where each element is true if abs(e - a) <= max(absTol, relTol*max(abs(e), abs(a)))
+	 * @param expected
+	 * @param calc
+	 * @param relTolerance
+	 * @param absTolerance
+	 */
+	public static void assertDatasetEquals(Dataset expected, Dataset calc, double relTol, double absTol) {
+		assertDatasetEquals(expected, calc, true, relTol, absTol);
+	}
+
+	/**
+	 * Assert equality of datasets where each element is true if abs(e - a) <= max(abs1e-5, 1e-5*max(abs(e), abs(a)))
+	 * @param expected
+	 * @param calc
+	 * @param relTolerance
+	 * @param absTolerance
+	 */
+	public static void assertDatasetEquals(Dataset calc, Dataset expected) {
+		assertDatasetEquals(expected, calc, 1e-5, 1e-5);
 	}
 }

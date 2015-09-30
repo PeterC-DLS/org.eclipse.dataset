@@ -189,7 +189,7 @@ public class AggregateDataset extends LazyDatasetBase implements ILazyDataset {
 
 	@Override
 	public Class<?> getElementClass() {
-		return DTypeUtils.elementClass(dtype);
+		return DTypeUtils.getElementClass(dtype);
 	}
 
 	@Override

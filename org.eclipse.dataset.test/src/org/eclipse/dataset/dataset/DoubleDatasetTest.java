@@ -15,10 +15,9 @@ import static org.junit.Assert.assertEquals;
 import org.eclipse.dataset.Slice;
 import org.eclipse.dataset.dense.Dataset;
 import org.eclipse.dataset.dense.DatasetFactory;
+import org.eclipse.dataset.dense.DoubleDataset;
 import org.eclipse.dataset.dense.IndexIterator;
 import org.eclipse.dataset.dense.Maths;
-import org.eclipse.dataset.internal.dense.DoubleDatasetImpl;
-import org.eclipse.dataset.dense.DoubleDataset;
 import org.junit.Test;
 
 public class DoubleDatasetTest {
@@ -26,21 +25,21 @@ public class DoubleDatasetTest {
 	@Test
 	public void testConstructor() {
 		double[] da = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
-		DoubleDataset a = new DoubleDatasetImpl(da);
+		DoubleDataset a = DatasetFactory.createFromObject(DoubleDataset.class, da);
 
 		IndexIterator it = a.getIterator();
 		for (int i = 0; it.hasNext(); i++) {
 			assertEquals(i, a.getElementDoubleAbs(it.index), 1e-5 * i);
 		}
 
-		DoubleDataset b = new DoubleDatasetImpl(da, 3, 4);
+		DoubleDataset b = DatasetFactory.createFromObject(DoubleDataset.class, da, 3, 4);
 
 		it = b.getIterator();
 		for (int i = 0; it.hasNext(); i++) {
 			assertEquals(i, b.getElementDoubleAbs(it.index), 1e-5 * i);
 		}
 
-		DoubleDataset c = new DoubleDatasetImpl(a.getSliceView(new int[] {1}, null, new int[] {2}));
+		DoubleDataset c = DatasetFactory.createFromObject(DoubleDataset.class, a.getSliceView(new int[] {1}, null, new int[] {2}));
 		it = c.getIterator();
 		for (int i = 0; it.hasNext(); i++) {
 			assertEquals(2*i+1, c.getElementDoubleAbs(it.index), 1e-5 * i);
@@ -55,7 +54,7 @@ public class DoubleDatasetTest {
 	@Test
 	public void testGetter() {
 		double[] da = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
-		DoubleDataset a = new DoubleDatasetImpl(da);
+		DoubleDataset a = DatasetFactory.createFromObject(DoubleDataset.class, da);
 		int l = da.length;
 		for (int i = 0; i < l; i++) {
 			assertEquals(i, a.getDouble(i), 1e-5 * i);
@@ -78,13 +77,13 @@ public class DoubleDatasetTest {
 	@Test
 	public void testCreators() {
 		double dz = 0.5;
-		DoubleDataset z = DoubleDatasetImpl.createFromObject(dz);
+		DoubleDataset z = DatasetFactory.createFromObject(DoubleDataset.class, dz);
 		assertEquals(0, z.getRank());
 		assertEquals(1, z.getSize());
 		assertEquals(dz, z.getElementDoubleAbs(0), 1e-14);
 
 		double[] da = { 0, 1, 2, 3, 4, 5 };
-		DoubleDataset a = DoubleDatasetImpl.createFromObject(da);
+		DoubleDataset a = DatasetFactory.createFromObject(DoubleDataset.class, da);
 		assertEquals(1, a.getRank());
 		assertEquals(6, a.getSize());
 		assertEquals(6, a.getShape()[0]);
@@ -94,7 +93,7 @@ public class DoubleDatasetTest {
 		}
 
 		double[][] db = { { 0, 1, 2 }, { 3, 4, 5 } };
-		DoubleDataset b = DoubleDatasetImpl.createFromObject(db);
+		DoubleDataset b = DatasetFactory.createFromObject(DoubleDataset.class, db);
 		assertEquals(2, b.getRank());
 		assertEquals(6, b.getSize());
 		assertEquals(2, b.getShape()[0]);
@@ -105,7 +104,7 @@ public class DoubleDatasetTest {
 		}
 
 		double[][] dc = { { 0, 1, 2, 3 }, { 4, 5, 6 } };
-		DoubleDataset c = DoubleDatasetImpl.createFromObject(dc);
+		DoubleDataset c = DatasetFactory.createFromObject(DoubleDataset.class, dc);
 		assertEquals(2, c.getRank());
 		assertEquals(8, c.getSize());
 		assertEquals(2, c.getShape()[0]);
@@ -119,7 +118,7 @@ public class DoubleDatasetTest {
 		}
 
 		double[][] dd = { { 0, 1, 2 }, { 4, 5, 6, 7 } };
-		DoubleDataset d = DoubleDatasetImpl.createFromObject(dd);
+		DoubleDataset d = DatasetFactory.createFromObject(DoubleDataset.class, dd);
 		assertEquals(2, d.getRank());
 		assertEquals(8, d.getSize());
 		assertEquals(2, d.getShape()[0]);
@@ -168,7 +167,7 @@ public class DoubleDatasetTest {
 	@Test
 	public void testMaths() {
 		double[] da = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
-		DoubleDataset a = new DoubleDatasetImpl(da);
+		DoubleDataset a = DatasetFactory.createFromObject(DoubleDataset.class, da);
 
 		Dataset r = Maths.add(a, a);
 		IndexIterator it = r.getIterator();
@@ -180,7 +179,7 @@ public class DoubleDatasetTest {
 	@Test
 	public void testPosition() {
 		double[] da = { 0, 1, 2, 3, 4, 5, 6, 5, 4, 3, 2, 1 };
-		DoubleDataset a = new DoubleDatasetImpl(da);
+		DoubleDataset a = DatasetFactory.createFromObject(DoubleDataset.class, da);
 
 		assertEquals(6, a.maxPos()[0]);
 		assertEquals(0, a.minPos()[0]);

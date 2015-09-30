@@ -180,7 +180,7 @@ public class DTypeUtils {
 	}
 
 	public static boolean isDTypeElemental(int dtype) {
-		return dtype <= Dataset.COMPLEX128 || dtype == Dataset.RGB;
+		return dtype < Dataset.COMPLEX64;
 	}
 
 	public static boolean isDTypeFloating(int dtype) {
@@ -310,6 +310,24 @@ public class DTypeUtils {
 			logger.error("Argument is of unsupported class");
 			throw new IllegalArgumentException("Argument is of unsupported class");
 		}
+	}
+
+	public static int getLength(final Object b) {
+		if (b instanceof Number) {
+			return 1;
+		} else if (b instanceof Complex) {
+			return 1;
+		} else if (b instanceof List<?>) {
+			List<?> jl = (List<?>) b;
+			return jl.size();
+		} else if (b.getClass().isArray()) {
+			return Array.getLength(b);
+		} else if (b instanceof IDataset) {
+			IDataset db = (Dataset) b;
+			return db.getSize();
+		}
+	
+		throw new IllegalArgumentException("Cannot find length as object not supported");
 	}
 
 	public static double[] toDoubleArray(final Object b, final int itemSize) {
@@ -819,6 +837,33 @@ public class DTypeUtils {
 	}
 
 	/**
+	 * @param otype
+	 * @return elemental dataset type available for given dataset type
+	 */
+	public static int getElementalDType(final int otype) {
+		switch (otype) {
+		case Dataset.COMPLEX64:
+			return Dataset.FLOAT32;
+		case Dataset.COMPLEX128:
+			return Dataset.FLOAT64;
+		case Dataset.ARRAYINT8:
+			return Dataset.INT8;
+		case Dataset.ARRAYINT16:
+			return Dataset.INT16;
+		case Dataset.ARRAYINT32:
+			return Dataset.INT32;
+		case Dataset.ARRAYINT64:
+			return Dataset.INT64;
+		case Dataset.ARRAYFLOAT32:
+			return Dataset.FLOAT32;
+		case Dataset.ARRAYFLOAT64:
+			return Dataset.FLOAT64;
+		default:
+			return otype;
+		}
+	}
+
+	/**
 	 * Get dataset type from an object. The following are supported: Java Number objects, Apache common math Complex
 	 * objects, Java arrays and lists
 	 * 
@@ -843,7 +888,7 @@ public class DTypeUtils {
 			}
 		} else if (obj.getClass().isArray()) {
 			Class<?> ca = obj.getClass().getComponentType();
-			if (DTypeUtils.isComponentSupported(ca)) {
+			if (isClassSupportedAsElement(ca)) {
 				return getDTypeFromClass(ca);
 			}
 			int l = Array.getLength(obj);
@@ -865,18 +910,18 @@ public class DTypeUtils {
 	}
 
 	/**
-	 * @param comp
-	 * @return true if supported
+	 * @param clazz
+	 * @return true if class is supported as an element
 	 */
-	public static boolean isComponentSupported(Class<? extends Object> comp) {
-		return comp.isPrimitive() || Number.class.isAssignableFrom(comp) || comp.equals(Boolean.class) || comp.equals(Complex.class) || comp.equals(String.class);
+	public static boolean isClassSupportedAsElement(Class<? extends Object> clazz) {
+		return clazz.isPrimitive() || Number.class.isAssignableFrom(clazz) || clazz.equals(Boolean.class) || clazz.equals(Complex.class) || clazz.equals(String.class);
 	}
 
 	/**
 	 * @param dtype
-	 * @return (boxed) class of constituent element
+	 * @return (boxed) class of constituent element from dataset type
 	 */
-	public static Class<?> elementClass(final int dtype) {
+	public static Class<?> getElementClass(final int dtype) {
 		switch (dtype) {
 		case Dataset.BOOL:
 			return Boolean.class;

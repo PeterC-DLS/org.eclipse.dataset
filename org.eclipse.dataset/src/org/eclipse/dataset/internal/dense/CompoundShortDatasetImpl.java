@@ -14,6 +14,7 @@
 
 package org.eclipse.dataset.internal.dense;
 
+import java.lang.reflect.Array;
 import java.util.Arrays;
 
 import org.apache.commons.math.complex.Complex;
@@ -269,6 +270,10 @@ public class CompoundShortDatasetImpl extends AbstractCompoundDataset implements
 	 * @return dataset with contents given by input
 	 */
 	public static CompoundShortDatasetImpl createFromObject(final Object obj) {
+		Class<?> clazz = obj.getClass();
+		if (clazz.isArray() && Array.get(obj, 0) instanceof Dataset) {
+			return new CompoundShortDatasetImpl((Dataset[]) obj);
+		}
 		ShortDatasetImpl result = ShortDatasetImpl.createFromObject(obj); // CLASS_TYPE
 		return (CompoundShortDatasetImpl) DatasetUtils.createCompoundDatasetFromLastAxis(result, true);
 	}

@@ -18,16 +18,13 @@ import org.eclipse.dataset.TestUtils;
 import org.eclipse.dataset.dense.Dataset;
 import org.eclipse.dataset.dense.DatasetFactory;
 import org.eclipse.dataset.dense.DatasetUtils;
-import org.eclipse.dataset.dense.LinearAlgebra;
-import org.eclipse.dataset.dense.Maths;
-import org.eclipse.dataset.dense.Random;
-import org.eclipse.dataset.internal.dense.DoubleDatasetImpl;
-import org.eclipse.dataset.internal.dense.FloatDatasetImpl;
-import org.eclipse.dataset.internal.dense.IntegerDatasetImpl;
-import org.eclipse.dataset.dense.LinearAlgebra.NormOrder;
 import org.eclipse.dataset.dense.DoubleDataset;
 import org.eclipse.dataset.dense.FloatDataset;
 import org.eclipse.dataset.dense.IntegerDataset;
+import org.eclipse.dataset.dense.LinearAlgebra;
+import org.eclipse.dataset.dense.LinearAlgebra.NormOrder;
+import org.eclipse.dataset.dense.Maths;
+import org.eclipse.dataset.dense.Random;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -53,7 +50,7 @@ public class LinearAlgebraTest {
 		assertArrayEquals("Shape", new int[] {5, 2}, c.getShape());
 		assertEquals("Type", Dataset.FLOAT32, c.getDType());
 
-		Dataset d = new DoubleDatasetImpl(new double[] { 4400., 4730.,
+		Dataset d = DatasetFactory.createFromObject(DoubleDataset.class, new double[] { 4400., 4730.,
 			4532.,  4874., 4664., 5018., 4796.,  5162., 4928.,  5306. }, 5, 2);
 		assertTrue("Data does not match", d.cast(c.getDType()).equals(c));
 
@@ -95,7 +92,7 @@ public class LinearAlgebraTest {
 	@Test
 	public void testRandomDot() {
 		Dataset a = Random.randn(123.5, 23.4, 100);
-//		a = new DoubleDatasetImpl(new double[] {166.332, 139.135, 145.899, 112.830, 125.682, 95.614 });
+//		a = DatasetFactory.createFromObject(DoubleDataset.class, new double[] {166.332, 139.135, 145.899, 112.830, 125.682, 95.614 });
 
 		Dataset aa = Maths.square(a);
 
@@ -122,9 +119,9 @@ public class LinearAlgebraTest {
 		Dataset a;
 		Dataset b;
 
-		a = DoubleDatasetImpl.createRange(2);
-		b = DoubleDatasetImpl.createRange(3);
-		TestUtils.assertDatasetEquals(new DoubleDatasetImpl(new double[] {0, 0, 0, 0, 1, 2}, 2, 3), LinearAlgebra.outerProduct(a, b),
+		a = DatasetFactory.createRange(2, Dataset.FLOAT64);
+		b = DatasetFactory.createRange(3, Dataset.FLOAT64);
+		TestUtils.assertDatasetEquals(DatasetFactory.createFromObject(DoubleDataset.class, new double[] {0, 0, 0, 0, 1, 2}, 2, 3), LinearAlgebra.outerProduct(a, b),
 				1e-12, 1e-12);
 		
 		a = Random.randn(123.5, 23.4, 10);
@@ -141,47 +138,47 @@ public class LinearAlgebraTest {
 	public void testCross() {
 		Dataset a, b, c, d;
 
-		a = new IntegerDatasetImpl(new int[] {2, 3, 5}, 3);
-		b = new FloatDatasetImpl(new float[] {1, 4, 7, 2, 5, 8}, 2, 3);
+		a = DatasetFactory.createFromObject(IntegerDataset.class, new int[] {2, 3, 5}, 3);
+		b = DatasetFactory.createFromObject(FloatDataset.class, new float[] {1, 4, 7, 2, 5, 8}, 2, 3);
 
 		c = LinearAlgebra.crossProduct(a, b);
-		TestUtils.assertDatasetEquals(new DoubleDatasetImpl(new double[] {1, -9, 5, -1, -6, 4}, 2, 3), c, 1e-15, 1e-15);
+		TestUtils.assertDatasetEquals(DatasetFactory.createFromObject(DoubleDataset.class, new double[] {1, -9, 5, -1, -6, 4}, 2, 3), c, 1e-15, 1e-15);
 		d = LinearAlgebra.crossProduct(b, a);
 		TestUtils.assertDatasetEquals(Maths.negative(c), d, 1e-15, 1e-15);
 		c = LinearAlgebra.crossProduct(a, b, -1, -1, 0);
-		TestUtils.assertDatasetEquals(new DoubleDatasetImpl(new double[] {1, -1, -9, -6, 5, 4}, 3, 2), c, 1e-15, 1e-15);
+		TestUtils.assertDatasetEquals(DatasetFactory.createFromObject(DoubleDataset.class, new double[] {1, -1, -9, -6, 5, 4}, 3, 2), c, 1e-15, 1e-15);
 		d = LinearAlgebra.crossProduct(b, a, -1, -1, 0);
 		TestUtils.assertDatasetEquals(Maths.negative(c), d, 1e-15, 1e-15);
 
-		a = new IntegerDatasetImpl(new int[] {2, 3, 0}, 3);
+		a = DatasetFactory.createFromObject(IntegerDataset.class, new int[] {2, 3, 0}, 3);
 		c = LinearAlgebra.crossProduct(a, b);
-		TestUtils.assertDatasetEquals(new DoubleDatasetImpl(new double[] {21, -14, 5, 24, -16, 4}, 2, 3), c, 1e-15, 1e-15);
+		TestUtils.assertDatasetEquals(DatasetFactory.createFromObject(DoubleDataset.class, new double[] {21, -14, 5, 24, -16, 4}, 2, 3), c, 1e-15, 1e-15);
 		d = LinearAlgebra.crossProduct(b, a);
 		TestUtils.assertDatasetEquals(Maths.negative(c), d, 1e-15, 1e-15);
 
-		a = new IntegerDatasetImpl(new int[] {2, 3}, 2);
+		a = DatasetFactory.createFromObject(IntegerDataset.class, new int[] {2, 3}, 2);
 		c = LinearAlgebra.crossProduct(a, b);
-		TestUtils.assertDatasetEquals(new DoubleDatasetImpl(new double[] {21, -14, 5, 24, -16, 4}, 2, 3), c, 1e-15, 1e-15);
+		TestUtils.assertDatasetEquals(DatasetFactory.createFromObject(DoubleDataset.class, new double[] {21, -14, 5, 24, -16, 4}, 2, 3), c, 1e-15, 1e-15);
 		d = LinearAlgebra.crossProduct(b, a);
 		TestUtils.assertDatasetEquals(Maths.negative(c), d, 1e-15, 1e-15);
 
-		a = new IntegerDatasetImpl(new int[] {2, 3, 5}, 3);
-		b = new FloatDatasetImpl(new float[] {1, 4, 0, 2, 5, 0}, 2, 3);
+		a = DatasetFactory.createFromObject(IntegerDataset.class, new int[] {2, 3, 5}, 3);
+		b = DatasetFactory.createFromObject(FloatDataset.class, new float[] {1, 4, 0, 2, 5, 0}, 2, 3);
 		c = LinearAlgebra.crossProduct(a, b);
-		TestUtils.assertDatasetEquals(new DoubleDatasetImpl(new double[] {-20, 5, 5, -25, 10, 4}, 2, 3), c, 1e-15, 1e-15);
+		TestUtils.assertDatasetEquals(DatasetFactory.createFromObject(DoubleDataset.class, new double[] {-20, 5, 5, -25, 10, 4}, 2, 3), c, 1e-15, 1e-15);
 		d = LinearAlgebra.crossProduct(b, a);
 		TestUtils.assertDatasetEquals(Maths.negative(c), d, 1e-15, 1e-15);
 
-		b = new FloatDatasetImpl(new float[] {1, 4, 2, 5}, 2, 2);
+		b = DatasetFactory.createFromObject(FloatDataset.class, new float[] {1, 4, 2, 5}, 2, 2);
 		c = LinearAlgebra.crossProduct(a, b);
-		TestUtils.assertDatasetEquals(new DoubleDatasetImpl(new double[] {-20, 5, 5, -25, 10, 4}, 2, 3), c, 1e-15, 1e-15);
+		TestUtils.assertDatasetEquals(DatasetFactory.createFromObject(DoubleDataset.class, new double[] {-20, 5, 5, -25, 10, 4}, 2, 3), c, 1e-15, 1e-15);
 		d = LinearAlgebra.crossProduct(b, a);
 		TestUtils.assertDatasetEquals(Maths.negative(c), d, 1e-15, 1e-15);
 
-		a = new IntegerDatasetImpl(new int[] {2, 3}, 2);
-		b = new FloatDatasetImpl(new float[] {1, 4, 2, 5}, 2, 2);
+		a = DatasetFactory.createFromObject(IntegerDataset.class, new int[] {2, 3}, 2);
+		b = DatasetFactory.createFromObject(FloatDataset.class, new float[] {1, 4, 2, 5}, 2, 2);
 		c = LinearAlgebra.crossProduct(a, b);
-		TestUtils.assertDatasetEquals(new DoubleDatasetImpl(new double[] {5, 4}, 2), c, 1e-15, 1e-15);
+		TestUtils.assertDatasetEquals(DatasetFactory.createFromObject(DoubleDataset.class, new double[] {5, 4}, 2), c, 1e-15, 1e-15);
 		d = LinearAlgebra.crossProduct(b, a);
 		TestUtils.assertDatasetEquals(Maths.negative(c), d, 1e-15, 1e-15);
 	}
@@ -238,37 +235,37 @@ public class LinearAlgebraTest {
 		assertEquals(40, LinearAlgebra.trace(a, 1, 0, 1).getInt());
 
 		a = DatasetFactory.createRange(60, Dataset.INT32).reshape(3, 4, 5);
-		TestUtils.assertDatasetEquals(new IntegerDatasetImpl(new int[]{36, 116, 196}, null), LinearAlgebra.trace(a, 0, 1, 2), true, 1e-12, 1e-12);
+		TestUtils.assertDatasetEquals(DatasetFactory.createFromObject(IntegerDataset.class, new int[]{36, 116, 196}, null), LinearAlgebra.trace(a, 0, 1, 2), true, 1e-12, 1e-12);
 	}
 
 	@Test
 	public void testKronecker() {
-		Dataset a = DatasetFactory.createFromObject(new int[] {1, 10, 100}, Dataset.INT32);
-		Dataset b = DatasetFactory.createFromObject(new int[] {5, 6, 7}, Dataset.INT32);
+		Dataset a = DatasetFactory.createFromObject(Dataset.INT32, new int[] {1, 10, 100});
+		Dataset b = DatasetFactory.createFromObject(Dataset.INT32, new int[] {5, 6, 7});
 		
-		TestUtils.assertDatasetEquals(new IntegerDatasetImpl(new int[]{5, 6, 7, 50, 60, 70, 500, 600, 700}, null), LinearAlgebra.kroneckerProduct(a, b), true, 1e-12, 1e-12);
-		TestUtils.assertDatasetEquals(new IntegerDatasetImpl(new int[]{5, 50, 500, 6, 60, 600, 7, 70, 700}, null), LinearAlgebra.kroneckerProduct(b, a), true, 1e-12, 1e-12);
+		TestUtils.assertDatasetEquals(DatasetFactory.createFromObject(IntegerDataset.class, new int[]{5, 6, 7, 50, 60, 70, 500, 600, 700}, null), LinearAlgebra.kroneckerProduct(a, b), true, 1e-12, 1e-12);
+		TestUtils.assertDatasetEquals(DatasetFactory.createFromObject(IntegerDataset.class, new int[]{5, 50, 500, 6, 60, 600, 7, 70, 700}, null), LinearAlgebra.kroneckerProduct(b, a), true, 1e-12, 1e-12);
 
 		a = DatasetUtils.eye(2, 2, 0, Dataset.INT16);
 		b = DatasetFactory.ones(new int[] {2, 2}, Dataset.FLOAT32);
-		TestUtils.assertDatasetEquals(new FloatDatasetImpl(new float[]{1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 1, 1}, 4, 4), LinearAlgebra.kroneckerProduct(a, b), true, 1e-12, 1e-12);
+		TestUtils.assertDatasetEquals(DatasetFactory.createFromObject(FloatDataset.class, new float[]{1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 1, 1, 0, 0, 1, 1}, 4, 4), LinearAlgebra.kroneckerProduct(a, b), true, 1e-12, 1e-12);
 	}
 
 	@Ignore("Test disabled, RealMatrix.power requires Apache Commons Math3")
 	@Test
 	public void testPower() {
-		Dataset a = new IntegerDatasetImpl(new int[] {0, 1, -1, 0}, 2, 2);
+		Dataset a = DatasetFactory.createFromObject(IntegerDataset.class, new int[] {0, 1, -1, 0}, 2, 2);
 
-		TestUtils.assertDatasetEquals(new IntegerDatasetImpl(new int[]{0, -1, 1, 0}, 2, 2), LinearAlgebra.power(a, 3), true, 1e-12, 1e-12);
-		TestUtils.assertDatasetEquals(new DoubleDatasetImpl(new double[]{0, 1, -1, 0}, 2, 2), LinearAlgebra.power(a, -3), true, 1e-12, 1e-12);
+		TestUtils.assertDatasetEquals(DatasetFactory.createFromObject(IntegerDataset.class, new int[]{0, -1, 1, 0}, 2, 2), LinearAlgebra.power(a, 3), true, 1e-12, 1e-12);
+		TestUtils.assertDatasetEquals(DatasetFactory.createFromObject(DoubleDataset.class, new double[]{0, 1, -1, 0}, 2, 2), LinearAlgebra.power(a, -3), true, 1e-12, 1e-12);
 
 		TestUtils.assertDatasetEquals(DatasetUtils.eye(4, 4, 0, Dataset.INT32), LinearAlgebra.power(DatasetFactory.zeros(new int[] {4, 4}, Dataset.INT32), 0), true, 1e-12, 1e-12);
 	}
 
 	@Test
 	public void testSolve() {
-		Dataset a = new IntegerDatasetImpl(new int[] {3, 1, 1, 2}, 2, 2);
-		Dataset b = new IntegerDatasetImpl(new int[] {9, 8}, null);
-		TestUtils.assertDatasetEquals(new DoubleDatasetImpl(new double[]{2, 3}), LinearAlgebra.solve(a, b), true, 1e-12, 1e-12);
+		Dataset a = DatasetFactory.createFromObject(IntegerDataset.class, new int[] {3, 1, 1, 2}, 2, 2);
+		Dataset b = DatasetFactory.createFromObject(IntegerDataset.class, new int[] {9, 8}, null);
+		TestUtils.assertDatasetEquals(DatasetFactory.createFromObject(DoubleDataset.class, new double[]{2, 3}), LinearAlgebra.solve(a, b), true, 1e-12, 1e-12);
 	}
 }

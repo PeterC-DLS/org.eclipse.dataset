@@ -467,7 +467,7 @@ public abstract class AbstractDataset extends LazyDatasetBase implements Dataset
 
 	@Override
 	public Class<?> getElementClass() {
-		return DTypeUtils.elementClass(getDType());
+		return DTypeUtils.getElementClass(getDType());
 	}
 
 	@Override

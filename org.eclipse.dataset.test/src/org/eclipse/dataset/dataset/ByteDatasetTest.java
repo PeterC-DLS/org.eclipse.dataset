@@ -15,7 +15,6 @@ import org.eclipse.dataset.dense.ByteDataset;
 import org.eclipse.dataset.dense.Dataset;
 import org.eclipse.dataset.dense.DatasetFactory;
 import org.eclipse.dataset.dense.IndexIterator;
-import org.eclipse.dataset.internal.dense.ByteDatasetImpl;
 import org.junit.Test;
 
 public class ByteDatasetTest {
@@ -23,14 +22,14 @@ public class ByteDatasetTest {
 	@Test
 	public void testConstructor() {
 		byte[] da = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
-		ByteDataset a = new ByteDatasetImpl(da);
+		ByteDataset a = DatasetFactory.createFromObject(ByteDataset.class, da);
 
 		IndexIterator it = a.getIterator();
 		for (int i = 0; it.hasNext(); i++) {
 			assertEquals(i, a.getElementLongAbs(it.index));
 		}
 
-		ByteDataset b = new ByteDatasetImpl(da, 3, 4);
+		ByteDataset b = DatasetFactory.createFromObject(ByteDataset.class, da, 3, 4);
 
 		it = b.getIterator();
 		for (int i = 0; it.hasNext(); i++) {

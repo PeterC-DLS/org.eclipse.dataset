@@ -14,6 +14,7 @@
 
 package org.eclipse.dataset.internal.dense;
 
+import java.lang.reflect.Array;
 import java.util.Arrays;
 
 import org.apache.commons.math.complex.Complex;
@@ -269,6 +270,10 @@ public class CompoundFloatDatasetImpl extends AbstractCompoundDataset implements
 	 * @return dataset with contents given by input
 	 */
 	public static CompoundFloatDatasetImpl createFromObject(final Object obj) {
+		Class<?> clazz = obj.getClass();
+		if (clazz.isArray() && Array.get(obj, 0) instanceof Dataset) {
+			return new CompoundFloatDatasetImpl((Dataset[]) obj);
+		}
 		FloatDatasetImpl result = FloatDatasetImpl.createFromObject(obj); // CLASS_TYPE
 		return (CompoundFloatDatasetImpl) DatasetUtils.createCompoundDatasetFromLastAxis(result, true);
 	}

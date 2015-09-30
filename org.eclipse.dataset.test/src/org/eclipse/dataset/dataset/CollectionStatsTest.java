@@ -12,8 +12,8 @@ package org.eclipse.dataset.dataset;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.dataset.DoubleUtils;
 import org.eclipse.dataset.IDataset;
+import org.eclipse.dataset.TestUtils;
 import org.eclipse.dataset.dense.CollectionStats;
 import org.eclipse.dataset.dense.Dataset;
 import org.eclipse.dataset.dense.DatasetFactory;
@@ -54,8 +54,8 @@ public class CollectionStatsTest {
 	   if (median.getShape()[1]!=2) throw new Exception("Median shape not correct!");
 	   
 	   final Dataset mean = CollectionStats.mean(SETS2D);
-	   if (!DoubleUtils.equalsWithinTolerance(mean.getDouble(0,0), 100.8d, 0.01)) throw new Exception("Mean not calculated correctly!");
-	   if (!DoubleUtils.equalsWithinTolerance(mean.getDouble(1,1), 103.2d, 0.01)) throw new Exception("Mean not calculated correctly!");  
+	   TestUtils.assertEquals("Mean not calculated correctly!", mean.getDouble(0, 0), 100.8);
+	   TestUtils.assertEquals("Mean not calculated correctly!", mean.getDouble(1, 1), 103.2);
    }
 
    @Test
@@ -66,8 +66,8 @@ public class CollectionStatsTest {
 	   if (median.getDouble(4)!=5) throw new Exception("Median not calculated correctly!");
 	   
 	   final Dataset mean = CollectionStats.mean(SETS1D);
-	   if (!DoubleUtils.equalsWithinTolerance(mean.getDouble(0), 100.8, 0.0001)) throw new Exception("Mean not calculated correctly!");
-	   if (!DoubleUtils.equalsWithinTolerance(mean.getDouble(4), 104, 0.0001)) throw new Exception("Mean not calculated correctly!");  
+	   TestUtils.assertEquals("Mean not calculated correctly!", mean.getDouble(0), 100.8);
+	   TestUtils.assertEquals("Mean not calculated correctly!", mean.getDouble(4), 104);
     }
 
    // Disable this test as it has an unresolvable dependency at the moment.

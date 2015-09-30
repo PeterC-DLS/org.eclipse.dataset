@@ -14,6 +14,7 @@
 
 package org.eclipse.dataset.internal.dense;
 
+import java.lang.reflect.Array;
 import java.util.Arrays;
 
 import org.apache.commons.math.complex.Complex; // NAN_OMIT
@@ -269,6 +270,10 @@ public class CompoundDoubleDatasetImpl extends AbstractCompoundDataset implement
 	 * @return dataset with contents given by input
 	 */
 	public static CompoundDoubleDatasetImpl createFromObject(final Object obj) {
+		Class<?> clazz = obj.getClass();
+		if (clazz.isArray() && Array.get(obj, 0) instanceof Dataset) {
+			return new CompoundDoubleDatasetImpl((Dataset[]) obj);
+		}
 		DoubleDatasetImpl result = DoubleDatasetImpl.createFromObject(obj); // CLASS_TYPE
 		return (CompoundDoubleDatasetImpl) DatasetUtils.createCompoundDatasetFromLastAxis(result, true);
 	}

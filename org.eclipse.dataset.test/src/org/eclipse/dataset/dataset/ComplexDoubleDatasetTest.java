@@ -16,19 +16,18 @@ import java.util.List;
 
 import org.apache.commons.math.complex.Complex;
 import org.eclipse.dataset.Slice;
+import org.eclipse.dataset.dense.ComplexDoubleDataset;
 import org.eclipse.dataset.dense.Dataset;
 import org.eclipse.dataset.dense.DatasetFactory;
 import org.eclipse.dataset.dense.IndexIterator;
 import org.eclipse.dataset.dense.Maths;
-import org.eclipse.dataset.internal.dense.ComplexDoubleDatasetImpl;
-import org.eclipse.dataset.dense.ComplexDoubleDataset;
 import org.junit.Test;
 
 public class ComplexDoubleDatasetTest {
 	@Test
 	public void testConstructor() {
 		double[] da = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
-		ComplexDoubleDataset a = new ComplexDoubleDatasetImpl(da);
+		ComplexDoubleDataset a = DatasetFactory.createFromObject(ComplexDoubleDataset.class, da);
 
 		assertEquals(Dataset.COMPLEX128, a.getDType());
 		assertEquals(2, a.getElementsPerItem());
@@ -39,14 +38,14 @@ public class ComplexDoubleDatasetTest {
 			assertEquals(i*2, a.getElementDoubleAbs(it.index), 1e-5*i);
 		}
 
-		ComplexDoubleDataset b = new ComplexDoubleDatasetImpl(da, 3, 2);
+		ComplexDoubleDataset b = DatasetFactory.createFromObject(ComplexDoubleDataset.class, da, 3, 2);
 
 		it = b.getIterator();
 		for (int i = 0; it.hasNext(); i++) {
 			assertEquals(i*2, b.getElementDoubleAbs(it.index), 1e-5*i);
 		}
 
-		ComplexDoubleDataset c = new ComplexDoubleDatasetImpl(a.getSliceView(new int[] {1}, null, new int[] {2}));
+		ComplexDoubleDataset c = DatasetFactory.createFromObject(ComplexDoubleDataset.class, a.getSliceView(new int[] {1}, null, new int[] {2}));
 		it = c.getIterator();
 		for (int i = 0; it.hasNext(); i++) {
 			assertEquals(4*i+2, c.getElementDoubleAbs(it.index), 1e-5 * i);
@@ -54,7 +53,7 @@ public class ComplexDoubleDatasetTest {
 
 		List<Complex> list = new ArrayList<Complex>();
 		list.add(new Complex(0.5, 1.0));
-		ComplexDoubleDataset z = ComplexDoubleDatasetImpl.createFromObject(list);
+		ComplexDoubleDataset z = DatasetFactory.createFromObject(ComplexDoubleDataset.class, list);
 		assertEquals(0.5, z.getComplex(0).getReal(), 1e-6);
 		assertEquals(1.0, z.getComplex(0).getImaginary(), 1e-6);
 
@@ -74,7 +73,7 @@ public class ComplexDoubleDatasetTest {
 	@Test
 	public void testGetter() {
 		double[] da = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
-		ComplexDoubleDataset a = new ComplexDoubleDatasetImpl(da);
+		ComplexDoubleDataset a = DatasetFactory.createFromObject(ComplexDoubleDataset.class, da);
 
 		int l = da.length / 2;
 		for (int i = 0; i < l; i++) {

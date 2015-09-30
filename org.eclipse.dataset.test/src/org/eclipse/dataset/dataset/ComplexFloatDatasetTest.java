@@ -11,18 +11,18 @@ package org.eclipse.dataset.dataset;
 
 import static org.junit.Assert.assertEquals;
 
+import org.eclipse.dataset.dense.ComplexFloatDataset;
 import org.eclipse.dataset.dense.Dataset;
+import org.eclipse.dataset.dense.DatasetFactory;
 import org.eclipse.dataset.dense.IndexIterator;
 import org.eclipse.dataset.dense.Maths;
-import org.eclipse.dataset.internal.dense.ComplexFloatDatasetImpl;
-import org.eclipse.dataset.dense.ComplexFloatDataset;
 import org.junit.Test;
 
 public class ComplexFloatDatasetTest {
 	@Test
 	public void testConstructor() {
 		float[] da = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 };
-		ComplexFloatDataset a = new ComplexFloatDatasetImpl(da);
+		ComplexFloatDataset a = DatasetFactory.createFromObject(ComplexFloatDataset.class, da);
 
 		assertEquals(Dataset.COMPLEX64, a.getDType());
 		assertEquals(2, a.getElementsPerItem());
@@ -33,7 +33,7 @@ public class ComplexFloatDatasetTest {
 			assertEquals(i*2, a.getElementDoubleAbs(it.index), 1e-5*i);
 		}
 
-		ComplexFloatDataset b = new ComplexFloatDatasetImpl(da, 3, 2);
+		ComplexFloatDataset b = DatasetFactory.createFromObject(ComplexFloatDataset.class, da, 3, 2);
 
 		it = b.getIterator();
 		for (int i = 0; it.hasNext(); i++) {

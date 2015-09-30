@@ -701,6 +701,9 @@ public class DatasetUtils {
 			case Dataset.COMPLEX128:
 				c = new ComplexDoubleDatasetImpl(a);
 				break;
+			case Dataset.RGB:
+				c = a instanceof CompoundDataset ? RGBDataset.createFromCompoundDataset((CompoundDataset) a) : new RGBDataset(a);
+				break;
 			default:
 				utilsLogger.error("Dataset of unknown type!");
 				break;
@@ -2659,7 +2662,7 @@ public class DatasetUtils {
 		if (ca != null) {
 			final int l = Array.getLength(obj);
 			DatasetUtils.updateShape(ldims, depth, l);
-			if (DTypeUtils.isComponentSupported(ca)) {
+			if (DTypeUtils.isClassSupportedAsElement(ca)) {
 				return true;
 			}
 			for (int i = 0; i < l; i++) {
