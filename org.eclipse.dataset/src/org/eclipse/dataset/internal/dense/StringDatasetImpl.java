@@ -252,7 +252,7 @@ public class StringDatasetImpl extends StringDatasetBaseImpl {
 
 	@Override
 	public StringDatasetImpl getSlice(final int[] start, final int[] stop, final int[] step) {
-		StringDatasetBaseImpl result = (StringDatasetBaseImpl) super.getSlice(start, stop, step);
+		StringDatasetBaseImpl result = super.getSlice(start, stop, step);
 
 		return new StringDatasetImpl(result.data, result.shape);
 	}

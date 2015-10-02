@@ -237,7 +237,7 @@ public class BooleanDatasetImpl extends BooleanDatasetBaseImpl {
 
 	@Override
 	public BooleanDatasetImpl getSlice(final int[] start, final int[] stop, final int[] step) {
-		BooleanDatasetBaseImpl result = (BooleanDatasetBaseImpl) super.getSlice(start, stop, step);
+		BooleanDatasetBaseImpl result = super.getSlice(start, stop, step);
 
 		return new BooleanDatasetImpl(result.data, result.shape);
 	}

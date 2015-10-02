@@ -12,7 +12,7 @@ package org.eclipse.dataset.dense;
 /**
  * Interface for dataset of bytes // PRIM_TYPE
  */
-public interface ByteDataset extends Dataset { // CLASS_TYPE
+public interface ByteDataset extends GenericDataset<ByteDataset> { // CLASS_TYPE
 
 	/**
 	 * This is a typed version of {@link #getBuffer()}
@@ -84,64 +84,4 @@ public interface ByteDataset extends Dataset { // CLASS_TYPE
 	 * @param pos
 	 */
 	void setItem(byte value, int... pos); // PRIM_TYPE
-
-	@Override
-	ByteDataset synchronizedCopy();
-
-	@Override
-	ByteDataset getView();
-
-	@Override
-	ByteDataset squeezeEnds();
-
-	@Override
-	ByteDataset squeeze();
-
-	@Override
-	ByteDataset squeeze(boolean onlyFromEnds);
-
-	@Override
-	ByteDataset clone();
-
-	@Override
-	ByteDataset reshape(int... shape);
-
-	@Override
-	ByteDataset getTransposedView(int... axes);
-
-	@Override
-	ByteDataset transpose(int... axes);
-
-	@Override
-	ByteDataset swapAxes(int axis1, int axis2);
-
-	@Override
-	ByteDataset flatten();
-
-	@Override
-	ByteDataset fill(Object obj);
-
-	@Override
-	ByteDataset sort(Integer axis);
-
-	@Override
-	ByteDataset iadd(Object b);
-
-	@Override
-	ByteDataset isubtract(Object b);
-
-	@Override
-	ByteDataset imultiply(Object b);
-
-	@Override
-	ByteDataset idivide(Object b);
-
-	@Override
-	ByteDataset ifloor();
-
-	@Override
-	ByteDataset iremainder(Object b);
-
-	@Override
-	ByteDataset ipower(Object b);
 }

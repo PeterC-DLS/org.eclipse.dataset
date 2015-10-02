@@ -12,7 +12,7 @@ package org.eclipse.dataset.dense;
 /**
  * Interface for compound dataset of shorts // PRIM_TYPE
  */
-public interface CompoundShortDataset extends CompoundDataset { // CLASS_TYPE
+public interface CompoundShortDataset extends GenericCompoundDataset<CompoundShortDataset> { // CLASS_TYPE
 
 	/**
 	 * This is a typed version of {@link #getBuffer()}
@@ -86,4 +86,19 @@ public interface CompoundShortDataset extends CompoundDataset { // CLASS_TYPE
 	 * @param pos
 	 */
 	void setItem(short[] d, int... pos); // PRIM_TYPE
+
+	@Override
+	public ShortDataset real(); // CLASS_TYPE
+
+	@Override
+	public ShortDataset realView(); // CLASS_TYPE
+
+	@Override
+	public ShortDataset getElements(int element); // CLASS_TYPE
+
+	@Override
+	public ShortDataset getElementsView(int element); // CLASS_TYPE
+
+	@Override
+	public ShortDataset asNonCompoundDataset(final boolean shareData); // CLASS_TYPE
 }

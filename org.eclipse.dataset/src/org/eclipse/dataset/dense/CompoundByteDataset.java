@@ -12,7 +12,7 @@ package org.eclipse.dataset.dense;
 /**
  * Interface for compound dataset of bytes // PRIM_TYPE
  */
-public interface CompoundByteDataset extends CompoundDataset { // CLASS_TYPE
+public interface CompoundByteDataset extends GenericCompoundDataset<CompoundByteDataset> { // CLASS_TYPE
 
 	/**
 	 * This is a typed version of {@link #getBuffer()}
@@ -86,4 +86,19 @@ public interface CompoundByteDataset extends CompoundDataset { // CLASS_TYPE
 	 * @param pos
 	 */
 	void setItem(byte[] d, int... pos); // PRIM_TYPE
+
+	@Override
+	public ByteDataset real(); // CLASS_TYPE
+
+	@Override
+	public ByteDataset realView(); // CLASS_TYPE
+
+	@Override
+	public ByteDataset getElements(int element); // CLASS_TYPE
+
+	@Override
+	public ByteDataset getElementsView(int element); // CLASS_TYPE
+
+	@Override
+	public ByteDataset asNonCompoundDataset(final boolean shareData); // CLASS_TYPE
 }

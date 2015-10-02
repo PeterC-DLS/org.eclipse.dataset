@@ -37,7 +37,7 @@ import org.eclipse.dataset.dense.SliceIterator;
 /**
  * Extend compound dataset for float values // PRIM_TYPE
  */
-public class CompoundFloatDatasetImpl extends AbstractCompoundDataset implements CompoundFloatDataset { // CLASS_TYPE
+public class CompoundFloatDatasetImpl extends AbstractCompoundDataset<CompoundFloatDatasetImpl> implements CompoundFloatDataset { // CLASS_TYPE
 	// pin UID to base class
 	private static final long serialVersionUID = Dataset.serialVersionUID;
 
@@ -827,7 +827,7 @@ public class CompoundFloatDatasetImpl extends AbstractCompoundDataset implements
 	}
 
 	@Override
-	public Dataset realView() {
+	public FloatDatasetImpl realView() { // CLASS_TYPE
 		return getElementsView(0);
 	}
 
@@ -999,7 +999,7 @@ public class CompoundFloatDatasetImpl extends AbstractCompoundDataset implements
 
 				double[] temp = new double[isize];
 				while (iter.hasNext() && oiter.hasNext()) {
-					((AbstractCompoundDataset) ds).getDoubleArrayAbs(oiter.index, temp);
+					((AbstractCompoundDataset<?>) ds).getDoubleArrayAbs(oiter.index, temp);
 					setDoubleArrayAbs(iter.index, temp);
 				}
 				while (iter.hasNext() && oiter.hasNext()) {
@@ -1051,7 +1051,7 @@ public class CompoundFloatDatasetImpl extends AbstractCompoundDataset implements
 
 				double[] temp = new double[isize];
 				while (iter.hasNext() && oiter.hasNext()) {
-					((AbstractCompoundDataset) ds).getDoubleArray(temp, pos);
+					((AbstractCompoundDataset<?>) ds).getDoubleArray(temp, pos);
 					setDoubleArrayAbs(get1DIndex(pos), temp);
 				}
 			} else {

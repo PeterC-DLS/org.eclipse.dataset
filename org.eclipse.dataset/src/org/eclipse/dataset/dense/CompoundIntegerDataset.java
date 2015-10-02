@@ -12,7 +12,7 @@ package org.eclipse.dataset.dense;
 /**
  * Interface for compound dataset of ints // PRIM_TYPE
  */
-public interface CompoundIntegerDataset extends CompoundDataset { // CLASS_TYPE
+public interface CompoundIntegerDataset extends GenericCompoundDataset<CompoundIntegerDataset> { // CLASS_TYPE
 
 	/**
 	 * This is a typed version of {@link #getBuffer()}
@@ -86,4 +86,19 @@ public interface CompoundIntegerDataset extends CompoundDataset { // CLASS_TYPE
 	 * @param pos
 	 */
 	void setItem(int[] d, int... pos); // PRIM_TYPE
+
+	@Override
+	public IntegerDataset real(); // CLASS_TYPE
+
+	@Override
+	public IntegerDataset realView(); // CLASS_TYPE
+
+	@Override
+	public IntegerDataset getElements(int element); // CLASS_TYPE
+
+	@Override
+	public IntegerDataset getElementsView(int element); // CLASS_TYPE
+
+	@Override
+	public IntegerDataset asNonCompoundDataset(final boolean shareData); // CLASS_TYPE
 }

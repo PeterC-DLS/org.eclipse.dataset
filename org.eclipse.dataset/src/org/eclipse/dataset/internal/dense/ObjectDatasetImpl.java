@@ -251,7 +251,7 @@ public class ObjectDatasetImpl extends ObjectDatasetBaseImpl {
 
 	@Override
 	public ObjectDatasetImpl getSlice(final int[] start, final int[] stop, final int[] step) {
-		ObjectDatasetBaseImpl result = (ObjectDatasetBaseImpl) super.getSlice(start, stop, step);
+		ObjectDatasetBaseImpl result = super.getSlice(start, stop, step);
 
 		return new ObjectDatasetImpl(result.data, result.shape);
 	}

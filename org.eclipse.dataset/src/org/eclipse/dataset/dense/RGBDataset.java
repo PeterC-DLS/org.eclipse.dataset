@@ -50,6 +50,11 @@ public class RGBDataset extends CompoundShortDatasetImpl implements Cloneable {
 		return new RGBDataset(this);
 	}
 
+	@Override
+	public synchronized RGBDataset synchronizedCopy() {
+		return clone();
+	}
+
 	/**
 	 * Create a dataset using given data (red, green and blue parts are given separately)
 	 * @param redData

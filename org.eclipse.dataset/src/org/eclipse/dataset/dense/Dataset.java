@@ -867,7 +867,7 @@ public interface Dataset extends IErrorDataset {
 	 * @param axis
 	 * @return dataset where items are true if all items along axis are true
 	 */
-	public Dataset all(int axis);
+	public BooleanDataset all(int axis);
 
 	/**
 	 * Test if any items are true
@@ -878,7 +878,7 @@ public interface Dataset extends IErrorDataset {
 	 * @param axis
 	 * @return dataset where items are true if any items along axis are true
 	 */
-	public Dataset any(int axis);
+	public BooleanDataset any(int axis);
 
 	/**
 	 * In-place addition with object o

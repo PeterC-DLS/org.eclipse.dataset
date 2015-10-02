@@ -40,7 +40,7 @@ import org.eclipse.dataset.dense.SliceIterator;
 /**
  * Extend dataset for double values // PRIM_TYPE
  */
-public class DoubleDatasetImpl extends AbstractDataset implements DoubleDataset { // CLASS_TYPE
+public class DoubleDatasetImpl extends AbstractDataset<DoubleDatasetImpl> implements DoubleDataset { // CLASS_TYPE
 	// pin UID to base class
 	private static final long serialVersionUID = Dataset.serialVersionUID;
 
@@ -244,11 +244,6 @@ public class DoubleDatasetImpl extends AbstractDataset implements DoubleDataset 
 	}
 
 	@Override
-	public synchronized DoubleDatasetImpl synchronizedCopy() {
-		return (DoubleDatasetImpl) super.synchronizedCopy();
-	}
-
-	@Override
 	public DoubleDatasetImpl getView() {
 		DoubleDatasetImpl view = new DoubleDatasetImpl();
 		copyToView(this, view, true, true);
@@ -257,49 +252,18 @@ public class DoubleDatasetImpl extends AbstractDataset implements DoubleDataset 
 	}
 
 	@Override
-	public DoubleDatasetImpl squeezeEnds() {
-		return (DoubleDatasetImpl) super.squeezeEnds();
-	}
-
-	@Override
-	public DoubleDatasetImpl squeeze() {
-		return (DoubleDatasetImpl) super.squeeze();
-	}
-
-	@Override
-	public DoubleDatasetImpl squeeze(boolean onlyFromEnds) {
-		return (DoubleDatasetImpl) super.squeeze(onlyFromEnds);
-	}
-
-	@Override
 	public DoubleDatasetImpl clone() {
 		return new DoubleDatasetImpl(this);
 	}
 
 	@Override
-	public DoubleDatasetImpl reshape(int... shape) {
-		return (DoubleDatasetImpl) super.reshape(shape);
-	}
-
-
-	@Override
-	public DoubleDatasetImpl getTransposedView(int... axes) {
-		return (DoubleDatasetImpl) super.getTransposedView(axes);
+	public DoubleDatasetImpl real() {
+		return this;
 	}
 
 	@Override
-	public DoubleDatasetImpl transpose(int... axes) {
-		return (DoubleDatasetImpl) super.transpose(axes);
-	}
-
-	@Override
-	public DoubleDatasetImpl swapAxes(int axis1, int axis2) {
-		return (DoubleDatasetImpl) super.swapAxes(axis1, axis2);
-	}
-
-	@Override
-	public DoubleDatasetImpl flatten() {
-		return (DoubleDatasetImpl) super.flatten();
+	public DoubleDatasetImpl realView() {
+		return getView();
 	}
 
 	@Override

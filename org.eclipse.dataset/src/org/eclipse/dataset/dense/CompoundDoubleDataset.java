@@ -12,7 +12,7 @@ package org.eclipse.dataset.dense;
 /**
  * Interface for compound dataset of doubles // PRIM_TYPE
  */
-public interface CompoundDoubleDataset extends CompoundDataset { // CLASS_TYPE
+public interface CompoundDoubleDataset extends GenericCompoundDataset<CompoundDoubleDataset> { // CLASS_TYPE
 
 	/**
 	 * This is a typed version of {@link #getBuffer()}
@@ -86,4 +86,19 @@ public interface CompoundDoubleDataset extends CompoundDataset { // CLASS_TYPE
 	 * @param pos
 	 */
 	void setItem(double[] d, int... pos); // PRIM_TYPE
+
+	@Override
+	public DoubleDataset real(); // CLASS_TYPE
+
+	@Override
+	public DoubleDataset realView(); // CLASS_TYPE
+
+	@Override
+	public DoubleDataset getElements(int element); // CLASS_TYPE
+
+	@Override
+	public DoubleDataset getElementsView(int element); // CLASS_TYPE
+
+	@Override
+	public DoubleDataset asNonCompoundDataset(final boolean shareData); // CLASS_TYPE
 }

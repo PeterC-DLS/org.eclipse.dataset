@@ -40,7 +40,7 @@ import org.eclipse.dataset.dense.SliceIterator;
 /**
  * Extend dataset for long values // PRIM_TYPE
  */
-public class LongDatasetImpl extends AbstractDataset implements LongDataset { // CLASS_TYPE
+public class LongDatasetImpl extends AbstractDataset<LongDatasetImpl> implements LongDataset { // CLASS_TYPE
 	// pin UID to base class
 	private static final long serialVersionUID = Dataset.serialVersionUID;
 
@@ -244,11 +244,6 @@ public class LongDatasetImpl extends AbstractDataset implements LongDataset { //
 	}
 
 	@Override
-	public synchronized LongDatasetImpl synchronizedCopy() {
-		return (LongDatasetImpl) super.synchronizedCopy();
-	}
-
-	@Override
 	public LongDatasetImpl getView() {
 		LongDatasetImpl view = new LongDatasetImpl();
 		copyToView(this, view, true, true);
@@ -257,49 +252,18 @@ public class LongDatasetImpl extends AbstractDataset implements LongDataset { //
 	}
 
 	@Override
-	public LongDatasetImpl squeezeEnds() {
-		return (LongDatasetImpl) super.squeezeEnds();
-	}
-
-	@Override
-	public LongDatasetImpl squeeze() {
-		return (LongDatasetImpl) super.squeeze();
-	}
-
-	@Override
-	public LongDatasetImpl squeeze(boolean onlyFromEnds) {
-		return (LongDatasetImpl) super.squeeze(onlyFromEnds);
-	}
-
-	@Override
 	public LongDatasetImpl clone() {
 		return new LongDatasetImpl(this);
 	}
 
 	@Override
-	public LongDatasetImpl reshape(int... shape) {
-		return (LongDatasetImpl) super.reshape(shape);
-	}
-
-
-	@Override
-	public LongDatasetImpl getTransposedView(int... axes) {
-		return (LongDatasetImpl) super.getTransposedView(axes);
+	public LongDatasetImpl real() {
+		return this;
 	}
 
 	@Override
-	public LongDatasetImpl transpose(int... axes) {
-		return (LongDatasetImpl) super.transpose(axes);
-	}
-
-	@Override
-	public LongDatasetImpl swapAxes(int axis1, int axis2) {
-		return (LongDatasetImpl) super.swapAxes(axis1, axis2);
-	}
-
-	@Override
-	public LongDatasetImpl flatten() {
-		return (LongDatasetImpl) super.flatten();
+	public LongDatasetImpl realView() {
+		return getView();
 	}
 
 	@Override

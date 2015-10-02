@@ -39,7 +39,7 @@ import org.eclipse.dataset.dense.SliceIterator;
 /**
  * Extend dataset for boolean values // PRIM_TYPE
  */
-public class BooleanDatasetBaseImpl extends AbstractDataset implements BooleanDataset { // CLASS_TYPE
+public class BooleanDatasetBaseImpl extends AbstractDataset<BooleanDatasetBaseImpl> implements BooleanDataset { // CLASS_TYPE
 	// pin UID to base class
 	private static final long serialVersionUID = Dataset.serialVersionUID;
 
@@ -218,11 +218,6 @@ public class BooleanDatasetBaseImpl extends AbstractDataset implements BooleanDa
 	}
 
 	@Override
-	public synchronized BooleanDatasetBaseImpl synchronizedCopy() {
-		return (BooleanDatasetBaseImpl) super.synchronizedCopy();
-	}
-
-	@Override
 	public BooleanDatasetBaseImpl getView() {
 		BooleanDatasetBaseImpl view = new BooleanDatasetBaseImpl();
 		copyToView(this, view, true, true);
@@ -231,49 +226,18 @@ public class BooleanDatasetBaseImpl extends AbstractDataset implements BooleanDa
 	}
 
 	@Override
-	public BooleanDatasetBaseImpl squeezeEnds() {
-		return (BooleanDatasetBaseImpl) super.squeezeEnds();
-	}
-
-	@Override
-	public BooleanDatasetBaseImpl squeeze() {
-		return (BooleanDatasetBaseImpl) super.squeeze();
-	}
-
-	@Override
-	public BooleanDatasetBaseImpl squeeze(boolean onlyFromEnds) {
-		return (BooleanDatasetBaseImpl) super.squeeze(onlyFromEnds);
-	}
-
-	@Override
 	public BooleanDatasetBaseImpl clone() {
 		return new BooleanDatasetBaseImpl(this);
 	}
 
 	@Override
-	public BooleanDatasetBaseImpl reshape(int... shape) {
-		return (BooleanDatasetBaseImpl) super.reshape(shape);
-	}
-
-
-	@Override
-	public BooleanDatasetBaseImpl getTransposedView(int... axes) {
-		return (BooleanDatasetBaseImpl) super.getTransposedView(axes);
+	public BooleanDatasetBaseImpl real() {
+		return this;
 	}
 
 	@Override
-	public BooleanDatasetBaseImpl transpose(int... axes) {
-		return (BooleanDatasetBaseImpl) super.transpose(axes);
-	}
-
-	@Override
-	public BooleanDatasetBaseImpl swapAxes(int axis1, int axis2) {
-		return (BooleanDatasetBaseImpl) super.swapAxes(axis1, axis2);
-	}
-
-	@Override
-	public BooleanDatasetBaseImpl flatten() {
-		return (BooleanDatasetBaseImpl) super.flatten();
+	public BooleanDatasetBaseImpl realView() {
+		return getView();
 	}
 
 	@Override

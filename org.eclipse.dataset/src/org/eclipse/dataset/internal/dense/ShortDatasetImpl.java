@@ -40,7 +40,7 @@ import org.eclipse.dataset.dense.SliceIterator;
 /**
  * Extend dataset for short values // PRIM_TYPE
  */
-public class ShortDatasetImpl extends AbstractDataset implements ShortDataset { // CLASS_TYPE
+public class ShortDatasetImpl extends AbstractDataset<ShortDatasetImpl> implements ShortDataset { // CLASS_TYPE
 	// pin UID to base class
 	private static final long serialVersionUID = Dataset.serialVersionUID;
 
@@ -244,11 +244,6 @@ public class ShortDatasetImpl extends AbstractDataset implements ShortDataset { 
 	}
 
 	@Override
-	public synchronized ShortDatasetImpl synchronizedCopy() {
-		return (ShortDatasetImpl) super.synchronizedCopy();
-	}
-
-	@Override
 	public ShortDatasetImpl getView() {
 		ShortDatasetImpl view = new ShortDatasetImpl();
 		copyToView(this, view, true, true);
@@ -257,49 +252,18 @@ public class ShortDatasetImpl extends AbstractDataset implements ShortDataset { 
 	}
 
 	@Override
-	public ShortDatasetImpl squeezeEnds() {
-		return (ShortDatasetImpl) super.squeezeEnds();
-	}
-
-	@Override
-	public ShortDatasetImpl squeeze() {
-		return (ShortDatasetImpl) super.squeeze();
-	}
-
-	@Override
-	public ShortDatasetImpl squeeze(boolean onlyFromEnds) {
-		return (ShortDatasetImpl) super.squeeze(onlyFromEnds);
-	}
-
-	@Override
 	public ShortDatasetImpl clone() {
 		return new ShortDatasetImpl(this);
 	}
 
 	@Override
-	public ShortDatasetImpl reshape(int... shape) {
-		return (ShortDatasetImpl) super.reshape(shape);
-	}
-
-
-	@Override
-	public ShortDatasetImpl getTransposedView(int... axes) {
-		return (ShortDatasetImpl) super.getTransposedView(axes);
+	public ShortDatasetImpl real() {
+		return this;
 	}
 
 	@Override
-	public ShortDatasetImpl transpose(int... axes) {
-		return (ShortDatasetImpl) super.transpose(axes);
-	}
-
-	@Override
-	public ShortDatasetImpl swapAxes(int axis1, int axis2) {
-		return (ShortDatasetImpl) super.swapAxes(axis1, axis2);
-	}
-
-	@Override
-	public ShortDatasetImpl flatten() {
-		return (ShortDatasetImpl) super.flatten();
+	public ShortDatasetImpl realView() {
+		return getView();
 	}
 
 	@Override

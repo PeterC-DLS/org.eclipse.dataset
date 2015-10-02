@@ -20,15 +20,6 @@ import org.eclipse.dataset.dense.IntegerDataset;
 public interface CompoundDataset extends Dataset {
 
 	@Override
-	public CompoundDataset cast(boolean repeat, int dtype, int isize);
-
-	@Override
-	public CompoundDataset cast(int dtype);
-
-	@Override
-	public CompoundDataset clone();
-
-	@Override
 	public CompoundDataset fill(Object obj);
 
 	@Override
@@ -186,6 +177,12 @@ public interface CompoundDataset extends Dataset {
 
 	@Override
 	public CompoundDataset variance(int axis);
+
+	@Override
+	public Dataset real();
+
+	@Override
+	public Dataset realView();
 
 	/**
 	 * Get an item as a double array

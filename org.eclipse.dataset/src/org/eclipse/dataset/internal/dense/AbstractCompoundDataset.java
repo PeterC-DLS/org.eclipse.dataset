@@ -16,18 +16,16 @@ import java.util.Arrays;
 import java.util.HashMap;
 
 import org.apache.commons.math.stat.descriptive.SummaryStatistics;
-import org.eclipse.dataset.IMonitor;
-import org.eclipse.dataset.Slice;
 import org.eclipse.dataset.SliceND;
 import org.eclipse.dataset.dense.CompoundDataset;
 import org.eclipse.dataset.dense.CompoundDoubleDataset;
 import org.eclipse.dataset.dense.ContiguousIterator;
+import org.eclipse.dataset.dense.DTypeUtils;
 import org.eclipse.dataset.dense.Dataset;
 import org.eclipse.dataset.dense.DatasetUtils;
 import org.eclipse.dataset.dense.DoubleDataset;
-import org.eclipse.dataset.dense.DTypeUtils;
+import org.eclipse.dataset.dense.GenericCompoundDataset;
 import org.eclipse.dataset.dense.IndexIterator;
-import org.eclipse.dataset.dense.IntegerDataset;
 import org.eclipse.dataset.dense.SliceIterator;
 import org.eclipse.dataset.dense.StrideIterator;
 
@@ -39,7 +37,7 @@ import org.eclipse.dataset.dense.StrideIterator;
  * Data items can be Complex, Vector, etc
  * 
  */
-public abstract class AbstractCompoundDataset extends AbstractDataset implements CompoundDataset {
+public abstract class AbstractCompoundDataset<T extends GenericCompoundDataset<?>> extends AbstractDataset<T> implements CompoundDataset {
 	// pin UID to base class
 	private static final long serialVersionUID = Dataset.serialVersionUID;
 
@@ -68,7 +66,7 @@ public abstract class AbstractCompoundDataset extends AbstractDataset implements
 	}
 
 	@Override
-	public Dataset getUniqueItems() {
+	public T getUniqueItems() {
 		throw new UnsupportedOperationException("Cannot sort compound datasets");
 	}
 
@@ -127,100 +125,6 @@ public abstract class AbstractCompoundDataset extends AbstractDataset implements
 	}
 
 	@Override
-	public CompoundDataset cast(boolean repeat, int dtype, int isize) {
-		return (CompoundDataset) super.cast(repeat, dtype, isize);
-	}
-
-	@Override
-	public CompoundDataset cast(int dtype) {
-		return (CompoundDataset) super.cast(dtype);
-	}
-
-	@Override
-	abstract public AbstractCompoundDataset clone();
-
-	@Override
-	public CompoundDataset flatten() {
-		return (CompoundDataset) super.flatten();
-	}
-
-	@Override
-	public CompoundDataset getBy1DIndex(IntegerDataset index) {
-		return (CompoundDataset) super.getBy1DIndex(index);
-	}
-
-	@Override
-	public CompoundDataset getByBoolean(Dataset selection) {
-		return (CompoundDataset) super.getByBoolean(selection);
-	}
-
-	@Override
-	public CompoundDataset getByIndexes(Object... indexes) {
-		return (CompoundDataset) super.getByIndexes(indexes);
-	}
-
-	@Override
-	public CompoundDataset getSlice(IMonitor mon, int[] start, int[] stop, int[] step) {
-		return (CompoundDataset) super.getSlice(mon, start, stop, step);
-	}
-
-	@Override
-	public CompoundDataset getSlice(IMonitor mon, Slice... slice) {
-		return (CompoundDataset) super.getSlice(mon, slice);
-	}
-
-	@Override
-	public CompoundDataset getSlice(IMonitor mon, SliceND slice) {
-		return (CompoundDataset) super.getSlice(mon, slice);
-	}
-
-	@Override
-	public CompoundDataset getSlice(int[] start, int[] stop, int[] step) {
-		return (CompoundDataset) super.getSlice(start, stop, step);
-	}
-
-	@Override
-	public CompoundDataset getSlice(Slice... slice) {
-		return (CompoundDataset) super.getSlice(slice);
-	}
-
-	@Override
-	public CompoundDataset getSlice(SliceND slice) {
-		return (CompoundDataset) super.getSlice(slice);
-	}
-
-	@Override
-	abstract public AbstractCompoundDataset getSlice(SliceIterator iterator);
-
-	@Override
-	public CompoundDataset getSliceView(int[] start, int[] stop, int[] step) {
-		return (CompoundDataset) super.getSliceView(start, stop, step);
-	}
-
-	@Override
-	public CompoundDataset getSliceView(Slice... slice) {
-		return (CompoundDataset) super.getSliceView(slice);
-	}
-
-	@Override
-	public CompoundDataset getSliceView(SliceND slice) {
-		return (CompoundDataset) super.getSliceView(slice);
-	}
-
-	@Override
-	public CompoundDataset getTransposedView(int... axes) {
-		return (CompoundDataset) super.getTransposedView(axes);
-	}
-
-	@Override
-	abstract public AbstractCompoundDataset getView();
-
-	@Override
-	public CompoundDataset ifloorDivide(Object o) {
-		return (CompoundDataset) super.ifloorDivide(o);
-	}
-
-	@Override
 	public CompoundDataset mean(boolean ignoreNaNs, int axis) {
 		return (CompoundDataset) super.mean(ignoreNaNs, axis);
 	}
@@ -231,18 +135,8 @@ public abstract class AbstractCompoundDataset extends AbstractDataset implements
 	}
 
 	@Override
-	public CompoundDataset peakToPeak(int axis) {
-		return (CompoundDataset) super.peakToPeak(axis);
-	}
-
-	@Override
 	public CompoundDataset product(int axis) {
 		return (CompoundDataset) super.product(axis);
-	}
-
-	@Override
-	public CompoundDataset reshape(int... shape) {
-		return (CompoundDataset) super.reshape(shape);
 	}
 
 	@Override
@@ -251,33 +145,8 @@ public abstract class AbstractCompoundDataset extends AbstractDataset implements
 	}
 
 	@Override
-	public CompoundDataset setSlice(Object obj, int[] start, int[] stop, int[] step) {
-		return (CompoundDataset) super.setSlice(obj, start, stop, step);
-	}
-
-	@Override
-	public CompoundDataset setSlice(Object object, Slice... slice) {
-		return (CompoundDataset) super.setSlice(object, slice);
-	}
-
-	@Override
-	public CompoundDataset sort(Integer axis) {
+	public T sort(Integer axis) {
 		throw new UnsupportedOperationException("Cannot sort dataset");
-	}
-
-	@Override
-	public CompoundDataset squeezeEnds() {
-		return (CompoundDataset) super.squeezeEnds();
-	}
-
-	@Override
-	public CompoundDataset squeeze() {
-		return (CompoundDataset) super.squeeze();
-	}
-
-	@Override
-	public CompoundDataset squeeze(boolean onlyFromEnd) {
-		return (CompoundDataset) super.squeeze(onlyFromEnd);
 	}
 
 	@Override
@@ -293,21 +162,6 @@ public abstract class AbstractCompoundDataset extends AbstractDataset implements
 	@Override
 	public CompoundDataset sum(int axis) {
 		return (CompoundDataset) super.sum(axis);
-	}
-
-	@Override
-	public CompoundDataset swapAxes(int axis1, int axis2) {
-		return (CompoundDataset) super.swapAxes(axis1, axis2);
-	}
-
-	@Override
-	public synchronized CompoundDataset synchronizedCopy() {
-		return clone();
-	}
-
-	@Override
-	public CompoundDataset transpose(int... axes) {
-		return (CompoundDataset) super.transpose(axes);
 	}
 
 	@Override
@@ -619,13 +473,13 @@ public abstract class AbstractCompoundDataset extends AbstractDataset implements
 	}
 
 	@Override
-	public CompoundDataset max(boolean ignoreNaNs, int axis) {
+	public T max(boolean ignoreNaNs, int axis) {
 		logger.error("Cannot compare compound numbers");
 		throw new UnsupportedOperationException("Cannot compare compound numbers");
 	}
 
 	@Override
-	public CompoundDataset max(int axis) {
+	public T max(int axis) {
 		logger.error("Cannot compare compound numbers");
 		throw new UnsupportedOperationException("Cannot compare compound numbers");
 	}
@@ -637,13 +491,13 @@ public abstract class AbstractCompoundDataset extends AbstractDataset implements
 	}
 
 	@Override
-	public CompoundDataset min(boolean ignoreNaNs, int axis) {
+	public T min(boolean ignoreNaNs, int axis) {
 		logger.error("Cannot compare compound numbers");
 		throw new UnsupportedOperationException("Cannot compare compound numbers");
 	}
 
 	@Override
-	public CompoundDataset min(int axis) {
+	public T min(int axis) {
 		logger.error("Cannot compare compound numbers");
 		throw new UnsupportedOperationException("Cannot compare compound numbers");
 	}
@@ -839,6 +693,7 @@ public abstract class AbstractCompoundDataset extends AbstractDataset implements
 		return getInternalErrorArray(false, pos);
 	}
 
+	@SuppressWarnings("unchecked")
 	private double[] getInternalErrorArray(final boolean squared, final int i) {
 		Dataset sed = squared ? getInternalSquaredError() : getInternalError();
 		if (sed == null)
@@ -858,6 +713,7 @@ public abstract class AbstractCompoundDataset extends AbstractDataset implements
 		return es;
 	}
 
+	@SuppressWarnings("unchecked")
 	private double[] getInternalErrorArray(final boolean squared, final int i, final int j) {
 		Dataset sed = squared ? getInternalSquaredError() : getInternalError();
 		if (sed == null)
@@ -877,6 +733,7 @@ public abstract class AbstractCompoundDataset extends AbstractDataset implements
 		return es;
 	}
 
+	@SuppressWarnings("unchecked")
 	private double[] getInternalErrorArray(final boolean squared, final int... pos) {
 		Dataset sed = squared ? getInternalSquaredError() : getInternalError();
 		if (sed == null)

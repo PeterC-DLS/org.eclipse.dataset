@@ -12,7 +12,7 @@ package org.eclipse.dataset.dense;
 /**
  * Interface for dataset of doubles // PRIM_TYPE
  */
-public interface DoubleDataset extends Dataset { // CLASS_TYPE
+public interface DoubleDataset extends GenericDataset<DoubleDataset> { // CLASS_TYPE
 
 	/**
 	 * This is a typed version of {@link #getBuffer()}
@@ -84,64 +84,4 @@ public interface DoubleDataset extends Dataset { // CLASS_TYPE
 	 * @param pos
 	 */
 	void setItem(double value, int... pos); // PRIM_TYPE
-
-	@Override
-	DoubleDataset synchronizedCopy();
-
-	@Override
-	DoubleDataset getView();
-
-	@Override
-	DoubleDataset squeezeEnds();
-
-	@Override
-	DoubleDataset squeeze();
-
-	@Override
-	DoubleDataset squeeze(boolean onlyFromEnds);
-
-	@Override
-	DoubleDataset clone();
-
-	@Override
-	DoubleDataset reshape(int... shape);
-
-	@Override
-	DoubleDataset getTransposedView(int... axes);
-
-	@Override
-	DoubleDataset transpose(int... axes);
-
-	@Override
-	DoubleDataset swapAxes(int axis1, int axis2);
-
-	@Override
-	DoubleDataset flatten();
-
-	@Override
-	DoubleDataset fill(Object obj);
-
-	@Override
-	DoubleDataset sort(Integer axis);
-
-	@Override
-	DoubleDataset iadd(Object b);
-
-	@Override
-	DoubleDataset isubtract(Object b);
-
-	@Override
-	DoubleDataset imultiply(Object b);
-
-	@Override
-	DoubleDataset idivide(Object b);
-
-	@Override
-	DoubleDataset ifloor();
-
-	@Override
-	DoubleDataset iremainder(Object b);
-
-	@Override
-	DoubleDataset ipower(Object b);
 }

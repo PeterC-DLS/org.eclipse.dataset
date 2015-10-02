@@ -12,7 +12,7 @@ package org.eclipse.dataset.dense;
 /**
  * Interface for dataset of shorts // PRIM_TYPE
  */
-public interface ShortDataset extends Dataset { // CLASS_TYPE
+public interface ShortDataset extends GenericDataset<ShortDataset> { // CLASS_TYPE
 
 	/**
 	 * This is a typed version of {@link #getBuffer()}
@@ -84,64 +84,4 @@ public interface ShortDataset extends Dataset { // CLASS_TYPE
 	 * @param pos
 	 */
 	void setItem(short value, int... pos); // PRIM_TYPE
-
-	@Override
-	ShortDataset synchronizedCopy();
-
-	@Override
-	ShortDataset getView();
-
-	@Override
-	ShortDataset squeezeEnds();
-
-	@Override
-	ShortDataset squeeze();
-
-	@Override
-	ShortDataset squeeze(boolean onlyFromEnds);
-
-	@Override
-	ShortDataset clone();
-
-	@Override
-	ShortDataset reshape(int... shape);
-
-	@Override
-	ShortDataset getTransposedView(int... axes);
-
-	@Override
-	ShortDataset transpose(int... axes);
-
-	@Override
-	ShortDataset swapAxes(int axis1, int axis2);
-
-	@Override
-	ShortDataset flatten();
-
-	@Override
-	ShortDataset fill(Object obj);
-
-	@Override
-	ShortDataset sort(Integer axis);
-
-	@Override
-	ShortDataset iadd(Object b);
-
-	@Override
-	ShortDataset isubtract(Object b);
-
-	@Override
-	ShortDataset imultiply(Object b);
-
-	@Override
-	ShortDataset idivide(Object b);
-
-	@Override
-	ShortDataset ifloor();
-
-	@Override
-	ShortDataset iremainder(Object b);
-
-	@Override
-	ShortDataset ipower(Object b);
 }

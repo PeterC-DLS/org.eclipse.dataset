@@ -40,7 +40,7 @@ import org.eclipse.dataset.dense.SliceIterator;
 /**
  * Extend dataset for int values // PRIM_TYPE
  */
-public class IntegerDatasetImpl extends AbstractDataset implements IntegerDataset { // CLASS_TYPE
+public class IntegerDatasetImpl extends AbstractDataset<IntegerDatasetImpl> implements IntegerDataset { // CLASS_TYPE
 	// pin UID to base class
 	private static final long serialVersionUID = Dataset.serialVersionUID;
 
@@ -244,11 +244,6 @@ public class IntegerDatasetImpl extends AbstractDataset implements IntegerDatase
 	}
 
 	@Override
-	public synchronized IntegerDatasetImpl synchronizedCopy() {
-		return (IntegerDatasetImpl) super.synchronizedCopy();
-	}
-
-	@Override
 	public IntegerDatasetImpl getView() {
 		IntegerDatasetImpl view = new IntegerDatasetImpl();
 		copyToView(this, view, true, true);
@@ -257,49 +252,18 @@ public class IntegerDatasetImpl extends AbstractDataset implements IntegerDatase
 	}
 
 	@Override
-	public IntegerDatasetImpl squeezeEnds() {
-		return (IntegerDatasetImpl) super.squeezeEnds();
-	}
-
-	@Override
-	public IntegerDatasetImpl squeeze() {
-		return (IntegerDatasetImpl) super.squeeze();
-	}
-
-	@Override
-	public IntegerDatasetImpl squeeze(boolean onlyFromEnds) {
-		return (IntegerDatasetImpl) super.squeeze(onlyFromEnds);
-	}
-
-	@Override
 	public IntegerDatasetImpl clone() {
 		return new IntegerDatasetImpl(this);
 	}
 
 	@Override
-	public IntegerDatasetImpl reshape(int... shape) {
-		return (IntegerDatasetImpl) super.reshape(shape);
-	}
-
-
-	@Override
-	public IntegerDatasetImpl getTransposedView(int... axes) {
-		return (IntegerDatasetImpl) super.getTransposedView(axes);
+	public IntegerDatasetImpl real() {
+		return this;
 	}
 
 	@Override
-	public IntegerDatasetImpl transpose(int... axes) {
-		return (IntegerDatasetImpl) super.transpose(axes);
-	}
-
-	@Override
-	public IntegerDatasetImpl swapAxes(int axis1, int axis2) {
-		return (IntegerDatasetImpl) super.swapAxes(axis1, axis2);
-	}
-
-	@Override
-	public IntegerDatasetImpl flatten() {
-		return (IntegerDatasetImpl) super.flatten();
+	public IntegerDatasetImpl realView() {
+		return getView();
 	}
 
 	@Override

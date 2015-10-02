@@ -12,7 +12,7 @@ package org.eclipse.dataset.dense;
 /**
  * Interface for dataset of floats // PRIM_TYPE
  */
-public interface FloatDataset extends Dataset { // CLASS_TYPE
+public interface FloatDataset extends GenericDataset<FloatDataset> { // CLASS_TYPE
 
 	/**
 	 * This is a typed version of {@link #getBuffer()}
@@ -84,64 +84,4 @@ public interface FloatDataset extends Dataset { // CLASS_TYPE
 	 * @param pos
 	 */
 	void setItem(float value, int... pos); // PRIM_TYPE
-
-	@Override
-	FloatDataset synchronizedCopy();
-
-	@Override
-	FloatDataset getView();
-
-	@Override
-	FloatDataset squeezeEnds();
-
-	@Override
-	FloatDataset squeeze();
-
-	@Override
-	FloatDataset squeeze(boolean onlyFromEnds);
-
-	@Override
-	FloatDataset clone();
-
-	@Override
-	FloatDataset reshape(int... shape);
-
-	@Override
-	FloatDataset getTransposedView(int... axes);
-
-	@Override
-	FloatDataset transpose(int... axes);
-
-	@Override
-	FloatDataset swapAxes(int axis1, int axis2);
-
-	@Override
-	FloatDataset flatten();
-
-	@Override
-	FloatDataset fill(Object obj);
-
-	@Override
-	FloatDataset sort(Integer axis);
-
-	@Override
-	FloatDataset iadd(Object b);
-
-	@Override
-	FloatDataset isubtract(Object b);
-
-	@Override
-	FloatDataset imultiply(Object b);
-
-	@Override
-	FloatDataset idivide(Object b);
-
-	@Override
-	FloatDataset ifloor();
-
-	@Override
-	FloatDataset iremainder(Object b);
-
-	@Override
-	FloatDataset ipower(Object b);
 }

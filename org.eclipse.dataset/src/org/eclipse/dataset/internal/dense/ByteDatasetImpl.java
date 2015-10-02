@@ -40,7 +40,7 @@ import org.eclipse.dataset.dense.SliceIterator;
 /**
  * Extend dataset for byte values // PRIM_TYPE
  */
-public class ByteDatasetImpl extends AbstractDataset implements ByteDataset { // CLASS_TYPE
+public class ByteDatasetImpl extends AbstractDataset<ByteDatasetImpl> implements ByteDataset { // CLASS_TYPE
 	// pin UID to base class
 	private static final long serialVersionUID = Dataset.serialVersionUID;
 
@@ -244,11 +244,6 @@ public class ByteDatasetImpl extends AbstractDataset implements ByteDataset { //
 	}
 
 	@Override
-	public synchronized ByteDatasetImpl synchronizedCopy() {
-		return (ByteDatasetImpl) super.synchronizedCopy();
-	}
-
-	@Override
 	public ByteDatasetImpl getView() {
 		ByteDatasetImpl view = new ByteDatasetImpl();
 		copyToView(this, view, true, true);
@@ -257,49 +252,18 @@ public class ByteDatasetImpl extends AbstractDataset implements ByteDataset { //
 	}
 
 	@Override
-	public ByteDatasetImpl squeezeEnds() {
-		return (ByteDatasetImpl) super.squeezeEnds();
-	}
-
-	@Override
-	public ByteDatasetImpl squeeze() {
-		return (ByteDatasetImpl) super.squeeze();
-	}
-
-	@Override
-	public ByteDatasetImpl squeeze(boolean onlyFromEnds) {
-		return (ByteDatasetImpl) super.squeeze(onlyFromEnds);
-	}
-
-	@Override
 	public ByteDatasetImpl clone() {
 		return new ByteDatasetImpl(this);
 	}
 
 	@Override
-	public ByteDatasetImpl reshape(int... shape) {
-		return (ByteDatasetImpl) super.reshape(shape);
-	}
-
-
-	@Override
-	public ByteDatasetImpl getTransposedView(int... axes) {
-		return (ByteDatasetImpl) super.getTransposedView(axes);
+	public ByteDatasetImpl real() {
+		return this;
 	}
 
 	@Override
-	public ByteDatasetImpl transpose(int... axes) {
-		return (ByteDatasetImpl) super.transpose(axes);
-	}
-
-	@Override
-	public ByteDatasetImpl swapAxes(int axis1, int axis2) {
-		return (ByteDatasetImpl) super.swapAxes(axis1, axis2);
-	}
-
-	@Override
-	public ByteDatasetImpl flatten() {
-		return (ByteDatasetImpl) super.flatten();
+	public ByteDatasetImpl realView() {
+		return getView();
 	}
 
 	@Override

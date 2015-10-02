@@ -39,6 +39,7 @@ import org.eclipse.dataset.dense.Dataset;
 import org.eclipse.dataset.dense.DatasetFactory;
 import org.eclipse.dataset.dense.DatasetUtils;
 import org.eclipse.dataset.dense.DoubleDataset;
+import org.eclipse.dataset.dense.GenericDataset;
 import org.eclipse.dataset.dense.DTypeUtils;
 import org.eclipse.dataset.dense.IndexIterator;
 import org.eclipse.dataset.dense.IntegerDataset;
@@ -61,11 +62,11 @@ import org.eclipse.dataset.metadata.MetadataType;
  * <p/>
  * Data items can be boolean, integer, float, complex float, vector float, etc
  */
-public abstract class AbstractDataset extends LazyDatasetBase implements Dataset {
+public abstract class AbstractDataset<T extends GenericDataset<?>> extends LazyDatasetBase implements Dataset {
 
 	protected int size; // number of items
 
-	transient protected AbstractDataset base; // is null when not a view
+	transient protected AbstractDataset<?> base; // is null when not a view
 	protected int[] stride; // can be null for row-major, contiguous datasets
 	protected int offset;
 
@@ -91,9 +92,10 @@ public abstract class AbstractDataset extends LazyDatasetBase implements Dataset
 	public AbstractDataset() {
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public synchronized Dataset synchronizedCopy() {
-		return clone();
+	public synchronized T synchronizedCopy() {
+		return (T) clone();
 	}
 
 	@Override
@@ -129,7 +131,7 @@ public abstract class AbstractDataset extends LazyDatasetBase implements Dataset
 	}
 
 	@Override
-	abstract public AbstractDataset clone();
+	abstract public AbstractDataset<?> clone();
 
 	protected Format stringFormat = null;
 
@@ -155,7 +157,7 @@ public abstract class AbstractDataset extends LazyDatasetBase implements Dataset
 	}
 
 	@Override
-	abstract public AbstractDataset getView();
+	abstract public T getView();
 
 	/**
 	 * Copy fields from original to view
@@ -164,21 +166,21 @@ public abstract class AbstractDataset extends LazyDatasetBase implements Dataset
 	 * @param clone if true, then clone everything but bulk data
 	 * @param cloneMetadata if true, clone metadata
 	 */
-	protected static void copyToView(Dataset orig, AbstractDataset view, boolean clone, boolean cloneMetadata) {
+	protected static void copyToView(Dataset orig, AbstractDataset<?> view, boolean clone, boolean cloneMetadata) {
 		view.name = orig.getName();
 		view.size = orig.getSize();
 		view.odata = orig.getBuffer();
 		view.offset = orig.getOffset();
-		view.base = orig instanceof AbstractDataset ? ((AbstractDataset) orig).base : null;
+		view.base = orig instanceof AbstractDataset ? ((AbstractDataset<?>) orig).base : null;
 
 		if (clone) {
 			view.shape = orig.getShape();
 			copyStoredValues(orig, view, false);
-			view.stride = orig instanceof AbstractDataset && ((AbstractDataset) orig).stride != null ?
-					((AbstractDataset) orig).stride.clone() : null;
+			view.stride = orig instanceof AbstractDataset && ((AbstractDataset<?>) orig).stride != null ?
+					((AbstractDataset<?>) orig).stride.clone() : null;
 		} else {
 			view.shape = orig.getShapeRef();
-			view.stride = orig instanceof AbstractDataset ? ((AbstractDataset) orig).stride : null;
+			view.stride = orig instanceof AbstractDataset ? ((AbstractDataset<?>) orig).stride : null;
 		}
 
 		view.metadata = getMetadataMap(orig, cloneMetadata);
@@ -233,13 +235,14 @@ public abstract class AbstractDataset extends LazyDatasetBase implements Dataset
 		return ret;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public Dataset getTransposedView(int... axes) {
+	public T getTransposedView(int... axes) {
 		axes = checkPermutatedAxes(shape, axes);
 
-		AbstractDataset t = getView();
+		AbstractDataset<?> t = (AbstractDataset<?>) getView();
 		if (axes == null || getRank() == 1)
-			return t;
+			return (T) t;
 
 		int rank = shape.length;
 		int[] tstride = new int[rank];
@@ -257,17 +260,19 @@ public abstract class AbstractDataset extends LazyDatasetBase implements Dataset
 		t.base = base == null ? this : base;
 		copyStoredValues(this, t, true);
 		t.transposeMetadata(axes);
-		return t;
+		return (T) t;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public Dataset transpose(int... axes) {
-		Dataset t = getTransposedView(axes);
-		return t == null ? clone() : t.clone();
+	public T transpose(int... axes) {
+		T t = getTransposedView(axes);
+		return (T) (t == null ? clone() : t.clone());
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public Dataset swapAxes(int axis1, int axis2) {
+	public T swapAxes(int axis1, int axis2) {
 		int rank = shape.length;
 		if (axis1 < 0)
 			axis1 += rank;
@@ -280,7 +285,7 @@ public abstract class AbstractDataset extends LazyDatasetBase implements Dataset
 		}
 
 		if (rank == 1 || axis1 == axis2) {
-			return this;
+			return (T) this;
 		}
 
 		int[] axes = new int[rank];
@@ -294,7 +299,7 @@ public abstract class AbstractDataset extends LazyDatasetBase implements Dataset
 	}
 
 	@Override
-	public Dataset flatten() {
+	public T flatten() {
 		return reshape(size);
 	}
 
@@ -419,13 +424,14 @@ public abstract class AbstractDataset extends LazyDatasetBase implements Dataset
 		return new BooleanIterator(getIterator(), choice, value);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public Dataset getByBoolean(Dataset selection) {
+	public T getByBoolean(Dataset selection) {
 		checkCompatibility(selection);
 
 		final int length = ((Number) selection.sum()).intValue();
 		final int is = getElementsPerItem();
-		Dataset r = DatasetFactory.zeros(is, new int[] { length }, getDType());
+		T r = (T) DatasetFactory.zeros(is, new int[] { length }, getDType());
 		BooleanIterator biter = getBooleanIterator(selection);
 
 		int i = 0;
@@ -436,10 +442,11 @@ public abstract class AbstractDataset extends LazyDatasetBase implements Dataset
 		return r;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public Dataset getBy1DIndex(IntegerDataset index) {
+	public T getBy1DIndex(IntegerDataset index) {
 		final int is = getElementsPerItem();
-		final Dataset r = DatasetFactory.zeros(is, index.getShape(), getDType());
+		final T r = (T) DatasetFactory.zeros(is, index.getShape(), getDType());
 		final IntegerIterator iter = new IntegerIterator(index, size, is);
 
 		int i = 0;
@@ -450,11 +457,12 @@ public abstract class AbstractDataset extends LazyDatasetBase implements Dataset
 		return r;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public Dataset getByIndexes(final Object... indexes) {
+	public T getByIndexes(final Object... indexes) {
 		final IntegersIterator iter = new IntegersIterator(shape, indexes);
 		final int is = getElementsPerItem();
-		final Dataset r = DatasetFactory.zeros(is, iter.getShape(), getDType());
+		final T r = (T) DatasetFactory.zeros(is, iter.getShape(), getDType());
 
 		final int[] pos = iter.getPos();
 		int i = 0;
@@ -820,22 +828,23 @@ public abstract class AbstractDataset extends LazyDatasetBase implements Dataset
 	}
 
 	@Override
-	public Dataset getSliceView(final int[] start, final int[] stop, final int[] step) {
+	public T getSliceView(final int[] start, final int[] stop, final int[] step) {
 		return getSliceView(new SliceND(shape, start, stop, step));
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public Dataset getSliceView(Slice... slice) {
+	public T getSliceView(Slice... slice) {
 		if (slice == null || slice.length == 0) {
 			int[] sOffset = new int[1];
 			int[] sStride = createStrides(this, sOffset);
 			
-			AbstractDataset s = getView();
+			AbstractDataset<?> s = (AbstractDataset<?>) getView();
 			s.stride = sStride;
 			s.offset = sOffset[0];
 			s.base = base == null ? this : base;
 
-			return s;
+			return (T) s;
 		}
 
 		return getSliceView(new SliceND(shape, slice));
@@ -846,15 +855,16 @@ public abstract class AbstractDataset extends LazyDatasetBase implements Dataset
 	 * @param slice
 	 * @return slice view
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
-	public Dataset getSliceView(SliceND slice) {
+	public T getSliceView(SliceND slice) {
 		final int rank = shape.length;
 		int[] sStride = new int[rank];
 		int[] sOffset = new int[1];
 
 		int[] sShape = createStrides(slice, this, sStride, sOffset);
 	
-		AbstractDataset s = getView();
+		AbstractDataset<?> s = (AbstractDataset<?>) getView();
 		s.shape = sShape;
 		s.size = DatasetUtils.calculateSize(sShape);
 		s.stride = sStride;
@@ -870,7 +880,7 @@ public abstract class AbstractDataset extends LazyDatasetBase implements Dataset
 			s.setDirty();
 			s.setName(name + BLOCK_OPEN + slice + BLOCK_CLOSE);
 		}
-		return s;
+		return (T) s;
 	}
 
 	/**
@@ -1326,17 +1336,18 @@ public abstract class AbstractDataset extends LazyDatasetBase implements Dataset
 	}
 
 	@Override
-	public Dataset squeezeEnds() {
+	public T squeezeEnds() {
 		return squeeze(true);
 	}
 
 	@Override
-	public Dataset squeeze() {
+	public T squeeze() {
 		return squeeze(false);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public Dataset squeeze(boolean onlyFromEnds) {
+	public T squeeze(boolean onlyFromEnds) {
 		final int[] tshape = DatasetUtils.squeezeShape(shape, onlyFromEnds);
 		final int[] oshape = shape;
 		if (stride == null) {
@@ -1369,7 +1380,7 @@ public abstract class AbstractDataset extends LazyDatasetBase implements Dataset
 		}
 
 		reshapeMetadata(oshape, shape);
-		return this;
+		return (T) this;
 	}
 
 	@Override
@@ -1382,8 +1393,9 @@ public abstract class AbstractDataset extends LazyDatasetBase implements Dataset
 		DatasetUtils.checkCompatibility(this, g);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public Dataset reshape(final int... shape) {
+	public T reshape(final int... shape) {
 		Dataset a = getView();
 		try {
 			a.setShape(shape);
@@ -1391,7 +1403,7 @@ public abstract class AbstractDataset extends LazyDatasetBase implements Dataset
 			a = a.clone();
 			a.setShape(shape);
 		}
-		return a;
+		return (T) a;
 	}
 
 	/**
@@ -1414,37 +1426,27 @@ public abstract class AbstractDataset extends LazyDatasetBase implements Dataset
 	}
 
 	@Override
-	public Dataset real() {
-		return this;
-	}
-
-	@Override
-	public Dataset realView() {
-		return getView();
-	}
-
-	@Override
-	public Dataset getSlice(final int[] start, final int[] stop, final int[] step) {
+	public T getSlice(final int[] start, final int[] stop, final int[] step) {
 		return getSlice(new SliceND(shape, start, stop, step));
 	}
 
 	@Override
-	public Dataset getSlice(Slice... slice) {
+	public T getSlice(Slice... slice) {
 		return getSlice(new SliceND(shape, slice));
 	}
 
 	@Override
-	public Dataset getSlice(IMonitor monitor, Slice... slice) {
+	public T getSlice(IMonitor monitor, Slice... slice) {
 		return getSlice(slice);
 	}
 
 	@Override
-	public Dataset getSlice(IMonitor monitor, SliceND slice) {
+	public T getSlice(IMonitor monitor, SliceND slice) {
 		return getSlice(slice);
 	}
 
 	@Override
-	public Dataset getSlice(IMonitor monitor, int[] start, int[] stop, int[] step) {
+	public T getSlice(IMonitor monitor, int[] start, int[] stop, int[] step) {
 		return getSlice(start, stop, step);
 	}
 
@@ -1453,13 +1455,14 @@ public abstract class AbstractDataset extends LazyDatasetBase implements Dataset
 	 * @param slice
 	 * @return The dataset of the sliced data
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
-	public Dataset getSlice(final SliceND slice) {
+	public T getSlice(final SliceND slice) {
 		SliceIterator it = (SliceIterator) getSliceIterator(slice);
-		AbstractDataset s = getSlice(it);
+		AbstractDataset<?> s = (AbstractDataset<?>) getSlice(it);
 		s.metadata = copyMetadata();
 		s.sliceMetadata(true, slice);
-		return s;
+		return (T) s;
 	}
 
 	/**
@@ -1468,10 +1471,10 @@ public abstract class AbstractDataset extends LazyDatasetBase implements Dataset
 	 * @param iterator Slice iterator
 	 * @return The dataset of the sliced data
 	 */
-	abstract public AbstractDataset getSlice(final SliceIterator iterator);
+	abstract public T getSlice(final SliceIterator iterator);
 
 	@Override
-	public Dataset setSlice(final Object obj, final SliceND slice) {
+	public T setSlice(final Object obj, final SliceND slice) {
 		Dataset ds;
 		if (obj instanceof Dataset) {
 			ds = (Dataset) obj;
@@ -1486,7 +1489,7 @@ public abstract class AbstractDataset extends LazyDatasetBase implements Dataset
 
 
 	@Override
-	public Dataset setSlice(final Object obj, final int[] start, final int[] stop, final int[] step) {
+	public T setSlice(final Object obj, final int[] start, final int[] stop, final int[] step) {
 		return setSlice(obj, new SliceND(shape, start, stop, step));
 	}
 
@@ -1496,10 +1499,10 @@ public abstract class AbstractDataset extends LazyDatasetBase implements Dataset
 	 * @param d
 	 * @return this dataset
 	 */
-	abstract Dataset setSlicedView(Dataset view, Dataset d);
+	abstract T setSlicedView(Dataset view, Dataset d);
 
 	@Override
-	public Dataset setSlice(Object obj, Slice... slice) {
+	public T setSlice(Object obj, Slice... slice) {
 		if (slice == null || slice.length == 0) {
 			return setSlice(obj, new SliceND(shape));
 		}
@@ -1526,9 +1529,10 @@ public abstract class AbstractDataset extends LazyDatasetBase implements Dataset
 		return Comparisons.anyTrue(this, axis);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public Dataset ifloorDivide(final Object o) {
-		return idivide(o).ifloor();
+	public T ifloorDivide(final Object o) {
+		return (T) idivide(o).ifloor();
 	}
 
 	@Override
@@ -1597,9 +1601,9 @@ public abstract class AbstractDataset extends LazyDatasetBase implements Dataset
 	 * @param derived
 	 * @param shapeChanged
 	 */
-	protected static void copyStoredValues(IDataset orig, AbstractDataset derived, boolean shapeChanged) {
-		if (orig instanceof AbstractDataset && ((AbstractDataset) orig).storedValues != null) {
-			derived.storedValues = new HashMap<String, Object>(((AbstractDataset) orig).storedValues);
+	protected static void copyStoredValues(IDataset orig, AbstractDataset<?> derived, boolean shapeChanged) {
+		if (orig instanceof AbstractDataset && ((AbstractDataset<?>) orig).storedValues != null) {
+			derived.storedValues = new HashMap<String, Object>(((AbstractDataset<?>) orig).storedValues);
 			if (shapeChanged) {
 				filterStoredValues(derived.storedValues);
 			}
@@ -2010,13 +2014,14 @@ public abstract class AbstractDataset extends LazyDatasetBase implements Dataset
 	}
 
 	@Override
-	public Dataset max(int axis) {
+	public T max(int axis) {
 		return max(false, axis);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public Dataset max(boolean ignoreNaNs, int axis) {
-		return (Dataset) getStatistics(ignoreNaNs, axis, STORE_MAX + "-" + axis);
+	public T max(boolean ignoreNaNs, int axis) {
+		return (T) getStatistics(ignoreNaNs, axis, STORE_MAX + "-" + axis);
 	}
 
 	@Override
@@ -2037,13 +2042,14 @@ public abstract class AbstractDataset extends LazyDatasetBase implements Dataset
 	}
 
 	@Override
-	public Dataset min(int axis) {
+	public T min(int axis) {
 		return min(false, axis);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public Dataset min(boolean ignoreNaNs, int axis) {
-		return (Dataset) getStatistics(ignoreNaNs, axis, STORE_MIN + "-" + axis);
+	public T min(boolean ignoreNaNs, int axis) {
+		return (T) getStatistics(ignoreNaNs, axis, STORE_MIN + "-" + axis);
 	}
 
 	@Override
@@ -2091,9 +2097,10 @@ public abstract class AbstractDataset extends LazyDatasetBase implements Dataset
 		return fromDoubleToNumber(max().doubleValue() - min().doubleValue());
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public Dataset peakToPeak(int axis) {
-		return Maths.subtract(max(axis), min(axis));
+	public T peakToPeak(int axis) {
+		return (T) Maths.subtract(max(axis), min(axis));
 	}
 
 	@Override
@@ -2341,6 +2348,7 @@ public abstract class AbstractDataset extends LazyDatasetBase implements Dataset
 		return ed;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public double getError(final int i) {
 		Dataset ed = getInternalError();
@@ -2351,6 +2359,7 @@ public abstract class AbstractDataset extends LazyDatasetBase implements Dataset
 		return ed.getElementDoubleAbs(bs.get1DIndex(i));
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public double getError(final int i, final int j) {
 		Dataset ed = getInternalError();
@@ -2361,6 +2370,7 @@ public abstract class AbstractDataset extends LazyDatasetBase implements Dataset
 		return ed.getElementDoubleAbs(bs.get1DIndex(i, j));
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public double getError(int... pos) {
 		Dataset ed = getInternalError();

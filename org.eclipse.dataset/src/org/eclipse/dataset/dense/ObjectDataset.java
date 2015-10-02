@@ -12,7 +12,7 @@ package org.eclipse.dataset.dense;
 /**
  * Interface for dataset of Objects // PRIM_TYPE
  */
-public interface ObjectDataset extends Dataset { // CLASS_TYPE
+public interface ObjectDataset extends GenericDataset<ObjectDataset> { // CLASS_TYPE
 
 	/**
 	 * This is a typed version of {@link #getBuffer()}
@@ -84,64 +84,4 @@ public interface ObjectDataset extends Dataset { // CLASS_TYPE
 	 * @param pos
 	 */
 	void setItem(Object value, int... pos); // PRIM_TYPE
-
-	@Override
-	ObjectDataset synchronizedCopy();
-
-	@Override
-	ObjectDataset getView();
-
-	@Override
-	ObjectDataset squeezeEnds();
-
-	@Override
-	ObjectDataset squeeze();
-
-	@Override
-	ObjectDataset squeeze(boolean onlyFromEnds);
-
-	@Override
-	ObjectDataset clone();
-
-	@Override
-	ObjectDataset reshape(int... shape);
-
-	@Override
-	ObjectDataset getTransposedView(int... axes);
-
-	@Override
-	ObjectDataset transpose(int... axes);
-
-	@Override
-	ObjectDataset swapAxes(int axis1, int axis2);
-
-	@Override
-	ObjectDataset flatten();
-
-	@Override
-	ObjectDataset fill(Object obj);
-
-	@Override
-	ObjectDataset sort(Integer axis);
-
-	@Override
-	ObjectDataset iadd(Object b);
-
-	@Override
-	ObjectDataset isubtract(Object b);
-
-	@Override
-	ObjectDataset imultiply(Object b);
-
-	@Override
-	ObjectDataset idivide(Object b);
-
-	@Override
-	ObjectDataset ifloor();
-
-	@Override
-	ObjectDataset iremainder(Object b);
-
-	@Override
-	ObjectDataset ipower(Object b);
 }

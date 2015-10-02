@@ -39,7 +39,7 @@ import org.eclipse.dataset.dense.SliceIterator;
 /**
  * Extend dataset for Object values // PRIM_TYPE
  */
-public class ObjectDatasetBaseImpl extends AbstractDataset implements ObjectDataset { // CLASS_TYPE
+public class ObjectDatasetBaseImpl extends AbstractDataset<ObjectDatasetBaseImpl> implements ObjectDataset { // CLASS_TYPE
 	// pin UID to base class
 	private static final long serialVersionUID = Dataset.serialVersionUID;
 
@@ -218,11 +218,6 @@ public class ObjectDatasetBaseImpl extends AbstractDataset implements ObjectData
 	}
 
 	@Override
-	public synchronized ObjectDatasetBaseImpl synchronizedCopy() {
-		return (ObjectDatasetBaseImpl) super.synchronizedCopy();
-	}
-
-	@Override
 	public ObjectDatasetBaseImpl getView() {
 		ObjectDatasetBaseImpl view = new ObjectDatasetBaseImpl();
 		copyToView(this, view, true, true);
@@ -231,49 +226,18 @@ public class ObjectDatasetBaseImpl extends AbstractDataset implements ObjectData
 	}
 
 	@Override
-	public ObjectDatasetBaseImpl squeezeEnds() {
-		return (ObjectDatasetBaseImpl) super.squeezeEnds();
-	}
-
-	@Override
-	public ObjectDatasetBaseImpl squeeze() {
-		return (ObjectDatasetBaseImpl) super.squeeze();
-	}
-
-	@Override
-	public ObjectDatasetBaseImpl squeeze(boolean onlyFromEnds) {
-		return (ObjectDatasetBaseImpl) super.squeeze(onlyFromEnds);
-	}
-
-	@Override
 	public ObjectDatasetBaseImpl clone() {
 		return new ObjectDatasetBaseImpl(this);
 	}
 
 	@Override
-	public ObjectDatasetBaseImpl reshape(int... shape) {
-		return (ObjectDatasetBaseImpl) super.reshape(shape);
-	}
-
-
-	@Override
-	public ObjectDatasetBaseImpl getTransposedView(int... axes) {
-		return (ObjectDatasetBaseImpl) super.getTransposedView(axes);
+	public ObjectDatasetBaseImpl real() {
+		return this;
 	}
 
 	@Override
-	public ObjectDatasetBaseImpl transpose(int... axes) {
-		return (ObjectDatasetBaseImpl) super.transpose(axes);
-	}
-
-	@Override
-	public ObjectDatasetBaseImpl swapAxes(int axis1, int axis2) {
-		return (ObjectDatasetBaseImpl) super.swapAxes(axis1, axis2);
-	}
-
-	@Override
-	public ObjectDatasetBaseImpl flatten() {
-		return (ObjectDatasetBaseImpl) super.flatten();
+	public ObjectDatasetBaseImpl realView() {
+		return getView();
 	}
 
 	@Override

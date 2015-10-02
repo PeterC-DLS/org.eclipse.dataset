@@ -12,7 +12,7 @@ package org.eclipse.dataset.dense;
 /**
  * Interface for compound dataset of longs // PRIM_TYPE
  */
-public interface CompoundLongDataset extends CompoundDataset { // CLASS_TYPE
+public interface CompoundLongDataset extends GenericCompoundDataset<CompoundLongDataset> { // CLASS_TYPE
 
 	/**
 	 * This is a typed version of {@link #getBuffer()}
@@ -86,4 +86,19 @@ public interface CompoundLongDataset extends CompoundDataset { // CLASS_TYPE
 	 * @param pos
 	 */
 	void setItem(long[] d, int... pos); // PRIM_TYPE
+
+	@Override
+	public LongDataset real(); // CLASS_TYPE
+
+	@Override
+	public LongDataset realView(); // CLASS_TYPE
+
+	@Override
+	public LongDataset getElements(int element); // CLASS_TYPE
+
+	@Override
+	public LongDataset getElementsView(int element); // CLASS_TYPE
+
+	@Override
+	public LongDataset asNonCompoundDataset(final boolean shareData); // CLASS_TYPE
 }
