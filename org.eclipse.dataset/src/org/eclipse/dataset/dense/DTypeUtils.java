@@ -1084,4 +1084,49 @@ public class DTypeUtils {
 		return class2DTypes.get(clazz);
 	}
 
+	static final Map<Integer, String> dtype2Names = createNameMap(); // map dataset type to names
+
+	private static Map<Integer, String> createNameMap() {
+		Map<Integer, String> map = new HashMap<>();
+		map.put(Dataset.BOOL, "bool");
+		map.put(Dataset.INT8, "int8");
+		map.put(Dataset.INT16, "int16");
+		map.put(Dataset.INT32, "int32");
+		map.put(Dataset.INT64, "int64");
+		map.put(Dataset.FLOAT32, "float32");
+		map.put(Dataset.FLOAT64, "float64");
+		map.put(Dataset.ARRAYINT8, map.get(Dataset.INT8));
+		map.put(Dataset.ARRAYINT16, map.get(Dataset.INT16));
+		map.put(Dataset.ARRAYINT32, map.get(Dataset.INT32));
+		map.put(Dataset.ARRAYINT64, map.get(Dataset.INT64));
+		map.put(Dataset.ARRAYFLOAT32, map.get(Dataset.FLOAT32));
+		map.put(Dataset.ARRAYFLOAT64, map.get(Dataset.FLOAT64));
+		map.put(Dataset.COMPLEX64, "complex64");
+		map.put(Dataset.COMPLEX128, "complex128");
+		map.put(Dataset.OBJECT, "object");
+		map.put(Dataset.STRING, "string");
+		map.put(Dataset.RGB, "rgb");
+		return map;
+	}
+
+	/**
+	 * @param a
+	 * @return name of dataset type
+	 */
+	public static String getDTypeName(Dataset a) {
+		return getDTypeName(a.getDType(), a.getElementsPerItem());
+	}
+
+	/**
+	 * @param dtype
+	 * @param itemSize
+	 * @return name of dataset type
+	 */
+	public static String getDTypeName(int dtype, int itemSize) {
+		String name = dtype2Names.get(dtype);
+		if (itemSize > 1) {
+			name = String.format("%s(%d)", name, itemSize);
+		}
+		return name;
+	}
 }
