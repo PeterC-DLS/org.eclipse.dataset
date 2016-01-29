@@ -327,7 +327,7 @@ public abstract class LazyDatasetBase implements ILazyDataset, Serializable {
 			int[] stt;
 			int[] stp;
 			int[] ste;
-			if (lz.getSize() == oSize) {
+			if (lz.getLongSize() == oSize) {
 				stt = start;
 				stp = stop;
 				ste = step;
@@ -546,11 +546,11 @@ public abstract class LazyDatasetBase implements ILazyDataset, Serializable {
 				for (int ob = 0; ob < or; ob++) {
 					broadcast[ob] = oldShape[ob] != 1 && lshape[ob] == 1;
 				}
-				int osize = lz.getSize();
+				long osize = lz.getLongSize();
 
 				// cannot do 3x5x... to 15x... if metadata is broadcasting (i.e. 1x5x...)
 				int ob = 0;
-				int nsize = 1;
+				long nsize = 1;
 				for (int i = 0; i < nr; i++) {
 					if (ob < or && broadcast[ob]) {
 						if (differences[ob] != 0) {
@@ -845,7 +845,7 @@ public abstract class LazyDatasetBase implements ILazyDataset, Serializable {
 		} else {
 			final int is = getElementsPerItem();
 			d = DatasetFactory.createFromObject(is == 1 ? Dataset.FLOAT64 : Dataset.ARRAYFLOAT64, blob);
-			if (d.getSize() == getSize() && !Arrays.equals(d.getShape(), shape)) {
+			if (d.getLongSize() == getLongSize() && !Arrays.equals(d.getShape(), shape)) {
 				d.setShape(shape.clone());
 			}
 		}

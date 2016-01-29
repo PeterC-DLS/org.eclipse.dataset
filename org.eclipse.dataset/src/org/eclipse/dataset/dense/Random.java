@@ -62,7 +62,7 @@ public class Random {
 	 * @return an array of values sampled from a uniform distribution between 0 (inclusive) and 1 (exclusive) 
 	 */
 	public static DoubleDataset rand(final int... shape) {
-		double[] buf = new double[DatasetUtils.calculateSize(shape)];
+		double[] buf = new double[(int) DatasetUtils.calculateSize(shape)];
 
 		for (int i = 0; i < buf.length; i++) {
 			buf[i] = generator.nextDouble();
@@ -80,7 +80,7 @@ public class Random {
 	 * @return an array of values sampled from a uniform distribution between low and high (both exclusive) 
 	 */
 	public static DoubleDataset rand(double low, double high, final int... shape) {
-		double[] buf = new double[DatasetUtils.calculateSize(shape)];
+		double[] buf = new double[(int) DatasetUtils.calculateSize(shape)];
 
 		for (int i = 0; i < buf.length; i++) {
 			buf[i] = prng.nextUniform(low, high);
@@ -99,7 +99,7 @@ public class Random {
 	 * same name Carl Friedrich Gauss  http://en.wikipedia.org/wiki/Carl_Friedrich_Gauss born in 1777.)
 	 */
 	public static DoubleDataset randn(final int... shape) {
-		double[] buf = new double[DatasetUtils.calculateSize(shape)];
+		double[] buf = new double[(int) DatasetUtils.calculateSize(shape)];
 
 		for (int i = 0; i < buf.length; i++) {
 			buf[i] = generator.nextGaussian();
@@ -117,7 +117,7 @@ public class Random {
 	 * @return an array of values sampled from a Gaussian distribution with given mean and standard deviation 
 	 */
 	public static DoubleDataset randn(double mean, double std, final int... shape) {
-		double[] buf = new double[DatasetUtils.calculateSize(shape)];
+		double[] buf = new double[(int) DatasetUtils.calculateSize(shape)];
 
 		for (int i = 0; i < buf.length; i++) {
 			buf[i] = prng.nextGaussian(mean, std);
@@ -145,7 +145,7 @@ public class Random {
 	 * @return an array of values sampled from a discrete uniform distribution in range [low, high]
 	 */
 	public static IntegerDataset random_integers(final int low, final int high, final int[] shape) {
-		int[] buf = new int[DatasetUtils.calculateSize(shape)];
+		int[] buf = new int[(int) DatasetUtils.calculateSize(shape)];
 
 		if (low == high) {
 			for (int i = 0; i < buf.length; i++) {
@@ -168,7 +168,7 @@ public class Random {
 	 * @return an array of values sampled from an exponential distribution with mean beta
 	 */
 	public static DoubleDataset exponential(final double beta, final int... shape) {
-		double[] buf = new double[DatasetUtils.calculateSize(shape)];
+		double[] buf = new double[(int) DatasetUtils.calculateSize(shape)];
 
 		for (int i = 0; i < buf.length; i++) {
 			buf[i] = prng.nextExponential(beta);
@@ -185,7 +185,7 @@ public class Random {
 	 * @return an array of values sampled from an exponential distribution with mean lambda
 	 */
 	public static IntegerDataset poisson(final double lam, final int... shape) {
-		int[] buf = new int[DatasetUtils.calculateSize(shape)];
+		int[] buf = new int[(int) DatasetUtils.calculateSize(shape)];
 
 		for (int i = 0; i < buf.length; i++) {
 			buf[i] = (int) prng.nextPoisson(lam);

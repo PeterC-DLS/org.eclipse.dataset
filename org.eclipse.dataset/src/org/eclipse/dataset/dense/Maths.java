@@ -1846,7 +1846,11 @@ public class Maths {
 		assert d.getRank() == 1;
 
 		final int i0 = (int) Math.floor(x0);
-		final int e0 = d.getSize() - 1;
+		long dlen = d.getLongSize();
+		if (dlen > Integer.MAX_VALUE) {
+			throw new IllegalArgumentException("Dataset is too large");
+		}
+		final int e0 = (int) dlen - 1;
 		if (i0 < -1 || i0 > e0)
 			return 0;
 
@@ -1876,7 +1880,11 @@ public class Maths {
 		assert m.getRank() == 1;
 
 		final int i0 = (int) Math.floor(x0);
-		final int e0 = d.getSize() - 1;
+		long dlen = d.getLongSize();
+		if (dlen > Integer.MAX_VALUE) {
+			throw new IllegalArgumentException("Dataset is too large");
+		}
+		final int e0 = (int) dlen - 1;
 		if (i0 < -1 || i0 > e0)
 			return 0;
 
@@ -1909,7 +1917,11 @@ public class Maths {
 		final double[] f1, f2;
 	
 		final int i0 = (int) Math.floor(x0);
-		final int e0 = d.getSize() - 1;
+		long dlen = d.getLongSize();
+		if (dlen > Integer.MAX_VALUE) {
+			throw new IllegalArgumentException("Dataset is too large");
+		}
+		final int e0 = (int) dlen - 1;
 		if (i0 < -1 || i0 > e0) {
 			Arrays.fill(values, 0);
 			return;
@@ -2870,7 +2882,11 @@ public class Maths {
 	private static double SelectedMean(Dataset data, int Min, int Max) {
 
 		double result = 0.0;
-		for (int i = Min, imax = data.getSize(); i <= Max; i++) {
+		long dlen = data.getLongSize();
+		if (dlen > Integer.MAX_VALUE) {
+			throw new IllegalArgumentException("Dataset is too large");
+		}
+		for (int i = Min, imax = (int) dlen; i <= Max; i++) {
 			// clip i appropriately, imagine that effectively the two ends continue
 			// straight out.
 			int pos = i;
@@ -2892,7 +2908,11 @@ public class Maths {
 		for (int j = 0; j < isize; j++)
 			out[j] = 0.;
 
-		for (int i = Min, imax = data.getSize(); i <= Max; i++) {
+		long dlen = data.getLongSize();
+		if (dlen > Integer.MAX_VALUE) {
+			throw new IllegalArgumentException("Dataset is too large");
+		}
+		for (int i = Min, imax = (int) dlen; i <= Max; i++) {
 			// clip i appropriately, imagine that effectively the two ends continue
 			// straight out.
 			int pos = i*isize;
@@ -2929,7 +2949,7 @@ public class Maths {
 		if (x.getRank() != 1 || y.getRank() != 1) {
 			throw new IllegalArgumentException("Only one dimensional dataset supported");
 		}
-		if (y.getSize() > x.getSize()) {
+		if (y.getLongSize() > x.getLongSize()) {
 			throw new IllegalArgumentException("Length of x dataset should be greater than or equal to y's");
 		}
 		int dtype = y.getDType();
@@ -2962,7 +2982,11 @@ public class Maths {
 
 		final int isize = y.getElementsPerItem();
 		if (isize == 1) {
-			for (int i = 0, imax = x.getSize(); i < imax; i++) {
+			long dlen = x.getLongSize();
+			if (dlen > Integer.MAX_VALUE) {
+				throw new IllegalArgumentException("Dataset is too large");
+			}
+			for (int i = 0, imax = (int) dlen; i < imax; i++) {
 				double LeftValue = SelectedMean(y, i - n, i - 1);
 				double RightValue = SelectedMean(y, i + 1, i + n);
 				double LeftPosition = SelectedMean(x, i - n, i - 1);
@@ -2975,7 +2999,11 @@ public class Maths {
 		} else {
 			double[] leftValues = new double[isize];
 			double[] rightValues = new double[isize];
-			for (int i = 0, imax = x.getSize(); i < imax; i++) {
+			long dlen = x.getLongSize();
+			if (dlen > Integer.MAX_VALUE) {
+				throw new IllegalArgumentException("Dataset is too large");
+			}
+			for (int i = 0, imax = (int) dlen; i < imax; i++) {
 				SelectedMeanArray(leftValues, y, i - n, i - 1);
 				SelectedMeanArray(rightValues, y, i + 1, i + n);
 				double delta = SelectedMean(x, i - n, i - 1);

@@ -1308,7 +1308,7 @@ public class AbstractDatasetTest {
 	public void testSetErrorBuffer() {
 		
 		Dataset a = DatasetFactory.zeros(new int[] {100,100}, Dataset.INT32);
-		Dataset err = DatasetUtils.linSpace(0, a.getSize() - 1, a.getSize(), Dataset.FLOAT64);
+		Dataset err = DatasetUtils.linSpace(0, a.getLongSize() - 1, (int) a.getLongSize(), Dataset.FLOAT64);
 		err.setShape(a.getShape());
 		
 		a.setErrorBuffer(null);

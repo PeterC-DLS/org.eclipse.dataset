@@ -59,7 +59,7 @@ public class LongDatasetTest {
 
 		Dataset sv = a.getSliceView(new Slice(2,7));
 		Dataset sc = a.getSlice(new Slice(2,7));
-		l = sc.getSize();
+		l = (int) sc.getLongSize();
 		for (int i = 0; i < l; i++) {
 			long r = sc.getLong(-(i + 1));
 			assertEquals(r, sv.getLong(-(i + 1)));

@@ -67,7 +67,7 @@ public class DoubleDatasetTest {
 
 		Dataset sv = a.getSliceView(new Slice(2, 7));
 		Dataset sc = a.getSlice(new Slice(2, 7));
-		l = sc.getSize();
+		l = (int) sc.getLongSize();
 		for (int i = 0; i < l; i++) {
 			double r = sc.getDouble(-(i + 1));
 			assertEquals(r, sv.getDouble(-(i + 1)), 1e-5 * r);
@@ -79,13 +79,13 @@ public class DoubleDatasetTest {
 		double dz = 0.5;
 		DoubleDataset z = DatasetFactory.createFromObject(DoubleDataset.class, dz);
 		assertEquals(0, z.getRank());
-		assertEquals(1, z.getSize());
+		assertEquals(1, z.getLongSize());
 		assertEquals(dz, z.getElementDoubleAbs(0), 1e-14);
 
 		double[] da = { 0, 1, 2, 3, 4, 5 };
 		DoubleDataset a = DatasetFactory.createFromObject(DoubleDataset.class, da);
 		assertEquals(1, a.getRank());
-		assertEquals(6, a.getSize());
+		assertEquals(6, a.getLongSize());
 		assertEquals(6, a.getShape()[0]);
 		IndexIterator it = a.getIterator();
 		for (int i = 0; it.hasNext(); i++) {
@@ -95,7 +95,7 @@ public class DoubleDatasetTest {
 		double[][] db = { { 0, 1, 2 }, { 3, 4, 5 } };
 		DoubleDataset b = DatasetFactory.createFromObject(DoubleDataset.class, db);
 		assertEquals(2, b.getRank());
-		assertEquals(6, b.getSize());
+		assertEquals(6, b.getLongSize());
 		assertEquals(2, b.getShape()[0]);
 		assertEquals(3, b.getShape()[1]);
 		it = b.getIterator();
@@ -106,7 +106,7 @@ public class DoubleDatasetTest {
 		double[][] dc = { { 0, 1, 2, 3 }, { 4, 5, 6 } };
 		DoubleDataset c = DatasetFactory.createFromObject(DoubleDataset.class, dc);
 		assertEquals(2, c.getRank());
-		assertEquals(8, c.getSize());
+		assertEquals(8, c.getLongSize());
 		assertEquals(2, c.getShape()[0]);
 		assertEquals(4, c.getShape()[1]);
 		it = c.getIterator();
@@ -120,7 +120,7 @@ public class DoubleDatasetTest {
 		double[][] dd = { { 0, 1, 2 }, { 4, 5, 6, 7 } };
 		DoubleDataset d = DatasetFactory.createFromObject(DoubleDataset.class, dd);
 		assertEquals(2, d.getRank());
-		assertEquals(8, d.getSize());
+		assertEquals(8, d.getLongSize());
 		assertEquals(2, d.getShape()[0]);
 		assertEquals(4, d.getShape()[1]);
 		it = d.getIterator();

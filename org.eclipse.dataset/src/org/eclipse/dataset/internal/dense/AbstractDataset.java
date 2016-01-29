@@ -64,7 +64,7 @@ import org.eclipse.dataset.metadata.MetadataType;
  */
 public abstract class AbstractDataset<T extends GenericDataset<?>> extends LazyDatasetBase implements Dataset {
 
-	protected int size; // number of items
+	protected long size; // number of items
 
 	transient protected AbstractDataset<?> base; // is null when not a view
 	protected int[] stride; // can be null for row-major, contiguous datasets
@@ -115,7 +115,7 @@ public abstract class AbstractDataset<T extends GenericDataset<?>> extends LazyD
 		Dataset other = (Dataset) obj;
 		if (getElementsPerItem() != other.getElementsPerItem())
 			return false;
-		if (size != other.getSize())
+		if (size != other.getLongSize())
 			return false;
 		if (!Arrays.equals(shape, other.getShapeRef())) {
 			return false;
@@ -168,7 +168,7 @@ public abstract class AbstractDataset<T extends GenericDataset<?>> extends LazyD
 	 */
 	protected static void copyToView(Dataset orig, AbstractDataset<?> view, boolean clone, boolean cloneMetadata) {
 		view.name = orig.getName();
-		view.size = orig.getSize();
+		view.size = orig.getLongSize();
 		view.odata = orig.getBuffer();
 		view.offset = orig.getOffset();
 		view.base = orig instanceof AbstractDataset ? ((AbstractDataset<?>) orig).base : null;
@@ -300,7 +300,11 @@ public abstract class AbstractDataset<T extends GenericDataset<?>> extends LazyD
 
 	@Override
 	public T flatten() {
-		return reshape(size);
+		if (size > Integer.MAX_VALUE) {
+			logger.error("Dataset is too large to flatten");
+			throw new UnsupportedOperationException("Dataset is too large to flatten");
+		}
+		return reshape((int) size);
 	}
 
 	/**
@@ -350,7 +354,11 @@ public abstract class AbstractDataset<T extends GenericDataset<?>> extends LazyD
 	public IndexIterator getIterator(final boolean withPosition) {
 		if (stride != null)
 			return new StrideIterator(shape, stride, offset);
-		return withPosition ? new ContiguousIteratorWithPosition(shape, size) : new ContiguousIterator(size);
+		if (size > Integer.MAX_VALUE) {
+			logger.error("Dataset is too large to support IndexIterators, please use a PositionIterator");
+			throw new UnsupportedOperationException("Dataset is too large to support IndexIterators, please use a PositionIterator");
+		}
+		return withPosition ? new ContiguousIteratorWithPosition(shape, (int) size) : new ContiguousIterator((int) size);
 	}
 
 	@Override
@@ -379,7 +387,10 @@ public abstract class AbstractDataset<T extends GenericDataset<?>> extends LazyD
 		if (stride != null)
 			return new StrideIterator(getElementsPerItem(), shape, stride, offset, slice);
 
-		return new SliceIterator(shape, size, slice);
+		if (size > Integer.MAX_VALUE) {
+			// TODO make a slice iterator that does use size
+		}
+		return new SliceIterator(shape, (int) size, slice);
 	}
 
 	@Override
@@ -444,10 +455,13 @@ public abstract class AbstractDataset<T extends GenericDataset<?>> extends LazyD
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public T getBy1DIndex(IntegerDataset index) {
+	public T getBy1DIndex(IntegerDataset index) { // TODO support a long dataset
 		final int is = getElementsPerItem();
 		final T r = (T) DatasetFactory.zeros(is, index.getShape(), getDType());
-		final IntegerIterator iter = new IntegerIterator(index, size, is);
+		if (size > Integer.MAX_VALUE) {
+			// TODO 
+		}
+		final IntegerIterator iter = new IntegerIterator(index, (int) size, is);
 
 		int i = 0;
 		while (iter.hasNext()) {
@@ -506,6 +520,11 @@ public abstract class AbstractDataset<T extends GenericDataset<?>> extends LazyD
 
 	@Override
 	public int getSize() {
+		return (int) getLongSize();
+	}
+
+	@Override
+	public long getLongSize() {
 		if (odata == null) {
 			throw new NullPointerException("The data object inside the dataset has not been allocated, "
 					+ "this suggests a failed or absent construction of the dataset");
@@ -529,7 +548,7 @@ public abstract class AbstractDataset<T extends GenericDataset<?>> extends LazyD
 	}
 
 	@Override
-	public int getNbytes() {
+	public long getNbytes() {
 		return getSize() * getItemsize();
 	}
 
@@ -538,10 +557,10 @@ public abstract class AbstractDataset<T extends GenericDataset<?>> extends LazyD
 	 * @param shape
 	 * @param size
 	 */
-	private void checkShape(int[] shape, int size) {
+	private void checkShape(int[] shape, long size) {
 		int rank = shape.length;
 		int found = -1;
-		int nsize = 1;
+		long nsize = 1;
 		for (int i = 0; i < rank; i++) {
 			int d = shape[i];
 			if (d == -1) {
@@ -556,7 +575,12 @@ public abstract class AbstractDataset<T extends GenericDataset<?>> extends LazyD
 			}
 		}
 		if (found >= 0) {
-			shape[found] = size/nsize;
+			long s = size/nsize;
+			if (s > Integer.MAX_VALUE) {
+				logger.error("Value for placeholder is too large");
+				throw new IllegalArgumentException("Value for placeholder is too large");
+			}
+			shape[found] = (int) s;
 		} else if (nsize != size) {
 			logger.error("New shape is not same size as old shape");
 			throw new IllegalArgumentException("New size is not same as the old size. Old size is "+size+" new size is "+nsize+" and shape is "+Arrays.toString(shape));
@@ -2340,7 +2364,7 @@ public abstract class AbstractDataset<T extends GenericDataset<?>> extends LazyD
 		if (ed == null)
 			return null;
 
-		if (ed.getSize() != getSize()) {
+		if (ed.getLongSize() != getLongSize()) {
 			DoubleDataset errors = new DoubleDatasetImpl(shape);
 			errors.setSlice(ed);
 			return errors;

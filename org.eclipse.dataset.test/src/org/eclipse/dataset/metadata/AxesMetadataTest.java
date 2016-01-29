@@ -213,7 +213,7 @@ public class AxesMetadataTest {
 
 		for (int i = 0; i < r; i++) {
 			ILazyDataset a = amd.getAxis(i)[0];
-			assertEquals(shape[map[i]], a.getSize());
+			assertEquals(shape[map[i]], a.getLongSize());
 		}
 	}
 

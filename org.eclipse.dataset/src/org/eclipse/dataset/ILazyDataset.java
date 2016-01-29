@@ -35,11 +35,20 @@ public interface ILazyDataset extends Serializable, IMetadataProvider, INameable
 
 	/**
 	 * The size of the dataset is the number of items in the array
+	 * 
+	 * @return number of data items
+	 * @deprecated use {{@link #getLongSize()} instead
+	 */
+	@Deprecated
+	public int getSize();
+
+	/**
+	 * The size of the dataset is the number of items in the array
 	 * (not including reserved space)
 	 * 
 	 * @return number of data items
 	 */
-	public int getSize();
+	public long getLongSize();
 
 	/**
 	 * The shape (or array of lengths for each dimension) of the dataset can be empty for zero-rank

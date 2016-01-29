@@ -1259,10 +1259,13 @@ public class LinearAlgebra {
 		if (a.getRank() != 1) {
 			throw new IllegalArgumentException("Dataset must be rank 1");
 		}
-		int size = a.getSize();
+		long size = a.getLongSize();
+		if (size > Integer.MAX_VALUE) {
+			throw new IllegalArgumentException("Dataset is too large");
+		}
 		IndexIterator it = a.getIterator(true);
 		int[] pos = it.getPos();
-		RealVector m = new ArrayRealVector(size);
+		RealVector m = new ArrayRealVector((int) size);
 		while (it.hasNext()) {
 			m.setEntry(pos[0], a.getElementDoubleAbs(it.index));
 		}
@@ -1271,7 +1274,11 @@ public class LinearAlgebra {
 
 	private static Dataset createDataset(RealVector v) {
 		DoubleDataset r = (DoubleDataset) DatasetFactory.zeros(new int[] {v.getDimension()}, Dataset.FLOAT64);
-		int size = r.getSize();
+		long size = r.getLongSize();
+		if (size > Integer.MAX_VALUE) {
+			// TODO support large n-D datasets
+			throw new IllegalArgumentException("Dataset is too large");
+		}
 		if (v instanceof ArrayRealVector) {
 			double[] data = ((ArrayRealVector) v).getDataRef();
 			for (int i = 0; i < size; i++) {

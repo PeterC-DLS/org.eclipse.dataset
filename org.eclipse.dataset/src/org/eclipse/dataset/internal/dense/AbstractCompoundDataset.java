@@ -74,8 +74,12 @@ public abstract class AbstractCompoundDataset<T extends GenericCompoundDataset<?
 	public IndexIterator getIterator(final boolean withPosition) {
 		if (stride != null)
 			return new StrideIterator(isize, shape, stride, offset);
-		return withPosition ? getSliceIterator(null, null, null) :
-			new ContiguousIterator(size, isize);
+
+		if (size > Integer.MAX_VALUE) {
+			logger.error("Dataset is too large to support IndexIterators, please use a PositionIterator");
+			throw new UnsupportedOperationException("Dataset is too large to support IndexIterators, please use a PositionIterator");
+		}
+		return withPosition ? getSliceIterator(null, null, null) : new ContiguousIterator((int) size, isize);
 	}
 
 	/**
@@ -90,7 +94,11 @@ public abstract class AbstractCompoundDataset<T extends GenericCompoundDataset<?
 			logger.error("Invalid choice of element: {}/{}", element, isize);
 			throw new IllegalArgumentException("Invalid choice of element: " + element + "/" + isize);
 		}
-		final IndexIterator it = stride != null ?  new StrideIterator(isize, shape, stride, offset) : new ContiguousIterator(size, isize);
+		if (size > Integer.MAX_VALUE) {
+			logger.error("Dataset is too large to support IndexIterators, please use a PositionIterator");
+			throw new UnsupportedOperationException("Dataset is too large to support IndexIterators, please use a PositionIterator");
+		}
+		final IndexIterator it = stride != null ?  new StrideIterator(isize, shape, stride, offset) : new ContiguousIterator((int) size, isize);
 
 		it.index += element;
 		return it;
@@ -101,7 +109,10 @@ public abstract class AbstractCompoundDataset<T extends GenericCompoundDataset<?
 		if (stride != null)
 			return new StrideIterator(isize, shape, stride, offset, slice);
 
-		return new SliceIterator(shape, size, isize, slice);
+		if (size > Integer.MAX_VALUE) {
+			// TODO make a slice iterator that does use size
+		}
+		return new SliceIterator(shape, (int) size, isize, slice);
 	}
 
 	/**
@@ -642,7 +653,7 @@ public abstract class AbstractCompoundDataset<T extends GenericCompoundDataset<?
 		if (ed == null)
 			return null;
 
-		if (ed.getSize() != size || ed.getElementsPerItem() != isize) {
+		if (ed.getLongSize() != size || ed.getElementsPerItem() != isize) {
 			CompoundDataset errors = new CompoundDoubleDatasetImpl(isize, shape);
 			errors.setSlice(ed);
 			return errors;

@@ -168,7 +168,7 @@ public class StatsTest {
 		Arrays.sort(times);
 		System.out.printf("Low/High (%g/%g) took %.2fms\n", vs[0], vs[1], times[0]/1e6);
 
-		double s = a.getSize();
+		double s = a.getLongSize();
 		double lx = s*LOW;
 		double hx = s*(1-HIGH);
 

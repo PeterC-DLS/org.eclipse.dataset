@@ -26,9 +26,17 @@ public class ContiguousPairIterator extends BroadcastIterator {
 	public ContiguousPairIterator(Dataset a, Dataset b, Dataset o, boolean createIfNull) {
 		super(a, b, o);
 		aStep = a.getElementsPerItem();
-		aMax = a.getSize() * aStep;
+		long s = a.getLongSize();
+		if (s > Integer.MAX_VALUE) {
+			throw new IllegalArgumentException("Dataset too large");
+		}
+		aMax = (int) s * aStep;
 		bStep = b.getElementsPerItem();
-		bMax = b.getSize() * bStep;
+		s = b.getLongSize();
+		if (s > Integer.MAX_VALUE) {
+			throw new IllegalArgumentException("Dataset too large");
+		}
+		bMax = (int) s * bStep;
 		if (outputA) {
 			oStep = aStep;
 		} else if (outputB) {

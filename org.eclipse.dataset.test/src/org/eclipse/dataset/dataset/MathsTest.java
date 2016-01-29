@@ -74,7 +74,7 @@ public class MathsTest {
 		Assert.assertNotNull(c);
 		Assert.assertNotNull(d);
 		Assert.assertEquals("Dtype does not match", c.getDType(), d.getDType());
-		Assert.assertEquals("Size does not match", c.getSize(), d.getSize());
+		Assert.assertEquals("Size does not match", c.getLongSize(), d.getLongSize());
 		Assert.assertEquals("ISize does not match", c.getElementsPerItem(), d.getElementsPerItem());
 		Assert.assertArrayEquals("Shape does not match", c.getShape(), d.getShape());
 
@@ -186,7 +186,7 @@ public class MathsTest {
 						continue;
 					}
 					start += System.nanoTime();
-					double ntime = ((double) start) / c.getSize();
+					double ntime = ((double) start) / c.getLongSize();
 
 					d = DatasetFactory.zeros(c);
 					start = -System.nanoTime();
@@ -257,7 +257,7 @@ public class MathsTest {
 					if (d == null)
 						break;
 					start += System.nanoTime();
-					double otime = ((double) start) / d.getSize();
+					double otime = ((double) start) / d.getLongSize();
 
 					System.out.printf("Time taken by add for %s: %s; %s (%.1f%%)\n", n, otime, ntime, 100.
 							* (otime - ntime) / otime);
@@ -293,7 +293,7 @@ public class MathsTest {
 					continue;
 				}
 				start += System.nanoTime();
-				double ntime = ((double) start)/c.getSize();
+				double ntime = ((double) start)/c.getLongSize();
 
 				d = DatasetFactory.zeros(c);
 				start = -System.nanoTime();
@@ -324,7 +324,7 @@ public class MathsTest {
 				if (d == null)
 					break;
 				start += System.nanoTime();
-				double otime = ((double) start)/d.getSize();
+				double otime = ((double) start)/d.getLongSize();
 
 				System.out.printf("Time taken by add for %s: %s; %s (%.1f%%)\n", n, otime, ntime, 100.*(otime - ntime)/otime);
 
@@ -388,7 +388,7 @@ public class MathsTest {
 						continue;
 					}
 					start += System.nanoTime();
-					double ntime = ((double) start) / c.getSize();
+					double ntime = ((double) start) / c.getLongSize();
 
 					d = DatasetFactory.zeros(c);
 					start = -System.nanoTime();
@@ -460,7 +460,7 @@ public class MathsTest {
 					if (d == null)
 						break;
 					start += System.nanoTime();
-					double otime = ((double) start) / d.getSize();
+					double otime = ((double) start) / d.getLongSize();
 
 					System.out.printf("Time taken by sub for %s: %s; %s (%.1f%%)\n", n, otime, ntime, 100.
 							* (otime - ntime) / otime);
@@ -496,7 +496,7 @@ public class MathsTest {
 					continue;
 				}
 				start += System.nanoTime();
-				double ntime = ((double) start)/c.getSize();
+				double ntime = ((double) start)/c.getLongSize();
 
 				d = DatasetFactory.zeros(c);
 				start = -System.nanoTime();
@@ -527,7 +527,7 @@ public class MathsTest {
 				if (d == null)
 					break;
 				start += System.nanoTime();
-				double otime = ((double) start)/d.getSize();
+				double otime = ((double) start)/d.getLongSize();
 
 				System.out.printf("Time taken by add for %s: %s; %s (%.1f%%)\n", n, otime, ntime, 100.*(otime - ntime)/otime);
 
@@ -561,7 +561,7 @@ public class MathsTest {
 					continue;
 				}
 				start += System.nanoTime();
-				double ntime = ((double) start)/c.getSize();
+				double ntime = ((double) start)/c.getLongSize();
 
 				d = DatasetFactory.zeros(c);
 				start = -System.nanoTime();
@@ -592,7 +592,7 @@ public class MathsTest {
 				if (d == null)
 					break;
 				start += System.nanoTime();
-				double otime = ((double) start)/d.getSize();
+				double otime = ((double) start)/d.getLongSize();
 
 				System.out.printf("Time taken by sub for %s: %s; %s (%.1f%%)\n", n, otime, ntime, 100.*(otime - ntime)/otime);
 
@@ -657,7 +657,7 @@ public class MathsTest {
 						continue;
 					}
 					start += System.nanoTime();
-					double ntime = ((double) start) / c.getSize();
+					double ntime = ((double) start) / c.getLongSize();
 
 					d = DatasetFactory.zeros(c);
 					start = -System.nanoTime();
@@ -729,7 +729,7 @@ public class MathsTest {
 					if (d == null)
 						break;
 					start += System.nanoTime();
-					double otime = ((double) start) / d.getSize();
+					double otime = ((double) start) / d.getLongSize();
 
 					System.out.printf("Time taken by mul for %s: %s; %s (%.1f%%)\n", n, otime, ntime, 100.
 							* (otime - ntime) / otime);
@@ -765,7 +765,7 @@ public class MathsTest {
 					continue;
 				}
 				start += System.nanoTime();
-				double ntime = ((double) start)/c.getSize();
+				double ntime = ((double) start)/c.getLongSize();
 
 				d = DatasetFactory.zeros(c);
 				start = -System.nanoTime();
@@ -796,7 +796,7 @@ public class MathsTest {
 				if (d == null)
 					break;
 				start += System.nanoTime();
-				double otime = ((double) start)/d.getSize();
+				double otime = ((double) start)/d.getLongSize();
 
 				System.out.printf("Time taken by mul for %s: %s; %s (%.1f%%)\n", n, otime, ntime, 100.*(otime - ntime)/otime);
 
@@ -861,7 +861,7 @@ public class MathsTest {
 						continue;
 					}
 					start += System.nanoTime();
-					double ntime = ((double) start) / c.getSize();
+					double ntime = ((double) start) / c.getLongSize();
 
 					d = DatasetFactory.zeros(c);
 					start = -System.nanoTime();
@@ -970,7 +970,7 @@ public class MathsTest {
 					if (d == null)
 						break;
 					start += System.nanoTime();
-					double otime = ((double) start) / d.getSize();
+					double otime = ((double) start) / d.getLongSize();
 
 					System.out.printf("Time taken by div for %s: %s; %s (%.1f%%)\n", n, otime, ntime, 100.
 							* (otime - ntime) / otime);
@@ -1006,7 +1006,7 @@ public class MathsTest {
 					continue;
 				}
 				start += System.nanoTime();
-				double ntime = ((double) start)/c.getSize();
+				double ntime = ((double) start)/c.getLongSize();
 
 				d = DatasetFactory.zeros(c);
 				start = -System.nanoTime();
@@ -1037,7 +1037,7 @@ public class MathsTest {
 				if (d == null)
 					break;
 				start += System.nanoTime();
-				double otime = ((double) start)/d.getSize();
+				double otime = ((double) start)/d.getLongSize();
 
 				System.out.printf("Time taken by div for %s: %s; %s (%.1f%%)\n", n, otime, ntime, 100.*(otime - ntime)/otime);
 
@@ -1071,7 +1071,7 @@ public class MathsTest {
 					continue;
 				}
 				start += System.nanoTime();
-				double ntime = ((double) start)/c.getSize();
+				double ntime = ((double) start)/c.getLongSize();
 
 				d = DatasetFactory.zeros(c);
 				start = -System.nanoTime();
@@ -1102,7 +1102,7 @@ public class MathsTest {
 				if (d == null)
 					break;
 				start += System.nanoTime();
-				double otime = ((double) start)/d.getSize();
+				double otime = ((double) start)/d.getLongSize();
 
 				System.out.printf("Time taken by div for %s: %s; %s (%.1f%%)\n", n, otime, ntime, 100.*(otime - ntime)/otime);
 
@@ -1170,7 +1170,7 @@ public class MathsTest {
 						continue;
 					}
 					start += System.nanoTime();
-					double ntime = ((double) start) / c.getSize();
+					double ntime = ((double) start) / c.getLongSize();
 
 					d = DatasetFactory.zeros(c);
 					start = -System.nanoTime();
@@ -1217,7 +1217,7 @@ public class MathsTest {
 					if (d == null)
 						break;
 					start += System.nanoTime();
-					double otime = ((double) start) / d.getSize();
+					double otime = ((double) start) / d.getLongSize();
 
 					System.out.printf("Time taken by rem for %s: %s; %s (%.1f%%)\n", n, otime, ntime, 100.
 							* (otime - ntime) / otime);
@@ -1256,7 +1256,7 @@ public class MathsTest {
 					continue;
 				}
 				start += System.nanoTime();
-				double ntime = ((double) start)/c.getSize();
+				double ntime = ((double) start)/c.getLongSize();
 
 				d = DatasetFactory.zeros(c);
 				start = -System.nanoTime();
@@ -1277,7 +1277,7 @@ public class MathsTest {
 					}
 				}
 				start += System.nanoTime();
-				double otime = ((double) start)/d.getSize();
+				double otime = ((double) start)/d.getLongSize();
 
 				System.out.printf("Time taken by rem for %s: %s; %s (%.1f%%)\n", n, otime, ntime, 100.*(otime - ntime)/otime);
 
@@ -1314,7 +1314,7 @@ public class MathsTest {
 					continue;
 				}
 				start += System.nanoTime();
-				double ntime = ((double) start)/c.getSize();
+				double ntime = ((double) start)/c.getLongSize();
 
 				d = DatasetFactory.zeros(c);
 				start = -System.nanoTime();
@@ -1335,7 +1335,7 @@ public class MathsTest {
 					}
 				}
 				start += System.nanoTime();
-				double otime = ((double) start)/d.getSize();
+				double otime = ((double) start)/d.getLongSize();
 
 				System.out.printf("Time taken by rem for %s: %s; %s (%.1f%%)\n", n, otime, ntime, 100.*(otime - ntime)/otime);
 
@@ -1400,7 +1400,7 @@ public class MathsTest {
 						continue;
 					}
 					start += System.nanoTime();
-					double ntime = ((double) start) / c.getSize();
+					double ntime = ((double) start) / c.getLongSize();
 
 					d = DatasetFactory.zeros(c);
 					start = -System.nanoTime();
@@ -1495,7 +1495,7 @@ public class MathsTest {
 					if (d == null)
 						break;
 					start += System.nanoTime();
-					double otime = ((double) start) / d.getSize();
+					double otime = ((double) start) / d.getLongSize();
 
 					System.out.printf("Time taken by pow for %s: %s; %s (%.1f%%)\n", n, otime, ntime, 100.
 							* (otime - ntime) / otime);
@@ -1531,7 +1531,7 @@ public class MathsTest {
 					continue;
 				}
 				start += System.nanoTime();
-				double ntime = ((double) start)/c.getSize();
+				double ntime = ((double) start)/c.getLongSize();
 
 				d = DatasetFactory.zeros(c);
 				start = -System.nanoTime();
@@ -1562,7 +1562,7 @@ public class MathsTest {
 				if (d == null)
 					break;
 				start += System.nanoTime();
-				double otime = ((double) start)/d.getSize();
+				double otime = ((double) start)/d.getLongSize();
 
 				System.out.printf("Time taken by pow for %s: %s; %s (%.1f%%)\n", n, otime, ntime, 100.*(otime - ntime)/otime);
 
@@ -1596,7 +1596,7 @@ public class MathsTest {
 					continue;
 				}
 				start += System.nanoTime();
-				double ntime = ((double) start)/c.getSize();
+				double ntime = ((double) start)/c.getLongSize();
 
 				d = DatasetFactory.zeros(c);
 				start = -System.nanoTime();
@@ -1627,7 +1627,7 @@ public class MathsTest {
 				if (d == null)
 					break;
 				start += System.nanoTime();
-				double otime = ((double) start)/d.getSize();
+				double otime = ((double) start)/d.getLongSize();
 
 				System.out.printf("Time taken by pow for %s: %s; %s (%.1f%%)\n", n, otime, ntime, 100.*(otime - ntime)/otime);
 
@@ -1804,19 +1804,19 @@ public class MathsTest {
 
 		double[] resFloor = { -2, -2, -2, 0, 1, 1, 1 };
 		x = (DoubleDataset) Maths.floor(t);
-		for (int i = 0, imax = t.getSize(); i < imax; i++) {
+		for (int i = 0, imax = (int) t.getLongSize(); i < imax; i++) {
 			assertEquals(resFloor[i], x.get(i), tol);
 		}
 
 		double[] resCeil = { -1, -1, -1, 1, 2, 2, 2 };
 		x = (DoubleDataset) Maths.ceil(t);
-		for (int i = 0, imax = t.getSize(); i < imax; i++) {
+		for (int i = 0, imax = (int) t.getLongSize(); i < imax; i++) {
 			assertEquals(resCeil[i], x.get(i), tol);
 		}
 
 		double[] resRint= { -2, -2, -1, 0, 1, 2, 2 };
 		x = (DoubleDataset) Maths.rint(t);
-		for (int i = 0, imax = t.getSize(); i < imax; i++) {
+		for (int i = 0, imax = (int) t.getLongSize(); i < imax; i++) {
 			assertEquals(resRint[i], x.get(i), tol);
 		}
 	}

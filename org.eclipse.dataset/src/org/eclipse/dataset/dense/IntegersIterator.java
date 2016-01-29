@@ -93,7 +93,7 @@ public class IntegersIterator extends IndexIterator {
 				indexes.add(null);
 		}
 
-		int ilength = -1;
+		long ilength = -1;
 		int[] cshape = null;
 		int first = -1; // index of first null or slice after non-null index
 		boolean intact = true;
@@ -106,7 +106,7 @@ public class IntegersIterator extends IndexIterator {
 					intact = false;
 				}
 
-				int l = ind.getSize();
+				long l = ind.getLongSize();
 				if (ilength < 0) {
 					ilength = l;
 				} else if (l != ilength) {

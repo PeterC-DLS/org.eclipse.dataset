@@ -180,7 +180,7 @@ public interface Dataset extends IErrorDataset {
 	/**
 	 * @return number of bytes used
 	 */
-	public int getNbytes();
+	public long getNbytes();
 
 	/**
 	 * @return the buffer that backs the dataset

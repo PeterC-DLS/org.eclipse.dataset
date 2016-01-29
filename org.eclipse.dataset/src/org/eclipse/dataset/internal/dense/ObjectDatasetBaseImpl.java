@@ -50,11 +50,11 @@ public class ObjectDatasetBaseImpl extends AbstractDataset<ObjectDatasetBaseImpl
 		data = (Object[]) odata; // PRIM_TYPE
 	}
 
-	protected static Object[] createArray(final int size) { // PRIM_TYPE
+	protected static Object[] createArray(final long size) { // PRIM_TYPE
 		Object[] array = null; // PRIM_TYPE
 
 		try {
-			array = new Object[size]; // PRIM_TYPE
+			array = new Object[(int) size]; // PRIM_TYPE
 		} catch (OutOfMemoryError e) {
 			logger.error("The size of the dataset ({}) that is being created is too large "
 					+ "and there is not enough memory to hold it.", size);
@@ -540,9 +540,9 @@ public class ObjectDatasetBaseImpl extends AbstractDataset<ObjectDatasetBaseImpl
 
 	@Override
 	public void resize(int... newShape) {
-		final IndexIterator iter = getIterator();
-		final int nsize = DatasetUtils.calculateSize(newShape);
+		final long nsize = DatasetUtils.calculateSize(newShape);
 		final Object[] ndata = createArray(nsize); // PRIM_TYPE
+		final IndexIterator iter = getIterator();
 		for (int i = 0; iter.hasNext() && i < nsize; i++) {
 			ndata[i] = data[iter.index];
 		}
@@ -621,8 +621,8 @@ public class ObjectDatasetBaseImpl extends AbstractDataset<ObjectDatasetBaseImpl
 	public ObjectDatasetBaseImpl setByBoolean(final Object obj, Dataset selection) {
 		if (obj instanceof Dataset) {
 			final Dataset ds = (Dataset) obj;
-			final int length = ((Number) selection.sum()).intValue();
-			if (length != ds.getSize()) {
+			final long length = ((Number) selection.sum()).longValue();
+			if (length != ds.getLongSize()) {
 				throw new IllegalArgumentException(
 						"Number of true items in selection does not match number of items in dataset");
 			}
@@ -649,20 +649,26 @@ public class ObjectDatasetBaseImpl extends AbstractDataset<ObjectDatasetBaseImpl
 	public ObjectDatasetBaseImpl setBy1DIndex(final Object obj, final Dataset index) {
 		if (obj instanceof Dataset) {
 			final Dataset ds = (Dataset) obj;
-			if (index.getSize() != ds.getSize()) {
+			if (index.getLongSize() != ds.getLongSize()) {
 				throw new IllegalArgumentException(
 						"Number of items in index dataset does not match number of items in dataset");
 			}
 
 			final IndexIterator oiter = ds.getIterator();
-			final IntegerIterator iter = new IntegerIterator(index, size);
+			if (size > Integer.MAX_VALUE) {
+				// TODO fix for large datasets
+			}
+			final IntegerIterator iter = new IntegerIterator(index, (int) size);
 
 			while (iter.hasNext() && oiter.hasNext()) {
 				data[iter.index] = ds.getObjectAbs(oiter.index); // GET_ELEMENT_WITH_CAST
 			}
 		} else {
 			final Object dv = obj; // PRIM_TYPE // FROM_OBJECT
-			IntegerIterator iter = new IntegerIterator(index, size);
+			if (size > Integer.MAX_VALUE) {
+				// TODO fix for large datasets
+			}
+			IntegerIterator iter = new IntegerIterator(index, (int) size);
 
 			while (iter.hasNext()) {
 				data[iter.index] = dv;
@@ -679,7 +685,7 @@ public class ObjectDatasetBaseImpl extends AbstractDataset<ObjectDatasetBaseImpl
 
 		if (obj instanceof Dataset) {
 			final Dataset ds = (Dataset) obj;
-			if (DatasetUtils.calculateSize(iter.getShape()) != ds.getSize()) {
+			if (DatasetUtils.calculateSize(iter.getShape()) != ds.getLongSize()) {
 				throw new IllegalArgumentException(
 						"Number of items in index datasets does not match number of items in dataset");
 			}

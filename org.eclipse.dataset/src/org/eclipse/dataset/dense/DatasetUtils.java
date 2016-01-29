@@ -116,7 +116,11 @@ public class DatasetUtils {
 	public static Dataset put(final Dataset a, final Dataset indices, Object values) {
 		IndexIterator it = indices.getIterator();
 		Dataset vd = DatasetFactory.createFromObject(values).flatten();
-		int vlen = vd.getSize();
+		long vlen = vd.getLongSize();
+		if (vlen > Integer.MAX_VALUE) {
+			utilsLogger.error("Values dataset is too large");
+			throw new IllegalArgumentException("Values dataset is too large");
+		}
 		int v = 0;
 		while (it.hasNext()) {
 			if (v >= vlen) v -= vlen;
@@ -136,7 +140,11 @@ public class DatasetUtils {
 	public static Dataset put(final Dataset a, final int[] indices, Object values) {
 		int ilen = indices.length;
 		Dataset vd = DatasetFactory.createFromObject(values).flatten();
-		int vlen = vd.getSize();
+		long vlen = vd.getLongSize();
+		if (vlen > Integer.MAX_VALUE) {
+			utilsLogger.error("Values dataset is too large");
+			throw new IllegalArgumentException("Values dataset is too large");
+		}
 		for (int i = 0, v= 0; i < ilen; i++) {
 			if (v >= vlen) v -= vlen;
 
@@ -513,7 +521,12 @@ public class DatasetUtils {
 
 		int alen;
 		if (axis < 0) {
-			alen = a.getSize();
+			long vlen = a.getLongSize();
+			if (vlen > Integer.MAX_VALUE) {
+				utilsLogger.error("Values dataset is too large");
+				throw new IllegalArgumentException("Values dataset is too large");
+			}
+			alen = (int) vlen;
 			axis = 0;
 			rank = 1;
 			shape[0] = alen;
@@ -594,7 +607,12 @@ public class DatasetUtils {
 	 * @return new dataset with new shape and items that are truncated or repeated, as necessary
 	 */
 	public static Dataset resize(final Dataset a, final int... shape) {
-		int size = a.getSize();
+		long alen = a.getLongSize();
+		if (alen > Integer.MAX_VALUE) {
+			utilsLogger.error("Values dataset is too large");
+			throw new IllegalArgumentException("Values dataset is too large");
+		}
+		int size = (int) alen;
 		Dataset rdata = DatasetFactory.zeros(a.getElementsPerItem(), shape, a.getDType());
 		IndexIterator it = rdata.getIterator();
 		while (it.hasNext()) {
@@ -1267,7 +1285,7 @@ public class DatasetUtils {
 		int[] shape = dataset.getShape(); 
 		int[] nshape = shape;
 		if (itemSize > 1) {
-			int size = DatasetUtils.calculateSize(shape);
+			long size = DatasetUtils.calculateSize(shape);
 			if (size % itemSize != 0) {
 				throw new IllegalArgumentException("Input dataset has number of items that is not a multiple of itemSize");
 			}
@@ -1459,7 +1477,12 @@ public class DatasetUtils {
 				utilsLogger.error("Given axis is not 1D");
 				throw new IllegalArgumentException("Given axis is not 1D");
 			}
-			nshape[i] = axis.getSize();
+			long asize = axis.getLongSize();
+			if (asize > Integer.MAX_VALUE) {
+				utilsLogger.error("Values dataset is too large");
+				throw new IllegalArgumentException("Values dataset is too large");
+			}
+			nshape[i] = (int) asize;
 		}
 
 		for (int i = 0; i < rank; i++) {
@@ -1467,7 +1490,7 @@ public class DatasetUtils {
 			Dataset coord = DatasetFactory.zeros(nshape, axis.getDType());
 			result.add(coord);
 
-			final int alen = axis.getSize();
+			final int alen = (int) axis.getLongSize();
 			for (int j = 0; j < alen; j++) {
 				final Object obj = axis.getObjectAbs(j);
 				PositionIterator pi = coord.getPositionIterator(i);
@@ -1543,7 +1566,7 @@ public class DatasetUtils {
 		if (bases.length == rank) {
 			for (int i = 0; i < rank; i++) {
 				Dataset b = bases[i];
-				if (b.getRank() != 1 && b.getSize() != shape[i]) {
+				if (b.getRank() != 1 && b.getLongSize() != shape[i]) {
 					throw new IllegalArgumentException("A base does not have shape to match given dataset");
 				}
 			}
@@ -1859,7 +1882,7 @@ public class DatasetUtils {
 	 * Find absolute index of first value in dataset that is equal to given number
 	 * @param a
 	 * @param n
-	 * @return absolute index (if greater than a.getSize() then no value found)
+	 * @return absolute index (if greater than a.getLongSize() then no value found)
 	 */
 	public static int findIndexEqualTo(final Dataset a, final double n) {
 		IndexIterator iter = a.getIterator();
@@ -1875,7 +1898,7 @@ public class DatasetUtils {
 	 * Find absolute index of first value in dataset that is greater than given number
 	 * @param a
 	 * @param n
-	 * @return absolute index (if greater than a.getSize() then no value found)
+	 * @return absolute index (if greater than a.getLongSize() then no value found)
 	 */
 	public static int findIndexGreaterThan(final Dataset a, final double n) {
 		IndexIterator iter = a.getIterator();
@@ -1891,7 +1914,7 @@ public class DatasetUtils {
 	 * Find absolute index of first value in dataset that is greater than or equal to given number
 	 * @param a
 	 * @param n
-	 * @return absolute index (if greater than a.getSize() then no value found)
+	 * @return absolute index (if greater than a.getLongSize() then no value found)
 	 */
 	public static int findIndexGreaterThanOrEqualTo(final Dataset a, final double n) {
 		IndexIterator iter = a.getIterator();
@@ -1907,7 +1930,7 @@ public class DatasetUtils {
 	 * Find absolute index of first value in dataset that is less than given number
 	 * @param a
 	 * @param n
-	 * @return absolute index (if greater than a.getSize() then no value found)
+	 * @return absolute index (if greater than a.getLongSize() then no value found)
 	 */
 	public static int findIndexLessThan(final Dataset a, final double n) {
 		IndexIterator iter = a.getIterator();
@@ -1923,7 +1946,7 @@ public class DatasetUtils {
 	 * Find absolute index of first value in dataset that is less than or equal to given number
 	 * @param a
 	 * @param n
-	 * @return absolute index (if greater than a.getSize() then no value found)
+	 * @return absolute index (if greater than a.getLongSize() then no value found)
 	 */
 	public static int findIndexLessThanOrEqualTo(final Dataset a, final double n) {
 		IndexIterator iter = a.getIterator();
@@ -1949,7 +1972,12 @@ public class DatasetUtils {
 		indexes.fill(-1);
 
 		IndexIterator it = a.getIterator();
-		final int n = values.getSize();
+		final long vlen = values.getLongSize();
+		if (vlen > Integer.MAX_VALUE) {
+			utilsLogger.error("Values dataset is too large");
+			throw new IllegalArgumentException("Values dataset is too large");
+		}
+		final int n = (int) vlen;
 		if (values.getDType() == Dataset.INT64) {
 			while (it.hasNext()) {
 				long x = a.getElementLongAbs(it.index);
@@ -2033,7 +2061,12 @@ public class DatasetUtils {
 
 		IndexIterator it = a.getIterator();
 		int i = -1;
-		final int n = values.getSize();
+		final long vlen = values.getLongSize();
+		if (vlen > Integer.MAX_VALUE) {
+			utilsLogger.error("Values dataset is too large");
+			throw new IllegalArgumentException("Values dataset is too large");
+		}
+		final int n = (int) vlen;
 		if (values.getDType() == Dataset.INT64) {
 			while (it.hasNext()) {
 				i++;
@@ -2115,7 +2148,12 @@ public class DatasetUtils {
 		int is = a.getElementsPerItem();
 		if (axis == null) {
 			IndexIterator it = a.getIterator();
-			int s = r.getSize();
+			final long slen = r.getLongSize();
+			if (slen > Integer.MAX_VALUE) {
+				utilsLogger.error("Values dataset is too large");
+				throw new IllegalArgumentException("Values dataset is too large");
+			}
+			int s = (int) slen;
 			int i = shift % s;
 			if (i < 0)
 				i += s;
@@ -2450,7 +2488,7 @@ public class DatasetUtils {
 			final int length = ((Number) b.sum()).intValue();
 	
 			BroadcastPairIterator it = new BroadcastPairIterator(a, b, null, false);
-			int size = DatasetUtils.calculateSize(it.getShape());
+			long size = DatasetUtils.calculateSize(it.getShape());
 			Dataset c;
 			if (length < size) {
 				int[] ashape = it.getFirstShape();
@@ -2464,7 +2502,12 @@ public class DatasetUtils {
 					}
 				}
 			}
-			c = DatasetFactory.zeros(new int[] {size}, a.getDType());
+			if (size > Integer.MAX_VALUE) {
+				utilsLogger.error("Destination dataset is too large (for 1D dataset)");
+				throw new UnsupportedOperationException("Destination dataset is too large (for 1D dataset)");
+				// TODO support bigger datasets
+			}
+			c = DatasetFactory.zeros(new int[] {(int) size}, a.getDType());
 	
 			int i = 0;
 			if (it.isOutputDouble()) {
@@ -2538,14 +2581,14 @@ public class DatasetUtils {
 	 * @param shape
 	 * @return size
 	 */
-	public static int calculateSize(final int[] shape) {
+	public static long calculateSize(final int[] shape) {
 		long lsize = calculateLongSize(shape);
 	
 		// check to see if the size is larger than an integer, i.e. we can't allocate it
 		if (lsize > Integer.MAX_VALUE) {
 			throw new IllegalArgumentException("Size of the dataset is too large to allocate");
 		}
-		return (int) lsize;
+		return lsize;
 	}
 
 	/**

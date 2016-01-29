@@ -58,7 +58,7 @@ public class BooleanDatasetTest {
 
 		Dataset sv = a.getSliceView(new Slice(2,7));
 		Dataset sc = a.getSlice(new Slice(2,7));
-		l = sc.getSize();
+		l = (int) sc.getLongSize();
 		for (int i = 0; i < l; i++) {
 			boolean r = sc.getBoolean(-(i + 1));
 			assertEquals(r, sv.getBoolean(-(i + 1)));

@@ -89,7 +89,7 @@ public class ComplexDoubleDatasetTest {
 
 		ComplexDoubleDataset sv = (ComplexDoubleDataset) a.getSliceView(new Slice(1, 4));
 		ComplexDoubleDataset sc = (ComplexDoubleDataset) a.getSlice(new Slice(1, 4));
-		l = sc.getSize();
+		l = (int) sc.getLongSize();
 		for (int i = 0; i < l; i++) {
 			Complex r = sc.getComplex(-(i + 1));
 			Complex q = sv.getComplex(-(i + 1));

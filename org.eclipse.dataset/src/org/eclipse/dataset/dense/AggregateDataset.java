@@ -38,7 +38,7 @@ public class AggregateDataset extends LazyDatasetBase implements ILazyDataset {
 	private ILazyDataset[] data = null; // array of lazy datasets
 	private int[] map = null;    // map first dimension to index of dataset
 	private int[] offset = null; // cumulative first dimension lengths used as slice offsets
-	private int size;
+	private long size;
 	private int dtype = -1;
 	private int isize; // number of elements per item
 	protected AggregateDataset base = null;
@@ -204,6 +204,11 @@ public class AggregateDataset extends LazyDatasetBase implements ILazyDataset {
 
 	@Override
 	public int getSize() {
+		return (int) size;
+	}
+
+	@Override
+	public long getLongSize() {
 		return size;
 	}
 

@@ -76,7 +76,7 @@ public class RGBDataset extends CompoundShortDatasetImpl implements Cloneable {
 		}
 		this.shape = shape.clone();
 
-		odata = data = createArray(size);
+		odata = data = createArray((int) size);
 
 		for (int i = 0, n = 0; i < size; i++) {
 			data[n++] = (short) redData[i];

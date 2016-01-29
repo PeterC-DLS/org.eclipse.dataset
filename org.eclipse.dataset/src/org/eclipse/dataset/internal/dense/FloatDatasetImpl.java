@@ -51,11 +51,11 @@ public class FloatDatasetImpl extends AbstractDataset<FloatDatasetImpl> implemen
 		data = (float[]) odata; // PRIM_TYPE
 	}
 
-	protected static float[] createArray(final int size) { // PRIM_TYPE
+	protected static float[] createArray(final long size) { // PRIM_TYPE
 		float[] array = null; // PRIM_TYPE
 
 		try {
-			array = new float[size]; // PRIM_TYPE
+			array = new float[(int) size]; // PRIM_TYPE
 		} catch (OutOfMemoryError e) {
 			logger.error("The size of the dataset ({}) that is being created is too large "
 					+ "and there is not enough memory to hold it.", size);
@@ -566,9 +566,9 @@ public class FloatDatasetImpl extends AbstractDataset<FloatDatasetImpl> implemen
 
 	@Override
 	public void resize(int... newShape) {
-		final IndexIterator iter = getIterator();
-		final int nsize = DatasetUtils.calculateSize(newShape);
+		final long nsize = DatasetUtils.calculateSize(newShape);
 		final float[] ndata = createArray(nsize); // PRIM_TYPE
+		final IndexIterator iter = getIterator();
 		for (int i = 0; iter.hasNext() && i < nsize; i++) {
 			ndata[i] = data[iter.index];
 		}
@@ -647,8 +647,8 @@ public class FloatDatasetImpl extends AbstractDataset<FloatDatasetImpl> implemen
 	public FloatDatasetImpl setByBoolean(final Object obj, Dataset selection) {
 		if (obj instanceof Dataset) {
 			final Dataset ds = (Dataset) obj;
-			final int length = ((Number) selection.sum()).intValue();
-			if (length != ds.getSize()) {
+			final long length = ((Number) selection.sum()).longValue();
+			if (length != ds.getLongSize()) {
 				throw new IllegalArgumentException(
 						"Number of true items in selection does not match number of items in dataset");
 			}
@@ -675,20 +675,26 @@ public class FloatDatasetImpl extends AbstractDataset<FloatDatasetImpl> implemen
 	public FloatDatasetImpl setBy1DIndex(final Object obj, final Dataset index) {
 		if (obj instanceof Dataset) {
 			final Dataset ds = (Dataset) obj;
-			if (index.getSize() != ds.getSize()) {
+			if (index.getLongSize() != ds.getLongSize()) {
 				throw new IllegalArgumentException(
 						"Number of items in index dataset does not match number of items in dataset");
 			}
 
 			final IndexIterator oiter = ds.getIterator();
-			final IntegerIterator iter = new IntegerIterator(index, size);
+			if (size > Integer.MAX_VALUE) {
+				// TODO fix for large datasets
+			}
+			final IntegerIterator iter = new IntegerIterator(index, (int) size);
 
 			while (iter.hasNext() && oiter.hasNext()) {
 				data[iter.index] = (float) ds.getElementDoubleAbs(oiter.index); // GET_ELEMENT_WITH_CAST
 			}
 		} else {
 			final float dv = (float) DTypeUtils.toReal(obj); // PRIM_TYPE // FROM_OBJECT
-			IntegerIterator iter = new IntegerIterator(index, size);
+			if (size > Integer.MAX_VALUE) {
+				// TODO fix for large datasets
+			}
+			IntegerIterator iter = new IntegerIterator(index, (int) size);
 
 			while (iter.hasNext()) {
 				data[iter.index] = dv;
@@ -705,7 +711,7 @@ public class FloatDatasetImpl extends AbstractDataset<FloatDatasetImpl> implemen
 
 		if (obj instanceof Dataset) {
 			final Dataset ds = (Dataset) obj;
-			if (DatasetUtils.calculateSize(iter.getShape()) != ds.getSize()) {
+			if (DatasetUtils.calculateSize(iter.getShape()) != ds.getLongSize()) {
 				throw new IllegalArgumentException(
 						"Number of items in index datasets does not match number of items in dataset");
 			}
@@ -921,7 +927,7 @@ public class FloatDatasetImpl extends AbstractDataset<FloatDatasetImpl> implemen
 	public FloatDatasetImpl iadd(final Object b) {
 		Dataset bds = b instanceof Dataset ? (Dataset) b : DatasetFactory.createFromObject(b);
 		boolean useLong = bds.getElementClass().equals(Long.class);
-		if (bds.getSize() == 1) {
+		if (bds.getLongSize() == 1) {
 			final IndexIterator it = getIterator();
 			if (useLong) {
 				final long lb = bds.getElementLongAbs(0);
@@ -955,7 +961,7 @@ public class FloatDatasetImpl extends AbstractDataset<FloatDatasetImpl> implemen
 	public FloatDatasetImpl isubtract(final Object b) {
 		Dataset bds = b instanceof Dataset ? (Dataset) b : DatasetFactory.createFromObject(b);
 		boolean useLong = bds.getElementClass().equals(Long.class);
-		if (bds.getSize() == 1) {
+		if (bds.getLongSize() == 1) {
 			final IndexIterator it = getIterator();
 			if (useLong) {
 				final long lb = bds.getElementLongAbs(0);
@@ -990,7 +996,7 @@ public class FloatDatasetImpl extends AbstractDataset<FloatDatasetImpl> implemen
 	public FloatDatasetImpl imultiply(final Object b) {
 		Dataset bds = b instanceof Dataset ? (Dataset) b : DatasetFactory.createFromObject(b);
 		boolean useLong = bds.getElementClass().equals(Long.class);
-		if (bds.getSize() == 1) {
+		if (bds.getLongSize() == 1) {
 			final IndexIterator it = getIterator();
 			if (useLong) {
 				final long lb = bds.getElementLongAbs(0);
@@ -1024,7 +1030,7 @@ public class FloatDatasetImpl extends AbstractDataset<FloatDatasetImpl> implemen
 	public FloatDatasetImpl idivide(final Object b) {
 		Dataset bds = b instanceof Dataset ? (Dataset) b : DatasetFactory.createFromObject(b);
 		boolean useLong = bds.getElementClass().equals(Long.class);
-		if (bds.getSize() == 1) {
+		if (bds.getLongSize() == 1) {
 			if (useLong) {
 				final long lb = bds.getElementLongAbs(0);
 				// if (lb == 0) { // INT_USE
@@ -1085,7 +1091,7 @@ public class FloatDatasetImpl extends AbstractDataset<FloatDatasetImpl> implemen
 	public FloatDatasetImpl iremainder(final Object b) {
 		Dataset bds = b instanceof Dataset ? (Dataset) b : DatasetFactory.createFromObject(b);
 		boolean useLong = bds.getElementClass().equals(Long.class);
-		if (bds.getSize() == 1) {
+		if (bds.getLongSize() == 1) {
 			if (useLong) {
 				final long lb = bds.getElementLongAbs(0);
 				// if (lb == 0) { // INT_USE
@@ -1127,7 +1133,7 @@ public class FloatDatasetImpl extends AbstractDataset<FloatDatasetImpl> implemen
 	@Override
 	public FloatDatasetImpl ipower(final Object b) {
 		Dataset bds = b instanceof Dataset ? (Dataset) b : DatasetFactory.createFromObject(b);
-		if (bds.getSize() == 1) {
+		if (bds.getLongSize() == 1) {
 			final double vr = bds.getElementDoubleAbs(0);
 			final IndexIterator it = getIterator();
 			if (bds.isComplex()) {

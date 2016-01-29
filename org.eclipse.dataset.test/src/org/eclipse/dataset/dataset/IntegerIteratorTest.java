@@ -41,7 +41,7 @@ public class IntegerIteratorTest {
 
 		List<Integer> inds = new ArrayList<Integer>();
 
-		IntegerIterator iter = new IntegerIterator(s, c.getSize());
+		IntegerIterator iter = new IntegerIterator(s, (int) c.getLongSize());
 		while (iter.hasNext())
 			inds.add((int) c.getElementLongAbs(iter.index));
 

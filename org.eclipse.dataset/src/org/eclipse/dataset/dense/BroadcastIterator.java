@@ -42,7 +42,7 @@ public abstract class BroadcastIterator extends IndexIterator {
 	 * @param newShape
 	 * @return broadcasted shape and full new shape or null if it cannot be done
 	 */
-	public static int[][] calcBroadcastShapes(int[] oldShape, int size, int... newShape) {
+	public static int[][] calcBroadcastShapes(int[] oldShape, long size, int... newShape) {
 		if (newShape == null)
 			return null;
 	
@@ -249,7 +249,7 @@ public abstract class BroadcastIterator extends IndexIterator {
 		final int isb = b.getElementsPerItem();
 		if (isa != isb && isa != 1 && isb != 1) {
 			// exempt single-value dataset case too
-			if ((isa == 1 || b.getSize() != 1) && (isb == 1 || a.getSize() != 1) ) {
+			if ((isa == 1 || b.getLongSize() != 1) && (isb == 1 || a.getLongSize() != 1) ) {
 				throw new IllegalArgumentException("Can not broadcast where number of elements per item mismatch and one does not equal another");
 			}
 		}

@@ -71,7 +71,7 @@ public class BroadcastIteratorTest {
 
 	private void checkBroadcastShape(Dataset a, String msg, int[] bShape, int[] cShape, int... newShape) {
 		int[][] answer = bShape == null && cShape == null ? null : new int[][] { bShape, cShape };
-		int[][] result = BroadcastIterator.calcBroadcastShapes(a.getShapeRef(), a.getSize(), newShape);
+		int[][] result = BroadcastIterator.calcBroadcastShapes(a.getShapeRef(), a.getLongSize(), newShape);
 		Assert.assertArrayEquals("Broadcasting " + msg, answer, result);
 	}
 

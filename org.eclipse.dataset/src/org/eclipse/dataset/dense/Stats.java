@@ -132,7 +132,7 @@ public class Stats {
 
 	// process a sorted dataset
 	private static double pQuantile(final Dataset s, final double q) {
-		double f = (s.getSize() - 1) * q; // fraction of sample number
+		double f = (s.getLongSize() - 1) * q; // fraction of sample number
 		if (f < 0)
 			return Double.NaN;
 		int qpt = (int) Math.floor(f); // quantile point
@@ -1561,7 +1561,7 @@ public class Stats {
 				sum += Math.abs(a.getElementDoubleAbs(it.index) - mean);
 			}
 
-			return sum / a.getSize();
+			return sum / a.getLongSize();
 		}
 
 		double[] means = (double[]) a.mean();
@@ -1572,7 +1572,7 @@ public class Stats {
 				sums[j] += Math.abs(a.getElementDoubleAbs(it.index + j) - means[j]);
 		}
 
-		double n = a.getSize();
+		double n = a.getLongSize();
 		for (int j = 0; j < is; j++)
 			sums[j] /= n;
 
@@ -1620,15 +1620,21 @@ public class Stats {
 		if (lo <= 0 || hi <= 0 || lo >= hi || hi >= 100  || Double.isNaN(lo)|| Double.isNaN(hi)) {
 			throw new IllegalArgumentException("Thresholds must be between (0,100) and in order");
 		}
-		final int size = a.getSize();
-		int nl = Math.max((int) ((lo*size)/100), 1);
-		if (length > 0 && nl > length)
+		final long size = a.getLongSize();
+		long nl = Math.max((long) ((lo*size)/100), 1);
+		if (length > 0 && nl > length) {
 			nl = length;
-		int nh = Math.max((int) (((100-hi)*size)/100), 1);
-		if (length > 0 && nh > length)
+		} else if (nl > Integer.MAX_VALUE) {
+			throw new IllegalArgumentException("Lower limit is too high and so cannot create a working dataset");
+		}
+		long nh = Math.max((long) (((100-hi)*size)/100), 1);
+		if (length > 0 && nh > length) {
 			nh = length;
+		} else if (nh > Integer.MAX_VALUE) {
+			throw new IllegalArgumentException("Higher limit is too low and so cannot create a working dataset");
+		}
 
-		double[] results = Math.max(nl, nh) > 640 ? outlierValuesMap(a, nl, nh) : outlierValuesList(a, nl, nh);
+		double[] results = Math.max(nl, nh) > 640 ? outlierValuesMap(a, (int) nl, (int) nh) : outlierValuesList(a, (int) nl, (int) nh);
 
 		results[2] = results[2]*100./size;
 		results[3] = 100. - results[3]*100./size;

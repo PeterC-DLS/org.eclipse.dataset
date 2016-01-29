@@ -48,11 +48,11 @@ public class CompoundDoubleDatasetImpl extends AbstractCompoundDataset<CompoundD
 		data = (double[]) odata; // PRIM_TYPE
 	}
 
-	protected double[] createArray(final int size) { // PRIM_TYPE
+	protected double[] createArray(final long size) { // PRIM_TYPE
 		double[] array = null; // PRIM_TYPE
 
 		try {
-			array = new double[isize * size]; // PRIM_TYPE
+			array = new double[(int) (isize * size)]; // PRIM_TYPE
 		} catch (OutOfMemoryError e) {
 			logger.error("The size of the dataset ({}) that is being created is too large "
 					+ "and there is not enough memory to hold it.", size);
@@ -205,7 +205,7 @@ public class CompoundDoubleDatasetImpl extends AbstractCompoundDataset<CompoundD
 	 */
 	public CompoundDoubleDatasetImpl(final int itemSize, final boolean repeat, final Dataset dataset) {
 		isize = itemSize;
-		size = dataset.getSize();
+		size = dataset.getLongSize();
 		shape = dataset.getShape();
 		name = new String(dataset.getName());
 
@@ -795,7 +795,7 @@ public class CompoundDoubleDatasetImpl extends AbstractCompoundDataset<CompoundD
 	@Override
 	public void resize(int... newShape) {
 		IndexIterator iter = getIterator();
-		int nsize = DatasetUtils.calculateSize(newShape);
+		long nsize = DatasetUtils.calculateSize(newShape);
 		double[] ndata = createArray(nsize); // PRIM_TYPE
 
 		int i = 0;
@@ -938,7 +938,7 @@ public class CompoundDoubleDatasetImpl extends AbstractCompoundDataset<CompoundD
 		if (o instanceof Dataset) {
 			Dataset ds = (Dataset) o;
 			final int length = ((Number) selection.sum()).intValue();
-			if (length != ds.getSize()) {
+			if (length != ds.getLongSize()) {
 				throw new IllegalArgumentException(
 						"Number of true items in selection does not match number of items in dataset");
 			}
@@ -984,13 +984,16 @@ public class CompoundDoubleDatasetImpl extends AbstractCompoundDataset<CompoundD
 	public CompoundDoubleDatasetImpl setBy1DIndex(final Object o, Dataset index) {
 		if (o instanceof Dataset) {
 			Dataset ds = (Dataset) o;
-			if (index.getSize() != ds.getSize()) {
+			if (index.getLongSize() != ds.getLongSize()) {
 				throw new IllegalArgumentException(
 						"Number of items in selection does not match number of items in dataset");
 			}
 
 			IndexIterator oiter = ds.getIterator();
-			final IntegerIterator iter = new IntegerIterator(index, size, isize);
+			if (size > Integer.MAX_VALUE) {
+				// TODO fix for large datasets
+			}
+			final IntegerIterator iter = new IntegerIterator(index, (int) size, isize);
 
 			if (ds instanceof AbstractCompoundDataset) {
 				if (isize != ds.getElementsPerItem()) {
@@ -1016,8 +1019,10 @@ public class CompoundDoubleDatasetImpl extends AbstractCompoundDataset<CompoundD
 		} else {
 			try {
 				final double[] vr = DTypeUtils.toDoubleArray(o, isize); // PRIM_TYPE // CLASS_TYPE
-
-				final IntegerIterator iter = new IntegerIterator(index, size, isize);
+				if (size > Integer.MAX_VALUE) {
+					// TODO fix for large datasets
+				}
+				final IntegerIterator iter = new IntegerIterator(index, (int) size, isize);
 
 				while (iter.hasNext()) {
 					setAbs(iter.index, vr);
@@ -1037,7 +1042,7 @@ public class CompoundDoubleDatasetImpl extends AbstractCompoundDataset<CompoundD
 
 		if (o instanceof Dataset) {
 			Dataset ds = (Dataset) o;
-			if (DatasetUtils.calculateSize(iter.getShape()) != ds.getSize()) {
+			if (DatasetUtils.calculateSize(iter.getShape()) != ds.getLongSize()) {
 				throw new IllegalArgumentException(
 						"Number of items in selection does not match number of items in dataset");
 			}
@@ -1259,7 +1264,7 @@ public class CompoundDoubleDatasetImpl extends AbstractCompoundDataset<CompoundD
 		Dataset bds = b instanceof Dataset ? (Dataset) b : DatasetFactory.createFromObject(b);
 		boolean useLong = bds.getElementClass().equals(Long.class);
 		int is = bds.getElementsPerItem();
-		if (bds.getSize() == 1) {
+		if (bds.getLongSize() == 1) {
 			final IndexIterator it = getIterator();
 			if (is == 1) {
 				if (useLong) {
@@ -1344,7 +1349,7 @@ public class CompoundDoubleDatasetImpl extends AbstractCompoundDataset<CompoundD
 		Dataset bds = b instanceof Dataset ? (Dataset) b : DatasetFactory.createFromObject(b);
 		boolean useLong = bds.getElementClass().equals(Long.class);
 		int is = bds.getElementsPerItem();
-		if (bds.getSize() == 1) {
+		if (bds.getLongSize() == 1) {
 			final IndexIterator it = getIterator();
 			if (is == 1) {
 				if (useLong) {
@@ -1429,7 +1434,7 @@ public class CompoundDoubleDatasetImpl extends AbstractCompoundDataset<CompoundD
 		Dataset bds = b instanceof Dataset ? (Dataset) b : DatasetFactory.createFromObject(b);
 		boolean useLong = bds.getElementClass().equals(Long.class);
 		int is = bds.getElementsPerItem();
-		if (bds.getSize() == 1) {
+		if (bds.getLongSize() == 1) {
 			final IndexIterator it = getIterator();
 			if (useLong) {
 				if (is == 1) {
@@ -1516,7 +1521,7 @@ public class CompoundDoubleDatasetImpl extends AbstractCompoundDataset<CompoundD
 		Dataset bds = b instanceof Dataset ? (Dataset) b : DatasetFactory.createFromObject(b);
 		boolean useLong = bds.getElementClass().equals(Long.class);
 		int is = bds.getElementsPerItem();
-		if (bds.getSize() == 1) {
+		if (bds.getLongSize() == 1) {
 			final IndexIterator it = getIterator();
 			if (useLong) {
 				if (is == 1) {
@@ -1636,7 +1641,7 @@ public class CompoundDoubleDatasetImpl extends AbstractCompoundDataset<CompoundD
 		Dataset bds = b instanceof Dataset ? (Dataset) b : DatasetFactory.createFromObject(b);
 		boolean useLong = bds.getElementClass().equals(Long.class);
 		int is = bds.getElementsPerItem();
-		if (bds.getSize() == 1) {
+		if (bds.getLongSize() == 1) {
 			final IndexIterator it = getIterator();
 			if (useLong) {
 				if (is == 1) {
@@ -1738,7 +1743,7 @@ public class CompoundDoubleDatasetImpl extends AbstractCompoundDataset<CompoundD
 	public CompoundDoubleDatasetImpl ipower(final Object b) {
 		Dataset bds = b instanceof Dataset ? (Dataset) b : DatasetFactory.createFromObject(b);
 		final int is = bds.getElementsPerItem();
-		if (bds.getSize() == 1) {
+		if (bds.getLongSize() == 1) {
 			final double vr = bds.getElementDoubleAbs(0);
 			final IndexIterator it = getIterator();
 			if (bds.isComplex()) {

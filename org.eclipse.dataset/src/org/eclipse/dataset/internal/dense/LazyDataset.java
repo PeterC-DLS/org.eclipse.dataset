@@ -130,6 +130,11 @@ public class LazyDataset extends LazyDatasetBase implements Serializable, Clonea
 	}
 
 	@Override
+	public long getLongSize() {
+		return size;
+	}
+
+	@Override
 	public String toString() {
 		StringBuilder out = new StringBuilder();
 
@@ -603,7 +608,7 @@ public class LazyDataset extends LazyDatasetBase implements Serializable, Clonea
 		
         // Firstly if the whole dataset it likely to fit in memory, then we allow it.
 		// Space specified in bytes per item available
-		final double space = max/lazySet.getSize();
+		final double space = max/lazySet.getLongSize();
 
 		// If we have room for this whole dataset, then fine
 		int[] shape = lazySet.getShape();

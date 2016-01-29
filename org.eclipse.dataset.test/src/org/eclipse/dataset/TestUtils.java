@@ -223,11 +223,11 @@ public class TestUtils {
 			Assert.assertEquals("Type", dtype, calc.getDType());
 			Assert.assertEquals("Items", expected.getElementsPerItem(), calc.getElementsPerItem());
 		}
-		Assert.assertEquals("Size", expected.getSize(), calc.getSize());
+		Assert.assertEquals("Size", expected.getLongSize(), calc.getLongSize());
 		try {
 			Assert.assertArrayEquals("Shape", expected.getShape(), calc.getShape());
 		} catch (AssertionError e) {
-			if (calc.getSize() == 1) {
+			if (calc.getLongSize() == 1) {
 				Assert.assertArrayEquals("Shape", new int[0], calc.getShape());
 			} else {
 				throw e;

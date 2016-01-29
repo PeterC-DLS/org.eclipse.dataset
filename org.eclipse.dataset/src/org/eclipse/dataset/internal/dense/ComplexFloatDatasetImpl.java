@@ -639,7 +639,7 @@ public class ComplexFloatDatasetImpl extends CompoundFloatDatasetImpl implements
 	public ComplexFloatDatasetImpl iadd(final Object b) {
 		Dataset bds = b instanceof Dataset ? (Dataset) b : DatasetFactory.createFromObject(b);
 		boolean useLong = bds.getElementClass().equals(Long.class);
-		if (bds.getSize() == 1) {
+		if (bds.getLongSize() == 1) {
 			final IndexIterator it = getIterator();
 			if (useLong) { // note no complex longs
 				final long lb = bds.getElementLongAbs(0);
@@ -688,7 +688,7 @@ public class ComplexFloatDatasetImpl extends CompoundFloatDatasetImpl implements
 	public ComplexFloatDatasetImpl isubtract(final Object b) {
 		Dataset bds = b instanceof Dataset ? (Dataset) b : DatasetFactory.createFromObject(b);
 		boolean useLong = bds.getElementClass().equals(Long.class);
-		if (bds.getSize() == 1) {
+		if (bds.getLongSize() == 1) {
 			final IndexIterator it = getIterator();
 			if (useLong) { // note no complex longs
 				final long lb = bds.getElementLongAbs(0);
@@ -737,7 +737,7 @@ public class ComplexFloatDatasetImpl extends CompoundFloatDatasetImpl implements
 	public ComplexFloatDatasetImpl imultiply(final Object b) {
 		Dataset bds = b instanceof Dataset ? (Dataset) b : DatasetFactory.createFromObject(b);
 		boolean useLong = bds.getElementClass().equals(Long.class);
-		if (bds.getSize() == 1) {
+		if (bds.getLongSize() == 1) {
 			final IndexIterator it = getIterator();
 			if (useLong) { // note no complex longs
 				final long r2 = bds.getElementLongAbs(0);
@@ -796,7 +796,7 @@ public class ComplexFloatDatasetImpl extends CompoundFloatDatasetImpl implements
 	public ComplexFloatDatasetImpl idivide(final Object b) {
 		Dataset bds = b instanceof Dataset ? (Dataset) b : DatasetFactory.createFromObject(b);
 		boolean useLong = bds.getElementClass().equals(Long.class);
-		if (bds.getSize() == 1) {
+		if (bds.getLongSize() == 1) {
 			final IndexIterator it = getIterator();
 			if (useLong) { // note no complex longs
 				final long r2 = bds.getElementLongAbs(0);
@@ -893,7 +893,7 @@ public class ComplexFloatDatasetImpl extends CompoundFloatDatasetImpl implements
 	@Override
 	public ComplexFloatDatasetImpl ipower(final Object b) {
 		Dataset bds = b instanceof Dataset ? (Dataset) b : DatasetFactory.createFromObject(b);
-		if (bds.getSize() == 1) {
+		if (bds.getLongSize() == 1) {
 			final IndexIterator it = getIterator();
 			final double r2 = bds.getElementDoubleAbs(0);
 			if (!bds.isComplex() || bds.getElementDoubleAbs(1) == 0) {

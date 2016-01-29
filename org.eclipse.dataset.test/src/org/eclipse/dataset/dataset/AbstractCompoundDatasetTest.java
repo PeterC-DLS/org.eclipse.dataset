@@ -344,7 +344,7 @@ public class AbstractCompoundDatasetTest {
 		double dz = 0.5;
 		CompoundDoubleDataset z = DatasetFactory.createFromObject(CompoundDoubleDataset.class, dz);
 		assertEquals(0, z.getRank());
-		assertEquals(1, z.getSize());
+		assertEquals(1, z.getLongSize());
 		assertEquals(1, z.getElementsPerItem());
 		assertEquals(dz, z.getElementDoubleAbs(0), 1e-14);
 
@@ -353,7 +353,7 @@ public class AbstractCompoundDatasetTest {
 		int is = a.getElementsPerItem();
 		assertEquals(6, is);
 		assertEquals(1, a.getRank());
-		assertEquals(1, a.getSize());
+		assertEquals(1, a.getLongSize());
 		assertEquals(1, a.getShape()[0]);
 		IndexIterator it = a.getIterator();
 		for (int i = 0; it.hasNext();) {
@@ -366,7 +366,7 @@ public class AbstractCompoundDatasetTest {
 		is = b.getElementsPerItem();
 		assertEquals(3, is);
 		assertEquals(1, b.getRank());
-		assertEquals(2, b.getSize());
+		assertEquals(2, b.getLongSize());
 		assertEquals(2, b.getShape()[0]);
 		it = b.getIterator();
 		for (int i = 0; it.hasNext();) {
@@ -384,7 +384,7 @@ public class AbstractCompoundDatasetTest {
 		is = c.getElementsPerItem();
 		assertEquals(4, is);
 		assertEquals(1, c.getRank());
-		assertEquals(2, c.getSize());
+		assertEquals(2, c.getLongSize());
 		assertEquals(2, c.getShape()[0]);
 		it = c.getIterator();
 		for (int i = 0; it.hasNext();) {
@@ -401,7 +401,7 @@ public class AbstractCompoundDatasetTest {
 		is = d.getElementsPerItem();
 		assertEquals(4, is);
 		assertEquals(1, d.getRank());
-		assertEquals(2, d.getSize());
+		assertEquals(2, d.getLongSize());
 		assertEquals(2, d.getShape()[0]);
 		it = d.getIterator();
 		for (int i = 0; it.hasNext();) {

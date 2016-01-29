@@ -100,7 +100,11 @@ public class AxesMetadataImpl implements AxesMetadata {
 			}
 			int[] newShape = new int[allAxes.length];
 			Arrays.fill(newShape, 1);
-			newShape[axisDim] = axisData.getSize();
+			long alen = axisData.getLongSize();
+			if (alen > Integer.MAX_VALUE) {
+				throw new IllegalArgumentException("Axis dataset is too large");
+			}
+			newShape[axisDim] = (int) alen;
 			view.setShape(newShape);
 		}
 		return view;
