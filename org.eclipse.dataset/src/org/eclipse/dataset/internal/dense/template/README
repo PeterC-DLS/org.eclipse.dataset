@@ -3,18 +3,40 @@ This directory contains some python scripts for auto-generating Java.
 It is not active code but code used to write code.
 
 The following classes are generated/amended by these scripts:
-org.eclipse.dawnsci.analysis.dataset.impl.Maths,
-org.eclipse.dawnsci.analysis.dataset.impl,FloatDataset,
-org.eclipse.dawnsci.analysis.dataset.impl.IntegerDataset,
-org.eclipse.dawnsci.analysis.dataset.impl.LongDataset,
-org.eclipse.dawnsci.analysis.dataset.impl.ShortDataset,
-org.eclipse.dawnsci.analysis.dataset.impl.ByteDataset,
-org.eclipse.dawnsci.analysis.dataset.impl.BooleanDatasetBase
+org.eclipse.dataset.dense.Maths,
+org.eclipse.dataset.dense.FloatDataset,
+org.eclipse.dataset.dense.IntegerDataset,
+org.eclipse.dataset.dense.LongDataset,
+org.eclipse.dataset.dense.ShortDataset,
+org.eclipse.dataset.dense.ByteDataset,
+org.eclipse.dataset.dense.BooleanDataset,
+org.eclipse.dataset.dense.StringDataset,
+org.eclipse.dataset.dense.ObjectDataset
 
-org.eclipse.dawnsci.analysis.dataset.impl.CompoundFloatDataset,
-org.eclipse.dawnsci.analysis.dataset.impl.ComplexFloatDataset
+org.eclipse.dataset.dense.CompoundFloatDataset,
+org.eclipse.dataset.dense.CompoundIntegerDataset,
+org.eclipse.dataset.dense.CompoundLongDataset,
+org.eclipse.dataset.dense.CompoundShortDataset,
+org.eclipse.dataset.dense.CompoundByteDataset,
+org.eclipse.dataset.dense.ComplexFloatDataset
 
-The file functions.txt defines functions for the org.eclipse.dawnsci.analysis.dataset.impl.Maths class 
+org.eclipse.dataset.internal.dense.FloatDataset,
+org.eclipse.dataset.internal.dense.IntegerDataset,
+org.eclipse.dataset.internal.dense.LongDataset,
+org.eclipse.dataset.internal.dense.ShortDataset,
+org.eclipse.dataset.internal.dense.ByteDataset,
+org.eclipse.dataset.internal.dense.BooleanDatasetBase,
+org.eclipse.dataset.internal.dense.StringDatasetBase,
+org.eclipse.dataset.internal.dense.ObjectDatasetBase
+
+org.eclipse.dataset.internal.dense.CompoundFloatDataset,
+org.eclipse.dataset.internal.dense.CompoundIntegerDataset,
+org.eclipse.dataset.internal.dense.CompoundLongDataset,
+org.eclipse.dataset.internal.dense.CompoundShortDataset,
+org.eclipse.dataset.internal.dense.CompoundByteDataset,
+org.eclipse.dataset.internal.dense.ComplexFloatDataset
+
+The file functions.txt defines functions for the org.eclipse.dataset.dense.Maths class 
 This class also has a fixed part which includes its license header.
 
 I
